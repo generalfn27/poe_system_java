@@ -32,9 +32,28 @@ public class user_type_choice {
                     // Call out manager class function
                     break;
                 case 0:
-                    System.out.println("Returning to welcome screen");
-                    // Call out the welcome screen of the store
-                    break;
+                    System.out.println("\n\tAre you sure you want to close the program?\n");
+                    System.out.println("\t[Y] for Yes  [N] for No: ");
+
+                    String exit_confirmation = scanf.nextLine().trim(); // Trim to remove any leading/trailing whitespace
+
+                    if (exit_confirmation.equalsIgnoreCase("Y")) {
+                        System.out.println("\t============================================\n");
+                        System.out.println("\t|                                          |\n");
+                        System.out.println("\t|     Thank You for Using our Program!     |\n");
+                        System.out.println("\t|                                          |\n");
+                        System.out.println("\t============================================\n");
+                        break;
+                    } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                        // user_type_choice();
+                        break; // You might want to break here to stay in the menu, or remove break to continue the loop.
+                    } else {
+                        System.out.println("\tInvalid input. Going back to menu.\n");
+                        // press_any_key();
+                        // user_type_choice();
+                        break; // Handle what happens when invalid input is given.
+                    }
+
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
