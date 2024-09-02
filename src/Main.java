@@ -2,10 +2,11 @@ import user_types.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        //System.out.println("Hello world!");
 
-        new user_type_choice();
+        UserType user_type = new UserType();
+        user_type.user_type_menu();
 
-        System.out.flush();
+        //System.out.flush();
     }
 }

@@ -22,4 +22,17 @@ public class customer {
         this.accountId = accountId;
     }
 
+    // Getters and Setters
+    public String getName() {  return name; }
+
+    public boolean isRegistered() {  return isRegistered; }
+
+    public String getAccountNumber() {  return accountNumber; }
+
+    public String getAccountId() {  return accountId; }
+
+    public void setAccountNumber(String accountNumber) {  this.accountNumber = accountNumber; }
+
+    public void setAccountId(String accountId) {  this.accountId = accountId; }
+
 }

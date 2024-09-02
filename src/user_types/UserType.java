@@ -1,12 +1,14 @@
 package user_types;
 
+import shopper.*;
+
 import java.util.Scanner;
 
 //eto ung class
-public class user_type_choice {
+public class UserType {
 
     //eto ung constructor (function)
-    public user_type_choice() {
+    public void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 
         while (true) {
@@ -23,7 +25,8 @@ public class user_type_choice {
             switch (user_type_choice) {
                 case 1:
                     System.out.println("You selected Customer.");
-                    // Call out customer class function
+                    UserCustomer user_customer = new UserCustomer();
+                    user_customer.user_customer_menu();
                     break;
                 case 2:
                     System.out.println("You selected Cashier.");
