@@ -38,7 +38,8 @@ public class UserType {
                     // Call out manager class function
                     break;
                 case 0:
-                    System.out.println("\n\tAre you sure you want to close the program?\n");
+                    System.out.flush();
+                    System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
                     System.out.println("\t[Y] for Yes  [N] for No: ");
 
                     String exit_confirmation = scanf.nextLine().trim(); // Trim to remove any leading/trailing whitespace
@@ -53,6 +54,7 @@ public class UserType {
                         System.exit(0); // Exits the program completely
                     } else if (exit_confirmation.equalsIgnoreCase("N")) {
                         // Do nothing, stay in the loop and return to the menu
+                        System.out.flush();
                         break;
                     } else {
                         System.out.println("\tInvalid input. Going back to menu.\n");
