@@ -9,7 +9,7 @@ public class UserType {
     public void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 
-        while (true) {  // Use a continuous loop
+        while (true) {
             System.out.println("Please enter what user type you are:");
             System.out.println(" ");
             System.out.println("[1] Customer");
@@ -49,6 +49,7 @@ public class UserType {
                         System.out.println("\t|     Thank You for Using our Program!     |\n");
                         System.out.println("\t|                                          |\n");
                         System.out.println("\t============================================\n");
+                        scanf.close(); // Close scanner before exiting
                         System.exit(0); // Exits the program completely
                     } else if (exit_confirmation.equalsIgnoreCase("N")) {
                         // Do nothing, stay in the loop and return to the menu
@@ -63,8 +64,8 @@ public class UserType {
                     System.out.println("Invalid choice. Please try again.");
             }
             System.out.println();
-
         }
 
+        // The scanner close is now handled properly, before calling System.exit
     }
 }
