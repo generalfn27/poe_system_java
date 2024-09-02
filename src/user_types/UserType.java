@@ -52,22 +52,21 @@ public class UserType {
                         System.out.println("\t============================================\n");
                         scanf.close(); // Close scanner before exiting
                         System.exit(0); // Exits the program completely
+
                     } else if (exit_confirmation.equalsIgnoreCase("N")) {
                         // Do nothing, stay in the loop and return to the menu
                         System.out.flush();
                         break;
+
                     } else {
                         System.out.println("\tInvalid input. Going back to menu.\n");
                         // Do nothing, stay in the loop and return to the menu
                         break;
                     }
-
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
             System.out.println();
         }
-
-        // The scanner close is now handled properly, before calling System.exit
     }
 }
