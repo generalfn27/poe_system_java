@@ -11,7 +11,7 @@ public class UserType {
     public void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 
-        while (true) {
+        do {
             System.out.println("Please enter what user type you are:");
             System.out.println(" ");
             System.out.println("[1] Customer");
@@ -69,7 +69,7 @@ public class UserType {
             if (user_type_choice == 0) {
                 break;
             }
-        }
+        } while (true);
 
         // Close the scanner after the loop to avoid resource leaks
         scanf.close();

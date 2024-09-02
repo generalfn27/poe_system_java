@@ -1,5 +1,7 @@
 package shopper;
 
+import user_types.*;
+
 import java.util.Scanner;
 
 public class UserCustomer {
@@ -23,6 +25,9 @@ public class UserCustomer {
             System.out.print("\n\tEnter Here: ");
             choice = scanf.nextInt();
 
+            // Consume the leftover newline from nextInt
+            scanf.nextLine();
+
             switch (choice) {
                 case 1:
                     // Call the login function (assuming it exists)
@@ -43,6 +48,7 @@ public class UserCustomer {
                     System.out.println("\n\tInvalid input. Try again...");
                     // Implement a method for pressAnyKey() if needed
             }
+            scanf.close();
         }
     }
 
