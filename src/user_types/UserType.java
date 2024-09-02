@@ -4,14 +4,12 @@ import shopper.*;
 
 import java.util.Scanner;
 
-// eto ung class
 public class UserType {
 
-    // eto ung constructor (function)
     public void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 
-        do {
+        while (true) {  // Use a continuous loop
             System.out.println("Please enter what user type you are:");
             System.out.println(" ");
             System.out.println("[1] Customer");
@@ -53,10 +51,11 @@ public class UserType {
                         System.out.println("\t============================================\n");
                         System.exit(0); // Exits the program completely
                     } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                        // Return to the menu without breaking out of the loop
+                        // Do nothing, stay in the loop and return to the menu
                         break;
                     } else {
                         System.out.println("\tInvalid input. Going back to menu.\n");
+                        // Do nothing, stay in the loop and return to the menu
                         break;
                     }
 
@@ -65,13 +64,7 @@ public class UserType {
             }
             System.out.println();
 
-            // Exit the loop if the user chooses 0
-            if (user_type_choice == 0) {
-                break;
-            }
-        } while (true);
+        }
 
-        // Close the scanner after the loop to avoid resource leaks
-        scanf.close();
     }
 }
