@@ -1,3 +1,5 @@
+package user_types;
+
 import java.util.Scanner;
 
 //eto ung class
@@ -45,12 +47,12 @@ public class user_type_choice {
                         System.out.println("\t============================================\n");
                         break;
                     } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                        // user_type_choice();
+                        // user_types.user_type_choice();
                         break; // You might want to break here to stay in the menu, or remove break to continue the loop.
                     } else {
                         System.out.println("\tInvalid input. Going back to menu.\n");
                         // press_any_key();
-                        // user_type_choice();
+                        // user_types.user_type_choice();
                         break; // Handle what happens when invalid input is given.
                     }
 

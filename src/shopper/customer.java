@@ -1,17 +1,25 @@
 package shopper;
 
 public class customer {
-    //private String kasi dito dba sa customer may registered at may guest
-    // so di ko pa alam ano lalagay kong attributes dito sa customer
-    // kasi every customer may name sila tas chuchu
-    // pero nag sstart muna sa guest ba sila or registered
+    private String name;
+    private boolean isRegistered;
+    private String accountNumber;
+    private String accountId;
 
-    //pag guest user walang login so walang ipapasa na value dito sa constructor na gagawin
-    //tapos pag registered may account number at account id nalang
+    // Constructor/function for guest customers (no account details)
+    public customer(String name) {
+        this.name = name;
+        this.isRegistered = false; // Guests are not registered by default
+        this.accountNumber = null;
+        this.accountId = null;
+    }
 
-    //kada id/account details kaya di ko pa maisip anong ipapasa
+    // Constructor for registered customers (with account details)
+    public customer(String name, String accountNumber, String accountId) {
+        this.name = name;
+        this.isRegistered = true; // Registered customer
+        this.accountNumber = accountNumber;
+        this.accountId = accountId;
+    }
 
-    // or gagawa muna ng another customer type na function bale boolean if registered customer
-
-    //tapos ibang function nalng ulit kgaya nung asa C program
 }
