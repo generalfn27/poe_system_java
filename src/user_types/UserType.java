@@ -4,10 +4,10 @@ import shopper.*;
 
 import java.util.Scanner;
 
-//eto ung class
+// eto ung class
 public class UserType {
 
-    //eto ung constructor (function)
+    // eto ung constructor (function)
     public void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 
@@ -21,6 +21,9 @@ public class UserType {
             System.out.println("Type here: ");
 
             int user_type_choice = scanf.nextInt();
+
+            // Consume the leftover newline from nextInt
+            scanf.nextLine();
 
             switch (user_type_choice) {
                 case 1:
@@ -48,15 +51,13 @@ public class UserType {
                         System.out.println("\t|     Thank You for Using our Program!     |\n");
                         System.out.println("\t|                                          |\n");
                         System.out.println("\t============================================\n");
-                        break;
+                        System.exit(0); // Exits the program completely
                     } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                        // user_types.user_type_choice();
-                        break; // You might want to break here to stay in the menu, or remove break to continue the loop.
+                        // Return to the menu without breaking out of the loop
+                        break;
                     } else {
                         System.out.println("\tInvalid input. Going back to menu.\n");
-                        // press_any_key();
-                        // user_types.user_type_choice();
-                        break; // Handle what happens when invalid input is given.
+                        break;
                     }
 
                 default:
