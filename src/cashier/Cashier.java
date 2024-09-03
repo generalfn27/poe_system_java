@@ -57,6 +57,7 @@ public class Cashier {
     }
 
     private void cashier_process_choice() {
+        System.out.flush();
         Scanner scanf = new Scanner(System.in);
         char choice;
         char confirm;
