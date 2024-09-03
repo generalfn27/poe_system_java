@@ -1,6 +1,7 @@
 package user_types;
 
 import shopper.*;
+import cashier.*;
 
 import java.util.Scanner;
 
@@ -31,7 +32,8 @@ public class UserType {
                     break;
                 case 2:
                     System.out.println("You selected Cashier.");
-                    // Call out cashier class function
+                    Cashier cashier = new Cashier();
+                    cashier.user_cashier();
                     break;
                 case 3:
                     System.out.println("You selected Manager.");
