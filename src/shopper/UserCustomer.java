@@ -1,7 +1,6 @@
 package shopper;
 
 import user_types.*;
-import Main.*;
 
 import java.util.Scanner;
 
