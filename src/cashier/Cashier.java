@@ -57,7 +57,7 @@ public class Cashier {
     }
 
     private void cashier_process_choice() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanf = new Scanner(System.in);
         char choice;
         char confirm;
 
@@ -70,7 +70,7 @@ public class Cashier {
             System.out.println("\t[0] Exit");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanner.next().charAt(0); // Read choice
+            choice = scanf.next().charAt(0); // Read choice
 
             switch (choice) {
                 case '1':
@@ -85,14 +85,30 @@ public class Cashier {
                     // Call method to view and select receipt from list
                     break;
 
-                case '0':
-                    // Ask for confirmation before logging out
-                    System.out.print("\n\tAre you sure you want to log out? (y/n): ");
-                    confirm = scanner.next().charAt(0);
-                    if (confirm == 'y' || confirm == 'Y') {
-                        return; // Exit the method if confirmed
-                    } else {
-                        System.out.println("\n\tLog out cancelled. Returning to menu...");
+                case 0:
+                    boolean exit_confirmed = false;
+                    while (!exit_confirmed) {
+                        System.out.flush();
+                        System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
+                        System.out.println("\t[Y] for Yes  [N] for No: ");
+
+                        String exit_confirmation = scanf.nextLine().trim();
+
+                        if (exit_confirmation.equalsIgnoreCase("Y")) {
+                            System.out.println("\t============================================\n");
+                            System.out.println("\t|                                          |\n");
+                            System.out.println("\t|     Thank You for Using our Program!     |\n");
+                            System.out.println("\t|                                          |\n");
+                            System.out.println("\t============================================\n");
+                            scanf.close();
+                            System.exit(0);
+                        } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                            // Do nothing, stay in the loop and return to the menu
+                            break;
+                        } else {
+                            System.out.println("\tInvalid input. Going back to menu.\n");
+                            // Do nothing, stay in the loop and return to the menu
+                        }
                     }
                     break;
 
