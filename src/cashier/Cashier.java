@@ -91,14 +91,12 @@ public class Cashier {
                 case '0':
                     boolean logout_confirmed = false;
                     while (!logout_confirmed) {
-                        System.out.flush();
-                        System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
+                        System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
                         System.out.println("\t[Y] for Yes  [N] for No: ");
 
                         String exit_confirmation = scanf.nextLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
-                            scanf.close();
                             return;
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             // Do nothing, stay in the loop and return to the menu
