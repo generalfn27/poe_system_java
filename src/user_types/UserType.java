@@ -40,8 +40,8 @@ public class UserType {
                     // Call out manager class function
                     break;
                 case 0:
-                    boolean exitConfirmed = false;
-                    while (!exitConfirmed) {
+                    boolean exit_confirmed = false;
+                    while (!exit_confirmed) {
                         System.out.flush();
                         System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
                         System.out.println("\t[Y] for Yes  [N] for No: ");
