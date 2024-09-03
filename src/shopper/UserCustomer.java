@@ -1,11 +1,16 @@
 package shopper;
 
 import user_types.*;
+import Main.*;
 
 import java.util.Scanner;
 
 public class UserCustomer {
+    private UserType userType;
 
+    public UserCustomer() {
+        this.userType = new UserType();
+    }
     public void user_customer_menu() {
         Scanner scanf = new Scanner(System.in);
         int choice;
@@ -43,7 +48,7 @@ public class UserCustomer {
                     customerRegister();
                     break;
                 case 0:
-                    user_type.user_type_menu();
+                    userType.user_type_menu();
                     return; // Go back to the previous menu
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
