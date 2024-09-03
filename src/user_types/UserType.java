@@ -38,31 +38,33 @@ public class UserType {
                     // Call out manager class function
                     break;
                 case 0:
-                    System.out.flush();
-                    System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
-                    System.out.println("\t[Y] for Yes  [N] for No: ");
-
-                    String exit_confirmation = scanf.nextLine().trim(); // Trim to remove any leading/trailing whitespace
-
-                    if (exit_confirmation.equalsIgnoreCase("Y")) {
-                        System.out.println("\t============================================\n");
-                        System.out.println("\t|                                          |\n");
-                        System.out.println("\t|     Thank You for Using our Program!     |\n");
-                        System.out.println("\t|                                          |\n");
-                        System.out.println("\t============================================\n");
-                        scanf.close(); // Close scanner before exiting
-                        System.exit(0); // Exits the program completely
-
-                    } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                        // Do nothing, stay in the loop and return to the menu
+                    do {
                         System.out.flush();
-                        break;
+                        System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
+                        System.out.println("\t[Y] for Yes  [N] for No: ");
 
-                    } else {
-                        System.out.println("\tInvalid input. Going back to menu.\n");
-                        // Do nothing, stay in the loop and return to the menu
-                        break;
-                    }
+                        String exit_confirmation = scanf.nextLine().trim(); // Trim to remove any leading/trailing whitespace
+
+                        if (exit_confirmation.equalsIgnoreCase("Y")) {
+                            System.out.println("\t============================================\n");
+                            System.out.println("\t|                                          |\n");
+                            System.out.println("\t|     Thank You for Using our Program!     |\n");
+                            System.out.println("\t|                                          |\n");
+                            System.out.println("\t============================================\n");
+                            scanf.close(); // Close scanner before exiting
+                            System.exit(0); // Exits the program completely
+
+                        } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                            // Do nothing, stay in the loop and return to the menu
+                            System.out.flush();
+                            break;
+
+                        } else {
+                            System.out.println("\tInvalid input. Going back to menu.\n");
+                            // Do nothing, stay in the loop and return to the menu
+                            break;
+                        }
+                    } while (true);
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
