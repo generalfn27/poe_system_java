@@ -1,5 +1,7 @@
 package cashier;
 
+import user_types.*;
+
 import java.util.Scanner;
 
 public class Cashier {
@@ -97,7 +99,7 @@ public class Cashier {
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
                             scanf.close();
-                            System.exit(0);
+                            return;
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             // Do nothing, stay in the loop and return to the menu
                             break;
