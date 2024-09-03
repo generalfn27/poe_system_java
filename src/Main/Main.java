@@ -1,4 +1,6 @@
-import user_types.*;
+package Main;
+
+import user_types.UserType;
 
 public class Main {
     public static void main(String[] args) {

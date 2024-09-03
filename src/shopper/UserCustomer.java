@@ -43,6 +43,7 @@ public class UserCustomer {
                     customerRegister();
                     break;
                 case 0:
+                    user_type.user_type_menu();
                     return; // Go back to the previous menu
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
