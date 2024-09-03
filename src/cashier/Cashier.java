@@ -86,9 +86,9 @@ public class Cashier {
                     // Call method to view and select receipt from list
                     break;
 
-                case 0:
-                    boolean exit_confirmed = false;
-                    while (!exit_confirmed) {
+                case '0':
+                    boolean logout_confirmed = false;
+                    while (!logout_confirmed) {
                         System.out.flush();
                         System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
                         System.out.println("\t[Y] for Yes  [N] for No: ");
@@ -96,11 +96,6 @@ public class Cashier {
                         String exit_confirmation = scanf.nextLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
-                            System.out.println("\t============================================\n");
-                            System.out.println("\t|                                          |\n");
-                            System.out.println("\t|     Thank You for Using our Program!     |\n");
-                            System.out.println("\t|                                          |\n");
-                            System.out.println("\t============================================\n");
                             scanf.close();
                             System.exit(0);
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
