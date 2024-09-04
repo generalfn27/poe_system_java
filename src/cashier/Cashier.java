@@ -15,10 +15,10 @@ public class Cashier {
 
     private void cashierLogin() {
         Scanner scanner = new Scanner(System.in);
-        int attemptCount = 0; // Count failed login attempts
+        int attempt_count = 0; // Count failed login attempts
         boolean valid = false; // Indicate if login is valid
 
-        while (!valid && attemptCount < MAX_ATTEMPTS) {
+        while (!valid && attempt_count < MAX_ATTEMPTS) {
             System.out.println("===================================");
             System.out.println("|                                 |");
             System.out.println("|          Cashier Login          |");
@@ -38,10 +38,10 @@ public class Cashier {
                 valid = true; // Set flag to exit loop
                 cashier_process_choice();
             } else {
-                attemptCount++;
-                cashier_increment_attempts(attemptCount, inputUsername);
+                attempt_count++;
+                cashier_increment_attempts(attempt_count, inputUsername);
 
-                if (attemptCount >= MAX_ATTEMPTS) {
+                if (attempt_count >= MAX_ATTEMPTS) {
                     System.out.println("Maximum attempts reached. Exiting.");
                     break;
                 }
