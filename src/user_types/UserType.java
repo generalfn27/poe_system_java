@@ -58,6 +58,7 @@ public class UserType {
                             System.exit(0);
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             // Do nothing, stay in the loop and return to the menu
+                            user_type_menu();
                             break;
                         } else {
                             System.out.println("\tInvalid input. Going back to menu.\n");
