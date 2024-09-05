@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.List;
 
 public class UserCustomer {
-    private UserType userType;
+    private final UserType userType;
 
     public UserCustomer() {
         this.userType = new UserType();
@@ -41,7 +41,7 @@ public class UserCustomer {
                 case 2:
                     // Handle the guest case
                     customer guest = new customer("Guest"); // Guest with default name
-                    guestCustomerItemCategory(guest); // Pass the guest customer to the item category function
+                    guest_customer_item_category(guest); // Pass the guest customer to the item category function
                     break;
                 case 3:
                     // Call the registration function (assuming it exists)
@@ -63,20 +63,84 @@ public class UserCustomer {
     }
 
     // Placeholder for the guest customer item category function
-    public void guestCustomerItemCategory(customer guest) {
+    public void guest_customer_item_category(customer guest) {
         // Implement guest item browsing functionality here
         System.out.println("Browsing as guest: " + guest.getName());
         // Continue with guest-specific browsing and processing
 
         Scanner scanf = new Scanner(System.in);
 
+        String item_category;
 
+        System.out.println("\n\t----------------------------------------------");
+        System.out.println("\t|              Welcome Customer!             |");
+        System.out.println("\t|             What do you want to browse?    |");
+        System.out.println("\t|                                                |");
+        System.out.println("\t|        [1] Beverages                               |");
+        System.out.println("\t|        [2] Snacks                  |");
+        System.out.println("\t|        [3] Canned Goods                            |");
+        System.out.println("\t|        [4] Condiments                            |");
+        System.out.println("\t|        [5] Dairy                            |");
+        System.out.println("\t|        [6] Frozen Foods                            |");
+        System.out.println("\t|        [7] Body Care & Beauty Care                            |");
+        System.out.println("\t|        [9] Detergents & Soaps                            |\n");
+        System.out.println("\t|        [0] Go Back                             |");
+        System.out.println("\t|                                                |");
+        System.out.println("\t----------------------------------------------");
+        System.out.println("\t|        Enter here: ");
 
+        item_category = scanf.nextLine();
 
+        switch (item_category)
+        {
+            case "0":
+                //reset_cart(cart, &total_items, &total_price);
+                user_customer_menu();
+                break;
+            case "1":
+                BrowseProduct browseBeverages = new BrowseProduct();
+                //dito gumawa sya ng array form para iproseso ung laman ng csv
+                List<Product> beverages = browseBeverages.loadProductsFromCSV("beverages.csv");
 
+                // Display the loaded products
+                browseBeverages.display_products(beverages);
 
+                //browse_beverages(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "2":
+                //browse_snacks(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "3":
+                //browse_canned_goods(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "4":
+                //browse_condiments(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "5":
+                //browse_dairy(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "6":
+                //browse_frozen_foods(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "7":
+                //browse_self_care_products(&queue_number);
+                guest_customer_item_category(guest);
+                break;
+            case "8":
+                //browse_detergent_soaps(&queue_number);
+                guest_customer_item_category(guest);
+                break;
 
-
+            default:
+                System.out.println("\\nInvalid input. Try again...");
+                //press_any_key();
+        }
 
         BrowseProduct browseBeverages = new BrowseProduct();
         List<Product> beverages = browseBeverages.loadProductsFromCSV("beverages.csv");
