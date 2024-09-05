@@ -53,7 +53,6 @@ public class UserCustomer {
                     System.out.println("\n\tInvalid input. Try again...");
                     // Implement a method for pressAnyKey() if needed
             }
-            scanf.close();
         }
     }
 
