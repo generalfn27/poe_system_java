@@ -3,10 +3,6 @@ package shopper;
 import user_types.*;
 
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserCustomer {
@@ -74,11 +70,19 @@ public class UserCustomer {
 
         Scanner scanf = new Scanner(System.in);
 
-        BrowseBeverages browseBeverages = new BrowseBeverages();
+
+
+
+
+
+
+
+
+        BrowseProduct browseBeverages = new BrowseProduct();
         List<Product> beverages = browseBeverages.loadProductsFromCSV("beverages.csv");
 
         // Display the loaded products
-        browseBeverages.displayProducts(beverages);
+        browseBeverages.display_products(beverages);
 
     }
 

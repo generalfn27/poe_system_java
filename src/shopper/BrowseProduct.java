@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseBeverages {
+public class BrowseProduct {
 
     // Method to read products from the CSV file
     public List<Product> loadProductsFromCSV(String fileName) {
@@ -28,14 +28,11 @@ public class BrowseBeverages {
     }
 
     // Method to display the products
-    public void displayProducts(List<Product> products) {
+    public void display_products(List<Product> products) {
         System.out.println("\nAvailable Products:");
         for (Product product : products) {
             System.out.println(product);
         }
     }
-
-
-
 
 }
