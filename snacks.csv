@@ -1,25 +1,25 @@
-code,name,price
-SNK000,Bengbeng,8.00
-SNK001,Biscuits except,6.25
-SNK002,Cheese it,7.50
-SNK003,Chippy,8.75
-SNK004,Choco knots,8.99
-SNK005,Cloud 9,9.00
-SNK006,Crackling,7.25
-SNK007,Fudgee Bars,7.50
-SNK008,Funcky,7.75
-SNK009,Mang Juan,8.99
-SNK010,Martys,7.00
-SNK011,Nagaraya,20.25
-SNK012,Nova,14.50
-SNK013,Oishi,7.75
-SNK014,Onion rings,7.99
-SNK015,Peewee,7.00
-SNK016,Piattos,14.25
-SNK017,Pillows big,8.50
-SNK018,Pillows small,6.75
-SNK019,Pretzels,8.99
-SNK020,Quakes,7.00
-SNK021,Ri-Chee,7.25
-SNK022,Rinbee,7.50
-SNK023,Skyflakes,7.75
+code,name,price,stock
+SNK000,Bengbeng,8.00,100
+SNK001,Biscuits except,6.25,100
+SNK002,Cheese it,7.50,100
+SNK003,Chippy,8.75,100
+SNK004,Choco knots,8.99,100
+SNK005,Cloud 9,9.00,100
+SNK006,Crackling,7.25,100
+SNK007,Fudgee Bars,7.50,100
+SNK008,Funcky,7.75,100
+SNK009,Mang Juan,8.99,100
+SNK010,Martys,7.00,100
+SNK011,Nagaraya,20.25,100
+SNK012,Nova,14.50,100
+SNK013,Oishi,7.75,100
+SNK014,Onion rings,7.99,100
+SNK015,Peewee,7.00,100
+SNK016,Piattos,14.25,100
+SNK017,Pillows big,8.50,100
+SNK018,Pillows small,6.75,100
+SNK019,Pretzels,8.99,100
+SNK020,Quakes,7.00,100
+SNK021,Ri-Chee,7.25,100
+SNK022,Rinbee,7.50,100
+SNK023,Skyflakes,7.75,100

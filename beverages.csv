@@ -1,19 +1,19 @@
-code,name,price
-BEV000,C2 Solo,13.00
-BEV001,Chuckie 110ml,15.25
-BEV002,Chuckie 180ml,22.50
-BEV003,Coke Sakto,10.75
-BEV004,Coke 12 Oz.,14.75
-BEV005,Coke 8 Oz.,12.00
-BEV006,Coke Mismo,18.00
-BEV007,Coke Kasalo,27.50
-BEV008,Sprite 1 Liter,35.75
-BEV009,Gatorade,32.99
-BEV010,Minute Maid,10.00
-BEV011,Nutri Boost,14.25
-BEV012,Sparkle,10.50
-BEV013,Zesto,11.50
-BEV014,Natures Spring 1Liter,27.75
-BEV015,Wilkins 1000 ml,29.99
-BEV016,Wilkins 237ml,20.25
-BEV017,Wilkins 500ml,20.50
+code,name,price,stock
+BEV000,C2 Solo,13.00,100
+BEV001,Chuckie 110ml,15.25,100
+BEV002,Chuckie 180ml,22.50,100
+BEV003,Coke Sakto,10.75,100
+BEV004,Coke 12 Oz.,14.75,100
+BEV005,Coke 8 Oz.,12.00,100
+BEV006,Coke Mismo,18.00,100
+BEV007,Coke Kasalo,27.50,100
+BEV008,Sprite 1 Liter,35.75,100
+BEV009,Gatorade,32.99,100
+BEV010,Minute Maid,10.00,100
+BEV011,Nutri Boost,14.25,100
+BEV012,Sparkle,10.50,100
+BEV013,Zesto,11.50,100
+BEV014,Natures Spring 1Liter,27.75,100
+BEV015,Wilkins 1000 ml,29.99,100
+BEV016,Wilkins 237ml,20.25,100
+BEV017,Wilkins 500ml,20.50,100

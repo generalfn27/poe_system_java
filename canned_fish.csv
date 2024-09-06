@@ -1,12 +1,12 @@
-code,name,price
-CAF000,555 Sardines,20.00
-CAF001,Atami,18.25
-CAF002,Magasardines red,18.50
-CAF003,Megasardines green,21.75
-CAF004,Unipak,20.99
-CAF005,Young'stown red/green,20.00
-CAF006,555 Tuna 150g,35.25
-CAF007,555 Tuna Junior,27.50
-CAF008,Century,27.75
-CAF009,Wow Ulam,24.99
-CAF010,Young'stown,32.00
+code,name,price,stock
+CAF000,555 Sardines,20.00,50
+CAF001,Atami,18.25,40
+CAF002,Magasardines red,18.50,60
+CAF003,Megasardines green,21.75,30
+CAF004,Unipak,20.99,45
+CAF005,Young'stown red/green,20.00,55
+CAF006,555 Tuna 150g,35.25,25
+CAF007,555 Tuna Junior,27.50,20
+CAF008,Century,27.75,35
+CAF009,Wow Ulam,24.99,50
+CAF010,Young'stown,32.00,40
