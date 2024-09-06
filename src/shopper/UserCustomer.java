@@ -115,10 +115,12 @@ public class UserCustomer {
 
                 // Display the loaded products
                 browse_snacks.display_products(snacks);
+
                 //browse_snacks(&queue_number);
                 guest_customer_item_category(guest);
                 break;
             case "3":
+                //canned goods may dalawang choice
                 //browse_canned_goods(&queue_number);
                 guest_customer_item_category(guest);
                 break;

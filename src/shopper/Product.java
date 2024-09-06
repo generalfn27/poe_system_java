@@ -13,6 +13,16 @@ class Product {
         this.name = name;
         this.price = price;
         this.stock = stock;
+
+        System.out.println("\t|        [1] Beverages                               |");
+        System.out.println("\t|        [2] Snacks                  |");
+        System.out.println("\t|        [3] Canned Goods                            |");
+        System.out.println("\t|        [4] Condiments                            |");
+        System.out.println("\t|        [5] Dairy                            |");
+        System.out.println("\t|        [6] Frozen Foods                            |");
+        System.out.println("\t|        [7] Body Care & Beauty Care                            |");
+        System.out.println("\t|        [9] Detergents & Soaps                            |\n");
+        System.out.println("\t|        [0] Go Back                             |");
     }
 
     public String getCode() {
@@ -36,3 +46,6 @@ class Product {
         return String.format("Code: %-6s    Name: %-24s Price: %-5.2f    Stock: %2d", code, name, price, stock);
     }
 }
+
+
+
