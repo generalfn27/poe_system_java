@@ -6,11 +6,13 @@ class Product {
     private String code;
     private String name;
     private double price;
+    private int stock;
 
-    public Product(String code, String name, double price) {
+    public Product(String code, String name, double price, int stock) {
         this.code = code;
         this.name = name;
         this.price = price;
+        this.stock = stock;
     }
 
     public String getCode() {
@@ -25,8 +27,12 @@ class Product {
         return price;
     }
 
+    public int getStock() {
+        return stock;
+    }
+
     @Override
     public String toString() {
-        return String.format("Code: %-6s   Name: %-24s Price: %.2f", code, name, price);
+        return String.format("Code: %-6s   Name: %-24s Price: %.2f Stock: %2d", code, name, price, stock);
     }
 }

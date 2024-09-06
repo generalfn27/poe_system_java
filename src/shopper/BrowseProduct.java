@@ -19,7 +19,8 @@ public class BrowseProduct {
                 String code = values[0];
                 String name = values[1];
                 double price = Double.parseDouble(values[2]);
-                products.add(new Product(code, name, price));
+                int stock = Integer.parseInt(values[3]);
+                products.add(new Product(code, name, price, stock));
             }
         } catch (IOException e) {
             e.printStackTrace();
