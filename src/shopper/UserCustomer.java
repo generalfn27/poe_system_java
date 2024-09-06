@@ -98,17 +98,23 @@ public class UserCustomer {
                 user_customer_menu();
                 break;
             case "1":
-                BrowseProduct browseBeverages = new BrowseProduct();
+                BrowseProduct browse_beverages = new BrowseProduct();
                 //dito gumawa sya ng array form para iproseso ung laman ng csv
-                List<Product> beverages = browseBeverages.loadProductsFromCSV("beverages.csv");
+                List<Product> beverages = browse_beverages.loadProductsFromCSV("beverages.csv");
 
                 // Display the loaded products
-                browseBeverages.display_products(beverages);
+                browse_beverages.display_products(beverages);
 
                 //browse_beverages(&queue_number);
                 guest_customer_item_category(guest);
                 break;
             case "2":
+                BrowseProduct browse_snacks = new BrowseProduct();
+                //dito gumawa sya ng array form para iproseso ung laman ng csv
+                List<Product> snacks = browse_snacks.loadProductsFromCSV("snacks.csv");
+
+                // Display the loaded products
+                browse_snacks.display_products(snacks);
                 //browse_snacks(&queue_number);
                 guest_customer_item_category(guest);
                 break;
