@@ -11,6 +11,7 @@ public class UserCustomer {
     public UserCustomer() {
         this.userType = new UserType();
     }
+
     public void user_customer_menu() {
         Scanner scanf = new Scanner(System.in);
         int choice;
@@ -98,30 +99,17 @@ public class UserCustomer {
                 user_customer_menu();
                 break;
             case "1":
-                BrowseProduct browse_beverages = new BrowseProduct();
-                //dito gumawa sya ng array form para iproseso ung laman ng csv
-                List<Product> beverages = browse_beverages.loadProductsFromCSV("beverages.csv");
-
-                // Display the loaded products
-                browse_beverages.display_products(beverages);
-
-                //browse_beverages(&queue_number);
+                BrowseProduct.browse_beverages();
                 guest_customer_item_category(guest);
                 break;
             case "2":
-                BrowseProduct browse_snacks = new BrowseProduct();
-                //dito gumawa sya ng array form para iproseso ung laman ng csv
-                List<Product> snacks = browse_snacks.loadProductsFromCSV("snacks.csv");
-
-                // Display the loaded products
-                browse_snacks.display_products(snacks);
-
-                //browse_snacks(&queue_number);
+                BrowseProduct.browse_snacks();
                 guest_customer_item_category(guest);
                 break;
             case "3":
+
+
                 //canned goods may dalawang choice
-                //browse_canned_goods(&queue_number);
                 guest_customer_item_category(guest);
                 break;
             case "4":

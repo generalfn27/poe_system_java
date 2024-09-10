@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BrowseProduct {
 
@@ -22,7 +23,7 @@ public class BrowseProduct {
                 int stock = Integer.parseInt(values[3]);
                 products.add(new Product(code, name, price, stock));
             }
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
         return products;
@@ -34,6 +35,43 @@ public class BrowseProduct {
         for (Product product : products) {
             System.out.println(product);
         }
+    }
+
+    public static void browse_beverages() {
+        BrowseProduct browse_beverages = new BrowseProduct();
+        //dito gumawa sya ng array form para iproseso ung laman ng csv
+        List<Product> beverages = browse_beverages.loadProductsFromCSV("beverages.csv");
+
+        browse_beverages.display_products(beverages); // Display the loaded products
+    }
+
+    public static void browse_snacks(){
+        BrowseProduct browse_snacks = new BrowseProduct();
+        //dito gumawa sya ng array form para iproseso ung laman ng csv
+        List<Product> snacks = browse_snacks.loadProductsFromCSV("snacks.csv");
+
+        browse_snacks.display_products(snacks); // Display the loaded products
+    }
+
+    public static void browse_canned_goods() {
+        BrowseProduct browse_canned_goods = new BrowseProduct();
+        char choice;
+        Scanner scanf = new Scanner(System.in);
+
+        System.out.println("\t���������������������������������������������������������\n");
+        System.out.println("\t�              Select kind of Canned Goods:             �\n");
+        System.out.println("\t�                                                       �\n");
+        System.out.println("\t�              [1] Canned Fish                          �\n");
+        System.out.println("\t�              [2] Canned Meat                          �\n");
+        System.out.println("\t�                                                       �\n");
+        System.out.println("\t�              [0] Go Back                              �\n");
+        System.out.println("\t�                                                       �\n");
+        System.out.println("\t�                                                       �\n");
+        System.out.println("\t���������������������������������������������������������\n");
+
+        System.out.print("\n\tEnter Here: ");
+        scanf.nextLine();
+
     }
 
 }
