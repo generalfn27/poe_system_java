@@ -14,7 +14,7 @@ public class UserCustomer {
 
     public void user_customer_menu() {
         Scanner scanf = new Scanner(System.in);
-        int choice;
+        String choice;
 
         while (true) {
             System.out.println("\n\t----------------------------------------------");
@@ -29,26 +29,26 @@ public class UserCustomer {
             System.out.println("\t----------------------------------------------");
 
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextInt();
+            choice = scanf.next();
 
             // Consume the leftover newline from nextInt
             scanf.nextLine();
 
             switch (choice) {
-                case 1:
+                case "1":
                     // Call the login function (assuming it exists)
                     customerLogin();
                     break;
-                case 2:
+                case "2":
                     // Handle the guest case
                     customer guest = new customer("Guest"); // Guest with default name
                     guest_customer_item_category(guest); // Pass the guest customer to the item category function
                     break;
-                case 3:
+                case "3":
                     // Call the registration function (assuming it exists)
                     customerRegister();
                     break;
-                case 0:
+                case "0":
                     userType.user_type_menu();
                     return; // Go back to the previous menu
                 default:
