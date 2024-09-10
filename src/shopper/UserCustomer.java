@@ -123,10 +123,12 @@ public class UserCustomer {
                     guest_customer_item_category(guest);
                     break;
                 case "7":
+                    //may dalawang option sa self care
                     BrowseProduct.browse_self_care_items();
                     guest_customer_item_category(guest);
                     break;
                 case "8":
+                    // may 3 categories dito ng
                     BrowseProduct.browse_detergents();
                     guest_customer_item_category(guest);
                     break;

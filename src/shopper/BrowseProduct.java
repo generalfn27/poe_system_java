@@ -117,7 +117,7 @@ public class BrowseProduct {
 
         do {
             System.out.println("\t���������������������������������������������������������");
-            System.out.println("\t�              Select kind of Canned Goods:             �");
+            System.out.println("\t�              Select kind of Self Care Product:        �");
             System.out.println("\t�                                                       �");
             System.out.println("\t�              [1] Body Care                            �");
             System.out.println("\t�              [2] Beauty Care                          �");
@@ -155,9 +155,9 @@ public class BrowseProduct {
 
         do {
             System.out.println("\t���������������������������������������������������������");
-            System.out.println("\t�              Select kind of Canned Goods:             �");
+            System.out.println("\t�              Select kind of Detergents:               �");
             System.out.println("\t�                                                       �");
-            System.out.println("\t�              [1] Powder Detergent                           �");
+            System.out.println("\t�              [1] Powder Detergent                     �");
             System.out.println("\t�              [2] Bar Soap                             �");
             System.out.println("\t�              [3] Liquid Soap                          �");
             System.out.println("\t�                                                       �");
