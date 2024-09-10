@@ -68,7 +68,6 @@ public class UserCustomer {
         String item_category;
 
         do {
-
             // Implement guest item browsing functionality here
             System.out.println("Browsing as guest: " + guest.getName());
             // Continue with guest-specific browsing and processing
@@ -107,35 +106,33 @@ public class UserCustomer {
                     guest_customer_item_category(guest);
                     break;
                 case "3":
-
-
+                    BrowseProduct.browse_canned_goods();
                     //canned goods may dalawang choice
                     guest_customer_item_category(guest);
                     break;
                 case "4":
-                    //browse_condiments(&queue_number);
+                    BrowseProduct.browse_condiments();
                     guest_customer_item_category(guest);
                     break;
                 case "5":
-                    //browse_dairy(&queue_number);
+                    BrowseProduct.browse_dairy();
                     guest_customer_item_category(guest);
                     break;
                 case "6":
-                    //browse_frozen_foods(&queue_number);
+                    BrowseProduct.browse_frozen_foods();
                     guest_customer_item_category(guest);
                     break;
                 case "7":
-                    //browse_self_care_products(&queue_number);
+                    BrowseProduct.browse_self_care_items();
                     guest_customer_item_category(guest);
                     break;
                 case "8":
-                    //browse_detergent_soaps(&queue_number);
+                    BrowseProduct.browse_detergents();
                     guest_customer_item_category(guest);
                     break;
 
                 default:
                     System.out.println("\\nInvalid input. Try again...");
-                    //press_any_key();
             }
         } while (!item_category.equals("0"));
 
