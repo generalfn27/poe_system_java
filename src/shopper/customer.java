@@ -1,13 +1,13 @@
 package shopper;
 
-public class Customer {
+public class customer {
     private String name;
     private boolean isRegistered;
     private String accountNumber;
     private String accountId;
 
     // Constructor/function for guest customers (no account details)
-    public Customer(String name) {
+    public customer(String name) {
         this.name = name;
         this.isRegistered = false; // Guests are not registered by default
         this.accountNumber = null;
@@ -15,7 +15,7 @@ public class Customer {
     }
 
     // Constructor for registered customers (with account details)
-    public Customer(String name, String accountNumber, String accountId) {
+    public customer(String name, String accountNumber, String accountId) {
         this.name = name;
         this.isRegistered = true; // Registered customer
         this.accountNumber = accountNumber;

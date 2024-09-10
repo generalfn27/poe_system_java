@@ -40,7 +40,7 @@ public class UserCustomer {
                     break;
                 case "2":
                     // Handle the guest case
-                    Customer guest = new Customer("Guest"); // Guest with default name
+                    customer guest = new customer("Guest"); // Guest with default name
                     guest_customer_item_category(guest); // Pass the guest customer to the item category function
                     break;
                 case "3":
@@ -63,7 +63,7 @@ public class UserCustomer {
     }
 
     // Placeholder for the guest customer item category function
-    public void guest_customer_item_category(Customer guest) {
+    public void guest_customer_item_category(customer guest) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
