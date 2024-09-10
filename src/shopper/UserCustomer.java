@@ -67,76 +67,77 @@ public class UserCustomer {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
-        // Implement guest item browsing functionality here
-        System.out.println("Browsing as guest: " + guest.getName());
-        // Continue with guest-specific browsing and processing
+        do {
+
+            // Implement guest item browsing functionality here
+            System.out.println("Browsing as guest: " + guest.getName());
+            // Continue with guest-specific browsing and processing
 
 
+            System.out.println("\n\t----------------------------------------------");
+            System.out.println("\t|              Welcome Customer!             |");
+            System.out.println("\t|             What do you want to browse?    |");
+            System.out.println("\t|                                                |");
+            System.out.println("\t|        [1] Beverages                               |");
+            System.out.println("\t|        [2] Snacks                  |");
+            System.out.println("\t|        [3] Canned Goods                            |");
+            System.out.println("\t|        [4] Condiments                            |");
+            System.out.println("\t|        [5] Dairy                            |");
+            System.out.println("\t|        [6] Frozen Foods                            |");
+            System.out.println("\t|        [7] Body Care & Beauty Care                            |");
+            System.out.println("\t|        [9] Detergents & Soaps                            |\n");
+            System.out.println("\t|        [0] Go Back                             |");
+            System.out.println("\t|                                                |");
+            System.out.println("\t----------------------------------------------");
+            System.out.println("\t|        Enter here: ");
 
-        System.out.println("\n\t----------------------------------------------");
-        System.out.println("\t|              Welcome Customer!             |");
-        System.out.println("\t|             What do you want to browse?    |");
-        System.out.println("\t|                                                |");
-        System.out.println("\t|        [1] Beverages                               |");
-        System.out.println("\t|        [2] Snacks                  |");
-        System.out.println("\t|        [3] Canned Goods                            |");
-        System.out.println("\t|        [4] Condiments                            |");
-        System.out.println("\t|        [5] Dairy                            |");
-        System.out.println("\t|        [6] Frozen Foods                            |");
-        System.out.println("\t|        [7] Body Care & Beauty Care                            |");
-        System.out.println("\t|        [9] Detergents & Soaps                            |\n");
-        System.out.println("\t|        [0] Go Back                             |");
-        System.out.println("\t|                                                |");
-        System.out.println("\t----------------------------------------------");
-        System.out.println("\t|        Enter here: ");
+            item_category = scanf.nextLine();
 
-        item_category = scanf.nextLine();
-
-        switch (item_category)
-        {
-            case "0":
-                //reset_cart(cart, &total_items, &total_price);
-                user_customer_menu();
-                break;
-            case "1":
-                BrowseProduct.browse_beverages();
-                guest_customer_item_category(guest);
-                break;
-            case "2":
-                BrowseProduct.browse_snacks();
-                guest_customer_item_category(guest);
-                break;
-            case "3":
+            switch (item_category) {
+                case "0":
+                    //reset_cart(cart, &total_items, &total_price);
+                    user_customer_menu();
+                    break;
+                case "1":
+                    BrowseProduct.browse_beverages();
+                    guest_customer_item_category(guest);
+                    break;
+                case "2":
+                    BrowseProduct.browse_snacks();
+                    guest_customer_item_category(guest);
+                    break;
+                case "3":
 
 
-                //canned goods may dalawang choice
-                guest_customer_item_category(guest);
-                break;
-            case "4":
-                //browse_condiments(&queue_number);
-                guest_customer_item_category(guest);
-                break;
-            case "5":
-                //browse_dairy(&queue_number);
-                guest_customer_item_category(guest);
-                break;
-            case "6":
-                //browse_frozen_foods(&queue_number);
-                guest_customer_item_category(guest);
-                break;
-            case "7":
-                //browse_self_care_products(&queue_number);
-                guest_customer_item_category(guest);
-                break;
-            case "8":
-                //browse_detergent_soaps(&queue_number);
-                guest_customer_item_category(guest);
-                break;
+                    //canned goods may dalawang choice
+                    guest_customer_item_category(guest);
+                    break;
+                case "4":
+                    //browse_condiments(&queue_number);
+                    guest_customer_item_category(guest);
+                    break;
+                case "5":
+                    //browse_dairy(&queue_number);
+                    guest_customer_item_category(guest);
+                    break;
+                case "6":
+                    //browse_frozen_foods(&queue_number);
+                    guest_customer_item_category(guest);
+                    break;
+                case "7":
+                    //browse_self_care_products(&queue_number);
+                    guest_customer_item_category(guest);
+                    break;
+                case "8":
+                    //browse_detergent_soaps(&queue_number);
+                    guest_customer_item_category(guest);
+                    break;
 
-            default:
-                System.out.println("\\nInvalid input. Try again...");
-                //press_any_key();
-        }
+                default:
+                    System.out.println("\\nInvalid input. Try again...");
+                    //press_any_key();
+            }
+        } while (!item_category.equals("0"));
 
     }
 
