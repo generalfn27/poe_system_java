@@ -3,7 +3,6 @@ package shopper;
 import user_types.*;
 
 import java.util.Scanner;
-import java.util.List;
 
 public class UserCustomer {
     private final UserType userType;
@@ -65,13 +64,14 @@ public class UserCustomer {
 
     // Placeholder for the guest customer item category function
     public void guest_customer_item_category(customer guest) {
+        Scanner scanf = new Scanner(System.in);
+        String item_category;
+
         // Implement guest item browsing functionality here
         System.out.println("Browsing as guest: " + guest.getName());
         // Continue with guest-specific browsing and processing
 
-        Scanner scanf = new Scanner(System.in);
 
-        String item_category;
 
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|              Welcome Customer!             |");
@@ -137,12 +137,6 @@ public class UserCustomer {
                 System.out.println("\\nInvalid input. Try again...");
                 //press_any_key();
         }
-
-        BrowseProduct browseBeverages = new BrowseProduct();
-        List<Product> beverages = browseBeverages.loadProductsFromCSV("beverages.csv");
-
-        // Display the loaded products
-        browseBeverages.display_products(beverages);
 
     }
 
