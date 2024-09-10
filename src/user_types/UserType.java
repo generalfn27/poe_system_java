@@ -19,27 +19,27 @@ public class UserType {
             System.out.println("\n[0] Exit");
             System.out.println("Type here: ");
 
-            int user_type_choice = scanf.nextInt();
+            String user_type_choice = scanf.next();
 
             // Consume the leftover newline from nextInt
             scanf.nextLine();
 
             switch (user_type_choice) {
-                case 1:
+                case "1":
                     System.out.println("You selected Customer.");
                     UserCustomer user_customer = new UserCustomer();
                     user_customer.user_customer_menu();
                     break;
-                case 2:
+                case "2":
                     System.out.println("You selected Cashier.");
                     Cashier cashier = new Cashier();
                     cashier.user_cashier();
                     break;
-                case 3:
+                case "3":
                     System.out.println("You selected Manager.");
                     // Call out manager class function
                     break;
-                case 0:
+                case "0":
                     boolean exit_confirmed = false;
                     while (!exit_confirmed) {
                         System.out.flush();
