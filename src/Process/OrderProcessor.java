@@ -1,6 +1,8 @@
 package Process;
 
+import Shopper.Customer;
 import Shopper.Product;
+import Shopper.UserCustomer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +124,7 @@ public class OrderProcessor {
             switch (choice) {
                 case "A":
                 case "a":
-                    //guest_customer_item_category();
+                    UserCustomer.guest_customer_item_category();
                     break;
                 case "R":
                 case "r":

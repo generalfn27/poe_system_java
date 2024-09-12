@@ -41,9 +41,7 @@ public class UserCustomer {
                     customerLogin();
                     break;
                 case "2":
-                    // Handle the guest case
-                    Customer guest = new Customer("Guest"); // Guest with default name
-                    guest_customer_item_category(guest); // Pass the guest customer to the item category function
+                    guest_customer_item_category(); // Pass the guest customer to the item category function
                     break;
                 case "3":
                     // Call the registration function (assuming it exists)
@@ -65,7 +63,7 @@ public class UserCustomer {
     }
 
     // Placeholder for the guest customer item category function
-    public void guest_customer_item_category(Customer guest) {
+    public static void guest_customer_item_category() {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
@@ -73,7 +71,7 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            System.out.println("\n\nBrowsing as guest: " + guest.getName());
+            System.out.println("\n\nBrowsing as guest: ");
 
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|              Welcome Customer!             |");
@@ -99,7 +97,6 @@ public class UserCustomer {
 
             switch (item_category) {
                 case "0":
-                    user_customer_menu();
                     return;  // Return to main menu
                 case "1":
                     selected_products = BrowseProduct.browse_beverages(); // Browse beverages
