@@ -42,7 +42,7 @@ public class UserCustomer {
                     break;
                 case "2":
                     // Handle the guest case
-                    customer guest = new customer("Guest"); // Guest with default name
+                    Customer guest = new Customer("Guest"); // Guest with default name
                     guest_customer_item_category(guest); // Pass the guest customer to the item category function
                     break;
                 case "3":
@@ -65,7 +65,7 @@ public class UserCustomer {
     }
 
     // Placeholder for the guest customer item category function
-    public void guest_customer_item_category(customer guest) {
+    public void guest_customer_item_category(Customer guest) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
@@ -73,10 +73,7 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            // Implement guest item browsing functionality here
             System.out.println("Browsing as guest: " + guest.getName());
-            // Continue with guest-specific browsing and processing
-
 
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|              Welcome Customer!             |");
@@ -102,53 +99,47 @@ public class UserCustomer {
 
             switch (item_category) {
                 case "0":
-                    //reset_cart(cart, &total_items, &total_price);
                     user_customer_menu();
-                    break;
+                    return;  // Return to main menu
                 case "1":
-                    BrowseProduct.browse_beverages();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_beverages(); // Browse beverages
                     break;
                 case "2":
-                    BrowseProduct.browse_snacks();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_snacks(); // Browse snacks
                     break;
                 case "3":
-                    BrowseProduct.browse_canned_goods();
-                    //canned goods may dalawang choice
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_canned_goods(); // Browse canned goods
                     break;
                 case "4":
-                    BrowseProduct.browse_condiments();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_condiments(); // Browse condiments
                     break;
                 case "5":
-                    BrowseProduct.browse_dairy();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_dairy(); // Browse dairy
                     break;
                 case "6":
-                    BrowseProduct.browse_frozen_foods();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_frozen_foods(); // Browse frozen foods
                     break;
                 case "7":
-                    //may dalawang option sa self care
-                    BrowseProduct.browse_self_care_items();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_self_care_items(); // Browse self-care items
                     break;
                 case "8":
-                    // may 3 categories dito ng
-                    BrowseProduct.browse_detergents();
-                    guest_customer_item_category(guest);
+                    selected_products = BrowseProduct.browse_detergents(); // Browse detergents
                     break;
-
                 default:
-                    System.out.println("\\nInvalid input. Try again...");
+                    System.out.println("\nInvalid input. Try again...");
+                    continue;
             }
+
+            if (selected_products != null && !selected_products.isEmpty()) {
+                // After displaying products, process the order by asking for product code
+                order_processor.process_customer_order(selected_products);
+            } else {
+                System.out.println("No products available in this category.");
+            }
+
         } while (!item_category.equals("0"));
-
-
-
     }
+
 
     // Placeholder for the customer registration function
     public void customerRegister() {

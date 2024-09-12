@@ -39,25 +39,27 @@ public class BrowseProduct {
         }
     }
 
-    public static void browse_beverages() {
+    public static List<Product> browse_beverages() {
         BrowseProduct browse_beverages = new BrowseProduct();
 
         //dito gumawa sya ng array form para iproseso ung laman ng csv
         List<Product> beverages = browse_beverages.loadProductsFromCSV("beverages.csv");
 
         browse_beverages.display_products(beverages); // Display the loaded products
+        return beverages;
     }
 
-    public static void browse_snacks(){
+    public static List<Product> browse_snacks(){
         BrowseProduct browse_snacks = new BrowseProduct();
 
         //dito gumawa sya ng array form para iproseso ung laman ng csv
         List<Product> snacks = browse_snacks.loadProductsFromCSV("snacks.csv");
 
         browse_snacks.display_products(snacks); // Display the loaded products
+        return snacks;
     }
 
-    public static void browse_canned_goods() {
+    public static List<Product> browse_canned_goods() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -93,27 +95,31 @@ public class BrowseProduct {
                     System.out.println("\nInvalid input. Try again...\n");
             }
         } while (!choice.equals("0"));
+        return null;
     }
 
-    public static void browse_condiments() {
+    public static List<Product> browse_condiments() {
         BrowseProduct browse_condiments = new BrowseProduct();
         List<Product> condiments = browse_condiments.loadProductsFromCSV("condiments.csv");
         browse_condiments.display_products(condiments); // Display the loaded products
+        return condiments;
     }
 
-    public static void browse_dairy() {
+    public static List<Product> browse_dairy() {
         BrowseProduct browse_dairy = new BrowseProduct();
         List<Product> dairy = browse_dairy.loadProductsFromCSV("dairy.csv");
         browse_dairy.display_products(dairy); // Display the loaded products
+        return dairy;
     }
 
-    public static void browse_frozen_foods() {
+    public static List<Product> browse_frozen_foods() {
         BrowseProduct browse_frozen_foods = new BrowseProduct();
         List<Product> dairy = browse_frozen_foods.loadProductsFromCSV("frozen_foods.csv");
         browse_frozen_foods.display_products(dairy); // Display the loaded products
+        return dairy;
     }
 
-    public static void browse_self_care_items() {
+    public static List<Product> browse_self_care_items() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -149,9 +155,10 @@ public class BrowseProduct {
                     System.out.println("\nInvalid input. Try again...\n");
             }
         } while (!choice.equals("0"));
+        return null;
     }
 
-    public static void browse_detergents() {
+    public static List<Product> browse_detergents() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -193,6 +200,7 @@ public class BrowseProduct {
                     System.out.println("\nInvalid input. Try again...\n");
             }
         } while (!choice.equals("0"));
+        return null;
     }
 
 }
