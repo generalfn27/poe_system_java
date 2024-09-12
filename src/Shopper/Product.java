@@ -1,12 +1,12 @@
-package shopper;
+package Shopper;
 
 
 // Product class to represent each product
-class Product {
-    private String code;
-    private String name;
-    private double price;
-    private int stock;
+public class Product {
+    public String code;
+    public String name;
+    public double price;
+    public int stock;
 
     public Product(String code, String name, double price, int stock) {
         this.code = code;

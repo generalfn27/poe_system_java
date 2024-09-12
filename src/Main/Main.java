@@ -1,6 +1,6 @@
 package Main;
 
-import user_types.UserType;
+import User_Types.UserType;
 
 public class Main {
     public static void main(String[] args) {

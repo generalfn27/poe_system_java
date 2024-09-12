@@ -1,7 +1,5 @@
 package cashier;
 
-import user_types.*;
-
 import java.util.Scanner;
 
 public class Cashier {

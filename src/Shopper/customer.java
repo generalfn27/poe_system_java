@@ -1,4 +1,4 @@
-package shopper;
+package Shopper;
 
 public class customer {
     private String name;

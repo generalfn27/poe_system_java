@@ -1,6 +1,6 @@
-package user_types;
+package User_Types;
 
-import shopper.*;
+import Shopper.*;
 import cashier.*;
 
 import java.util.Scanner;

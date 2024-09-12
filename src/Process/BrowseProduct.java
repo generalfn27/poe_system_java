@@ -1,4 +1,6 @@
-package shopper;
+package Process;
+
+import Shopper.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

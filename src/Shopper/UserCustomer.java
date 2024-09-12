@@ -1,6 +1,7 @@
-package shopper;
+package Shopper;
 
-import user_types.*;
+import User_Types.*;
+import Process.*;
 
 import java.util.Scanner;
 
