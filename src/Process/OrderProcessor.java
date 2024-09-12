@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class OrderProcessor {
-    private List<Product> cart;
-    private int total_items;
-    private double total_price;
+    private static List<Product> cart;
+    private static int total_items;
+    private static double total_price;
 
     public OrderProcessor() {
         cart = new ArrayList<>();
@@ -90,7 +90,7 @@ public class OrderProcessor {
         cart.add(new Product(product.getCode(), product.getName(), product.getPrice(), quantity));
     }
 
-    public void display_cart() {
+    public static void display_cart() {
         System.out.println("\nYour Cart:");
         if (cart.isEmpty()) {
             System.out.println("Your cart is empty.");
@@ -104,17 +104,17 @@ public class OrderProcessor {
         }
     }
 
-    public void modify_menu_process() {
+    public static void guest_modify_menu_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
         while (true) {
-            System.out.println("\tAdd more items (A)\n");
-            System.out.println("\tRemove Items (R)\n");
-            System.out.println("\tDeduct Quantity(D)\n");
-            System.out.println("\tClear Cart(C)\n");
-            System.out.println("\tProceed to checkout (P)\n");
-            System.out.println("\tGo Back (B)\n");
+            System.out.println("\tAdd more items (A)");
+            System.out.println("\tRemove Items (R)");
+            System.out.println("\tDeduct Quantity(D)");
+            System.out.println("\tClear Cart(C)");
+            System.out.println("\tProceed to checkout (P)");
+            System.out.println("\tGo Back (B)");
             System.out.println("\n\tEnter choice: ");
 
             choice = scanf.nextLine();
@@ -126,7 +126,7 @@ public class OrderProcessor {
                     break;
                 case "R":
                 case "r":
-                    //view_cart(cart, *total_items, *total_price);
+                    display_cart();
                     //ask_remove(cart, total_items, total_price);
                     break;
                 case "D":
@@ -141,8 +141,7 @@ public class OrderProcessor {
                     break;
                 case "B":
                 case "b":
-                    //guest_customer_item_category();
-                    break;
+                    return;
                 case "P":
                 case "p":
                     // Confirmation before checkout

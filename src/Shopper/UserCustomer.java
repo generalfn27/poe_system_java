@@ -136,7 +136,7 @@ public class UserCustomer {
             } else {
                 System.out.println("No products available in this category.");
             }
-
+            OrderProcessor.guest_modify_menu_process();
         } while (true);
     }
 
