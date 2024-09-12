@@ -4,6 +4,7 @@ import User_Types.*;
 import Process.*;
 
 import java.util.Scanner;
+import java.util.List;
 
 public class UserCustomer {
     private final UserType userType;
@@ -68,6 +69,9 @@ public class UserCustomer {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
+        // Create an instance of OrderProcessor to handle the guest's order
+        OrderProcessor order_processor = new OrderProcessor();
+
         do {
             // Implement guest item browsing functionality here
             System.out.println("Browsing as guest: " + guest.getName());
@@ -92,6 +96,9 @@ public class UserCustomer {
             System.out.println("\t|        Enter here: ");
 
             item_category = scanf.nextLine();
+
+            // Variable to hold the products in the chosen category
+            List<Product> selected_products = null;
 
             switch (item_category) {
                 case "0":
@@ -138,6 +145,8 @@ public class UserCustomer {
                     System.out.println("\\nInvalid input. Try again...");
             }
         } while (!item_category.equals("0"));
+
+
 
     }
 

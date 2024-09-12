@@ -31,6 +31,15 @@ public class Product {
         return stock;
     }
 
+    // Method to update the stock quantity
+    public void update_stock(int quantityChange) {
+        if (this.stock + quantityChange >= 0) {  // Ensure stock doesn't go negative
+            this.stock += quantityChange;
+        } else {
+            System.out.println("Not enough stock available!");
+        }
+    }
+
     @Override
     public String toString() {
         return String.format("Code: %-6s    Name: %-24s Price: %-5.2f    Stock: %2d", code, name, price, stock);

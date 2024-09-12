@@ -1,5 +1,8 @@
 package Shopper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class customer {
     private String name;
     private boolean isRegistered;
@@ -20,6 +23,13 @@ public class customer {
         this.isRegistered = true; // Registered customer
         this.accountNumber = accountNumber;
         this.accountId = accountId;
+    }
+
+    private List<Product> cart = new ArrayList<>();
+
+    // Method to add product to cart
+    public void addToCart(Product product) {
+        cart.add(product);
     }
 
     // Getters and Setters
