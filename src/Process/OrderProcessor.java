@@ -1,6 +1,5 @@
 package Process;
 
-import Shopper.Customer;
 import Shopper.Product;
 import Shopper.UserCustomer;
 
@@ -65,7 +64,6 @@ public class OrderProcessor {
         if (choice == 'A' || choice == 'a') {
             add_to_cart(selected_product, quantity);
             System.out.println("Item added to cart.");
-            display_cart();
         } else if (choice == 'C' || choice == 'c') {
             System.out.println("Item not added to cart.");
         }
@@ -106,16 +104,18 @@ public class OrderProcessor {
         }
     }
 
-    public static void guest_modify_menu_process() {
+    public static void modify_menu_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
         while (true) {
-            System.out.println("\tAdd more items (A)");
+            display_cart();
+            System.out.println("\n\tAdd more items (A)");
             System.out.println("\tRemove Items (R)");
-            System.out.println("\tDeduct Quantity(D)");
-            System.out.println("\tClear Cart(C)");
+            System.out.println("\tDeduct Quantity (D)");
+            System.out.println("\tClear Cart (C)");
             System.out.println("\tProceed to checkout (P)");
+            System.out.println("\tDisplay cart(V)");
             System.out.println("\tGo Back (B)");
             System.out.println("\n\tEnter choice: ");
 
@@ -124,44 +124,85 @@ public class OrderProcessor {
             switch (choice) {
                 case "A":
                 case "a":
-                    UserCustomer.guest_customer_item_category();
+                    //UserCustomer.guest_customer_item_category(guest);
                     break;
                 case "R":
                 case "r":
-                    display_cart();
-                    //ask_remove(cart, total_items, total_price);
+                    System.out.print("Enter product code to remove: ");
+                    String codeToRemove = scanf.nextLine();
+                    remove_item(codeToRemove);  // Remove the item
                     break;
                 case "D":
                 case "d":
-                    //view_cart(cart, *total_items, *total_price);
-                    //ask_deduct(cart, total_items, total_price);
+                    System.out.print("Enter product code to deduct: ");
+                    String codeToDeduct = scanf.nextLine();
+                    System.out.print("Enter quantity to deduct: ");
+                    int quantityToDeduct = scanf.nextInt();
+                    deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
                     break;
                 case "C":
                 case "c":
-                    //reset_cart(cart, total_items, total_price);
-                    //view_cart(cart, *total_items, *total_price);
+                    reset_cart();  // Reset the cart
+                    break;
+                case "V":
+                case "v":
+                    display_cart();
                     break;
                 case "B":
                 case "b":
                     return;
                 case "P":
                 case "p":
-                    // Confirmation before checkout
-                    String confirm_choice;
-                    System.out.println("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                    confirm_choice = scanf.nextLine();
-
-                    if (confirm_choice == "Y" || confirm_choice == "y") {
-                        // Proceed to checkout logic
-                        System.out.println("\n\tProcessing checkout...\n");
-                        //callout sa process queue function
-                    } else {
-                        System.out.println("\n\tCheckout cancelled.\n");
-                    }
+                    // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
                     break;
             }
         }
-
     }
+
+    public static void deduct_item_quantity(String product_code, int quantity) {
+        for (Product product : cart) {
+            if (product.getCode().equals(product_code)) {
+                int new_quantity = product.getStock() - quantity;
+                if (new_quantity > 0) {
+                    product.update_stock(-quantity);
+                    total_items -= quantity;
+                    total_price -= product.getPrice() * quantity;
+                    System.out.printf("Deducted %d of %s from the cart.\n", quantity, product.getName());
+                } else {
+                    remove_item(product_code);
+                }
+                return;
+            }
+        }
+        System.out.println("Product not found in the cart.");
+    }
+
+    public static void remove_item(String product_code) {
+        Product to_remove = null;
+        for (Product product : cart) {
+            if (product.getCode().equals(product_code)) {
+                total_price-= product.getStock();
+                total_price -= product.getPrice() * product.getStock();
+                to_remove = product;
+                break;
+            }
+        }
+        if (to_remove != null) {
+            cart.remove(to_remove);
+            System.out.printf("Removed %s from the cart.\n", to_remove.getName());
+        } else {
+            System.out.println("Product not found in the cart.");
+        }
+    }
+
+    public static void reset_cart() {
+        cart.clear();
+        total_items = 0;
+        total_price = 0;
+        System.out.println("The cart has been reset.");
+    }
+
+
+
 
 }
