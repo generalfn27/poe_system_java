@@ -21,7 +21,7 @@ public class OrderProcessor {
         Scanner scanf = new Scanner(System.in);
         String product_code;
         int quantity = 0;
-        Product selected_product = null;
+        Product selected_product;
 
         do {
             System.out.println("\nEnter product code: ");

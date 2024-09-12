@@ -95,7 +95,7 @@ public class UserCustomer {
             item_category = scanf.nextLine();
 
             // Variable to hold the products in the chosen category
-            List<Product> selected_products = null;
+            List<Product> selected_products;
 
             switch (item_category) {
                 case "0":
@@ -137,7 +137,7 @@ public class UserCustomer {
                 System.out.println("No products available in this category.");
             }
 
-        } while (!item_category.equals("0"));
+        } while (true);
     }
 
 

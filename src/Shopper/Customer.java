@@ -27,10 +27,6 @@ public class Customer {
 
     private List<Product> cart = new ArrayList<>();
 
-    // Method to add product to cart
-    public void addToCart(Product product) {
-        cart.add(product);
-    }
 
     // Getters and Setters
     public String getName() {  return name; }
