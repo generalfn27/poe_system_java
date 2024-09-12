@@ -63,6 +63,7 @@ public class OrderProcessor {
         if (choice == 'A' || choice == 'a') {
             add_to_cart(selected_product, quantity);
             System.out.println("Item added to cart.");
+            display_cart();
         } else if (choice == 'C' || choice == 'c') {
             System.out.println("Item not added to cart.");
         }
@@ -89,6 +90,19 @@ public class OrderProcessor {
         cart.add(new Product(product.getCode(), product.getName(), product.getPrice(), quantity));
     }
 
+    public void display_cart() {
+        System.out.println("\nYour Cart:");
+        if (cart.isEmpty()) {
+            System.out.println("Your cart is empty.");
+        } else {
+            for (Product product : cart) {
+                System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
+                        product.getCode(), product.getName(), product.getStock(), product.getPrice());
+            }
+            System.out.printf("Total Items: %d\n", total_items);
+            System.out.printf("Total Price: %.2f\n", total_price);
+        }
 
+    }
 
 }

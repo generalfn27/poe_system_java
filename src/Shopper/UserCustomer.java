@@ -73,22 +73,22 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            System.out.println("Browsing as guest: " + guest.getName());
+            System.out.println("\n\nBrowsing as guest: " + guest.getName());
 
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|              Welcome Customer!             |");
             System.out.println("\t|             What do you want to browse?    |");
-            System.out.println("\t|                                                |");
-            System.out.println("\t|        [1] Beverages                               |");
-            System.out.println("\t|        [2] Snacks                  |");
-            System.out.println("\t|        [3] Canned Goods                            |");
-            System.out.println("\t|        [4] Condiments                            |");
-            System.out.println("\t|        [5] Dairy                            |");
-            System.out.println("\t|        [6] Frozen Foods                            |");
-            System.out.println("\t|        [7] Body Care & Beauty Care                            |");
-            System.out.println("\t|        [9] Detergents & Soaps                            |\n");
-            System.out.println("\t|        [0] Go Back                             |");
-            System.out.println("\t|                                                |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|        [1] Beverages                       |");
+            System.out.println("\t|        [2] Snacks                          |");
+            System.out.println("\t|        [3] Canned Goods                    |");
+            System.out.println("\t|        [4] Condiments                      |");
+            System.out.println("\t|        [5] Dairy                           |");
+            System.out.println("\t|        [6] Frozen Foods                    |");
+            System.out.println("\t|        [7] Body Care & Beauty Care         |");
+            System.out.println("\t|        [9] Detergents & Soaps              |\n");
+            System.out.println("\t|        [0] Go Back                         |");
+            System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
             System.out.println("\t|        Enter here: ");
 
