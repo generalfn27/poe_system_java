@@ -102,6 +102,64 @@ public class OrderProcessor {
             System.out.printf("Total Items: %d\n", total_items);
             System.out.printf("Total Price: %.2f\n", total_price);
         }
+    }
+
+    public void modify_menu_process() {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+
+        while (true) {
+            System.out.println("\tAdd more items (A)\n");
+            System.out.println("\tRemove Items (R)\n");
+            System.out.println("\tDeduct Quantity(D)\n");
+            System.out.println("\tClear Cart(C)\n");
+            System.out.println("\tProceed to checkout (P)\n");
+            System.out.println("\tGo Back (B)\n");
+            System.out.println("\n\tEnter choice: ");
+
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "A":
+                case "a":
+                    //guest_customer_item_category();
+                    break;
+                case "R":
+                case "r":
+                    //view_cart(cart, *total_items, *total_price);
+                    //ask_remove(cart, total_items, total_price);
+                    break;
+                case "D":
+                case "d":
+                    //view_cart(cart, *total_items, *total_price);
+                    //ask_deduct(cart, total_items, total_price);
+                    break;
+                case "C":
+                case "c":
+                    //reset_cart(cart, total_items, total_price);
+                    //view_cart(cart, *total_items, *total_price);
+                    break;
+                case "B":
+                case "b":
+                    //guest_customer_item_category();
+                    break;
+                case "P":
+                case "p":
+                    // Confirmation before checkout
+                    String confirm_choice;
+                    System.out.println("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                    confirm_choice = scanf.nextLine();
+
+                    if (confirm_choice == "Y" || confirm_choice == "y") {
+                        // Proceed to checkout logic
+                        System.out.println("\n\tProcessing checkout...\n");
+                        //callout sa process queue function
+                    } else {
+                        System.out.println("\n\tCheckout cancelled.\n");
+                    }
+                    break;
+            }
+        }
 
     }
 
