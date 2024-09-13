@@ -63,40 +63,38 @@ public class BrowseProduct {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
-        do {
-            System.out.println("\t���������������������������������������������������������");
-            System.out.println("\t�              Select kind of Canned Goods:             �");
-            System.out.println("\t�                                                       �");
-            System.out.println("\t�              [1] Canned Fish                          �");
-            System.out.println("\t�              [2] Canned Meat                          �");
-            System.out.println("\t�                                                       �");
-            System.out.println("\t�              [0] Go Back                              �");
-            System.out.println("\t�                                                       �");
-            System.out.println("\t�                                                       �");
-            System.out.println("\t���������������������������������������������������������");
+        while (true) {
+            System.out.println("\t----------------------------------------------");
+            System.out.println("\t|              Select kind of Canned Goods: |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|              [1] Canned Fish               |");
+            System.out.println("\t|              [2] Canned Meat               |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|              [0] Go Back                   |");
+            System.out.println("\t----------------------------------------------");
 
             System.out.print("\n\tEnter Here: ");
             choice = scanf.nextLine();
 
             switch (choice) {
                 case "0":
-                    break;
+                    return null;  // Return to the previous menu or caller
                 case "1":
                     BrowseProduct browse_canned_fish = new BrowseProduct();
                     List<Product> canned_fish = browse_canned_fish.loadProductsFromCSV("canned_fish.csv");
                     browse_canned_fish.display_products(canned_fish); // Display the loaded products
-                    break;
+                    return canned_fish;  // Return the list of products to the caller
                 case "2":
                     BrowseProduct browse_canned_meat = new BrowseProduct();
-                    List<Product> canned_meat = browse_canned_meat.loadProductsFromCSV("canned_fish.csv");
+                    List<Product> canned_meat = browse_canned_meat.loadProductsFromCSV("canned_meat.csv"); // Correct CSV file
                     browse_canned_meat.display_products(canned_meat); // Display the loaded products
-                    break;
+                    return canned_meat;  // Return the list of products to the caller
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
             }
-        } while (!choice.equals("0"));
-        return null;
+        }
     }
+
 
     public static List<Product> browse_condiments() {
         BrowseProduct browse_condiments = new BrowseProduct();
@@ -123,7 +121,7 @@ public class BrowseProduct {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
-        do {
+        while (true) {
             System.out.println("\t���������������������������������������������������������");
             System.out.println("\t�              Select kind of Self Care Product:        �");
             System.out.println("\t�                                                       �");
@@ -140,29 +138,28 @@ public class BrowseProduct {
 
             switch (choice) {
                 case "0":
-                    break;
+                    return null;
                 case "1":
                     BrowseProduct browse_body_care = new BrowseProduct();
                     List<Product> body_care = browse_body_care.loadProductsFromCSV("body_care.csv");
                     browse_body_care.display_products(body_care); // Display the loaded products
-                    break;
+                    return body_care;
                 case "2":
                     BrowseProduct browse_beauty_care = new BrowseProduct();
                     List<Product> beauty_care = browse_beauty_care.loadProductsFromCSV("beauty_care.csv");
                     browse_beauty_care.display_products(beauty_care); // Display the loaded products
-                    break;
+                    return beauty_care;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
             }
-        } while (!choice.equals("0"));
-        return null;
+        }
     }
 
     public static List<Product> browse_detergents() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
-        do {
+        while (true) {
             System.out.println("\t���������������������������������������������������������");
             System.out.println("\t�              Select kind of Detergents:               �");
             System.out.println("\t�                                                       �");
@@ -180,27 +177,26 @@ public class BrowseProduct {
 
             switch (choice) {
                 case "0":
-                    break;
+                    return null;
                 case "1":
                     BrowseProduct browse_powder_detergent = new BrowseProduct();
-                    List<Product> powder_detergent = browse_powder_detergent.loadProductsFromCSV("powder_detergent.csv");
+                    List<Product> powder_detergent = browse_powder_detergent.loadProductsFromCSV("powder_detergents.csv");
                     browse_powder_detergent.display_products(powder_detergent); // Display the loaded products
-                    break;
+                    return powder_detergent;
                 case "2":
                     BrowseProduct browse_bar_soap = new BrowseProduct();
-                    List<Product> bar_soap = browse_bar_soap.loadProductsFromCSV("bar_soap.csv");
+                    List<Product> bar_soap = browse_bar_soap.loadProductsFromCSV("bar_soaps.csv");
                     browse_bar_soap.display_products(bar_soap); // Display the loaded products
-                    break;
+                    return bar_soap;
                 case "3":
                     BrowseProduct browse_liquid_soap = new BrowseProduct();
-                    List<Product> liquid_soap = browse_liquid_soap.loadProductsFromCSV("liquid_soap.csv");
+                    List<Product> liquid_soap = browse_liquid_soap.loadProductsFromCSV("liquid_soaps.csv");
                     browse_liquid_soap.display_products(liquid_soap); // Display the loaded products
-                    break;
+                    return liquid_soap;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
             }
-        } while (!choice.equals("0"));
-        return null;
+        }
     }
 
 }

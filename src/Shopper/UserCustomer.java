@@ -86,7 +86,7 @@ public class UserCustomer {
             System.out.println("\t|        [5] Dairy                           |");
             System.out.println("\t|        [6] Frozen Foods                    |");
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
-            System.out.println("\t|        [9] Detergents & Soaps              |\n");
+            System.out.println("\t|        [8] Detergents & Soaps              |\n");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
