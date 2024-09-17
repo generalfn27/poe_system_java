@@ -60,7 +60,6 @@ public class UserCustomer {
                     customerRegister();
                     break;
                 case "0":
-                    userType.user_type_menu();
                     return; // Go back to the previous menu
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
@@ -467,6 +466,6 @@ public class UserCustomer {
         System.out.println("\n\tUsername not found. Please try again.");
     }
 
-    
+
 
 }
