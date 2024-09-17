@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class Cashier {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
-    private String username = "admin"; // Default username
-    private String password = "password"; // Default password
 
     public void user_cashier() {
         cashierLogin();
@@ -49,6 +47,10 @@ public class Cashier {
 
     private boolean validate_cashier_login(String inputUsername, String inputPassword) {
         // Add logic to validate the cashier's credentials here
+        // Default username
+        String username = "admin";
+        // Default password
+        String password = "password";
         return inputUsername.equals(username) && inputPassword.equals(password);
     }
 

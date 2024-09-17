@@ -1,7 +1,6 @@
 package Process;
 
 import Shopper.Product;
-import Shopper.UserCustomer;
 
 import java.util.ArrayList;
 import java.util.List;
