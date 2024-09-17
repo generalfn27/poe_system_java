@@ -269,6 +269,11 @@ public class OrderProcessor {
             System.out.println("\t�Thank you for ordering! Please remember your queue number and proceed to the cashier. �");
             System.out.println("\t����������������������������������������������������������������������������������������\n\n");
 
+            Scanner scanf = new Scanner(System.in);
+
+            System.out.println("\nPress any key to continue...");
+            scanf.next(); // Read any input from the user
+
             // Save the updated queue number
             save_queue_number();
 
