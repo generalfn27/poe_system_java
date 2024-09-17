@@ -15,6 +15,9 @@ public class UserCustomer {
     private final int MAX_CUSTOMERS = 100;
     private final String CSV_FILE = "customers.csv"; // CSV file name
 
+    private int MAX_ATTEMPTS = 5; // Maximum number of login attempts
+
+
     public UserCustomer() {
         // Load customers from CSV file when the program starts
         loadCustomersFromCSV();
@@ -45,6 +48,7 @@ public class UserCustomer {
             switch (choice) {
                 case "1":
                     // Call the login function (assuming it exists)
+                    customer_login();
                     break;
                 case "2":
                     // Handle the guest case
@@ -179,9 +183,8 @@ public class UserCustomer {
         }
 
         // Phone number
-        String phoneNumber;
         System.out.print("\tEnter Phone Number: ");
-        phoneNumber = scanner.nextLine();
+        String phoneNumber = scanner.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
 
         // Payment method choice
@@ -222,9 +225,12 @@ public class UserCustomer {
         // Save the customer to the CSV file
         saveCustomerToFile(newCustomer);
 
+        // Add the customer to the in-memory list
+        customers.add(newCustomer);
+
         System.out.println("\n\tRegistration successful. You can now log in.");
-        //customerLogin();
     }
+
 
 
     // Add funds to customer's account
@@ -305,15 +311,19 @@ public class UserCustomer {
     private void loadCustomersFromCSV() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CSV_FILE))) {
             String line;
+            // Skip the header line
+            bufferedReader.readLine();
+
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 5) {
+                if (data.length == 6) { // Expect 6 fields: username, password, phone number, payment method, balance, PIN
                     Customer customer = new Customer();
                     customer.setUsername(data[0]);
                     customer.setPassword(data[1]);
                     customer.setPhoneNumber(data[2]);
                     customer.setPaymentMethod(data[3]);
                     customer.setBalance(Float.parseFloat(data[4]));
+                    customer.setPinCode(data[5]);
 
                     customers.add(customer);
                 }
@@ -327,8 +337,59 @@ public class UserCustomer {
     }
 
 
-    public void customerLogin() {
-        // Implement customer login functionality here
+
+    public void customer_login() {
+        Scanner scanner = new Scanner(System.in);
+        int attemptCount = 0;
+        boolean loginSuccessful = false;
+
+        // Load customers from the CSV if not already loaded
+        if (customers.isEmpty()) {
+            loadCustomersFromCSV();
+        }
+
+        // Loop until login is successful or maximum attempts reached
+        while (attemptCount < MAX_ATTEMPTS) {
+            System.out.println("\n===================================");
+            System.out.println("|                                 |");
+            System.out.println("|          Shopper Login          |");
+            System.out.println("|                                 |");
+            System.out.println("===================================\n");
+
+            System.out.print("\tEnter Username: ");
+            String username = scanner.nextLine();
+
+            // Get hidden password input
+            String password = inputPassword(scanner, "\tEnter Password: ");
+
+            // Check if the username and password match any customer record
+            for (Customer customer : customers) {
+                if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
+                    System.out.println("\n\tLogin successful.\n");
+                    registeredUserCustomerItemCategory(customer.getUsername(), customer.getBalance());
+                    loginSuccessful = true;
+                    break;
+                }
+            }
+
+            if (loginSuccessful) {
+                break;
+            } else {
+                attemptCount++;
+                System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
+            }
+        }
+
+        if (!loginSuccessful) {
+            System.out.println("\n\tMaximum login attempts reached. Please try again later.");
+        }
     }
+
+    // Placeholder method for registered customer actions after login
+    private void registeredUserCustomerItemCategory(String username, double balance) {
+        System.out.println("\tBrowsing item categories for " + username + "...");
+        System.out.println("\tYour remaining balance: " + balance + "...");
+    }
+
 
 }
