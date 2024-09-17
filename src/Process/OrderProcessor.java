@@ -258,11 +258,10 @@ public class OrderProcessor {
                         product.getPrice(),
                         subtotal);
             }
-            System.out.printf("\tYour queue number is: %d\n", currentQueueNumber - 1);
 
             System.out.println("\t����������������������������������������������������������������������������������������");
             System.out.println("\t�                                                                                      �\n");
-            System.out.printf ("\t�                            Your queue number is: %d                                  �", currentQueueNumber - 1);
+            System.out.printf ("\t�                            Your queue number is: %d                                  �\n", currentQueueNumber - 1);
             System.out.println("\t�                           Cart saved to " + fileName);
             System.out.println("\t�                                                                                      �");
             System.out.println("\t�                                                                                      �");

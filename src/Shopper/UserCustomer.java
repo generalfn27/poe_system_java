@@ -3,14 +3,21 @@ package Shopper;
 import User_Types.*;
 import Process.*;
 
-import java.util.Scanner;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class UserCustomer {
-    private final UserType userType;
+    private UserType userType;
+
+    private List<Customer> customers = new ArrayList<>();
+    private final int MAX_CUSTOMERS = 100;
+    private final String CSV_FILE = "customers.csv"; // CSV file name
 
     public UserCustomer() {
-        this.userType = new UserType();
+        // Load customers from CSV file when the program starts
+        loadCustomersFromCSV();
     }
 
     public void user_customer_menu() {
@@ -38,7 +45,6 @@ public class UserCustomer {
             switch (choice) {
                 case "1":
                     // Call the login function (assuming it exists)
-                    customerLogin();
                     break;
                 case "2":
                     // Handle the guest case
@@ -59,10 +65,7 @@ public class UserCustomer {
         }
     }
 
-    // Placeholder for the customer login function
-    public void customerLogin() {
-        // Implement customer login functionality here
-    }
+
 
     // Placeholder for the guest customer item category function
     public void guest_customer_item_category(Customer guest) {
@@ -73,7 +76,7 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            System.out.println("\n\nBrowsing as guest: " + guest.getName());
+            System.out.println("\n\nBrowsing as guest: " + guest.getUsername());
 
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|              Welcome Customer!             |");
@@ -140,9 +143,178 @@ public class UserCustomer {
         } while (true);
     }
 
-
-    // Placeholder for the customer registration function
+    // Customer registration function
     public void customerRegister() {
-        // Implement customer registration functionality here
+        Scanner scanner = new Scanner(System.in);
+        if (customers.size() >= MAX_CUSTOMERS) {
+            System.out.println("\n\tCustomer limit reached. Cannot register new customers.");
+            return;
+        }
+
+        Customer newCustomer = new Customer(); // Only declared once
+        String confirmPassword;
+        float initialFunds;
+
+        System.out.print("\n\tEnter Username: ");
+        String username = scanner.nextLine();
+
+        // Check if the username already exists
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username)) {
+                System.out.println("\n\tUsername already exists. Please choose a different username.");
+                return;
+            }
+        }
+        newCustomer.setUsername(username);
+
+        // Password input
+        String password = inputPassword(scanner, "Enter Password: ");
+        newCustomer.setPassword(password);
+
+        // Confirm password
+        confirmPassword = inputPassword(scanner, "Confirm Password: ");
+        if (!newCustomer.getPassword().equals(confirmPassword)) {
+            System.out.println("\n\tPasswords do not match. Please try again.");
+            return;
+        }
+
+        // Phone number
+        String phoneNumber;
+        System.out.print("\tEnter Phone Number: ");
+        phoneNumber = scanner.nextLine();
+        newCustomer.setPhoneNumber(phoneNumber);
+
+        // Payment method choice
+        String paymentMethod;
+        System.out.print("\tIs the phone number for GCash (G) or PayMaya (P)? ");
+        char paymentChoice = scanner.nextLine().toUpperCase().charAt(0);
+        if (paymentChoice == 'G') {
+            paymentMethod = "GCash";
+        } else if (paymentChoice == 'P') {
+            paymentMethod = "PayMaya";
+        } else {
+            System.out.println("\n\tInvalid choice. Please try again.");
+            return;
+        }
+        newCustomer.setPaymentMethod(paymentMethod);
+
+        // Prompt for 4-digit PIN code
+        String pinCode;
+        while (true) {
+            System.out.print("\tEnter a 4-digit PIN code: ");
+            pinCode = scanner.nextLine();
+
+            // Check if the entered PIN is exactly 4 digits
+            if (pinCode.matches("\\d{4}")) {
+                break;
+            } else {
+                System.out.println("\tInvalid PIN. Please enter a 4-digit number.");
+            }
+        }
+        newCustomer.setPinCode(pinCode);
+
+        // Initial funds
+        System.out.print("\tEnter initial amount to add to your account: ");
+        initialFunds = scanner.nextFloat();
+        scanner.nextLine(); // consume the leftover newline
+        newCustomer.setBalance(initialFunds);
+
+        // Save the customer to the CSV file
+        saveCustomerToFile(newCustomer);
+
+        System.out.println("\n\tRegistration successful. You can now log in.");
+        //customerLogin();
     }
+
+
+    // Add funds to customer's account
+    public void addFunds(String username) {
+        Scanner scanner = new Scanner(System.in);
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username)) {
+                System.out.print("\tEnter amount to add: ");
+                float amount = scanner.nextFloat();
+                scanner.nextLine(); // consume the leftover newline
+
+                // Add the amount to the customer's balance
+                customer.setBalance(customer.getBalance() + amount);
+
+                // Save all customers back to the CSV
+                saveAllCustomersToCSV();
+
+                System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
+                return;
+            }
+        }
+        System.out.println("\n\tUsername not found. Please try again.");
+    }
+
+    // Helper method to input hidden password
+    private String inputPassword(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
+    }
+
+    // Save a single customer to the CSV file
+    public void saveAllCustomersToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE))) {
+            for (Customer customer : customers) {
+                writer.write(customer.getUsername() + "," +
+                        customer.getPassword() + "," +
+                        customer.getPhoneNumber() + "," +
+                        customer.getPaymentMethod() + "," +
+                        customer.getBalance() + "," +
+                        customer.getPinCode() + "\n");  // Add PIN code
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving customers to CSV: " + e.getMessage());
+        }
+    }
+
+
+
+    public void saveCustomerToFile(Customer customer) {
+        try (FileWriter writer = new FileWriter("customers.csv", true)) {
+            writer.append(customer.getUsername()).append(",");
+            writer.append(customer.getPassword()).append(",");
+            writer.append(customer.getPhoneNumber()).append(",");
+            writer.append(customer.getPaymentMethod()).append(",");
+            writer.append(String.valueOf(customer.getBalance())).append(",");
+            writer.append(customer.getPinCode()).append("\n"); // Add PIN to CSV
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // Load all customers from the CSV file
+    private void loadCustomersFromCSV() {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CSV_FILE))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 5) {
+                    Customer customer = new Customer();
+                    customer.setUsername(data[0]);
+                    customer.setPassword(data[1]);
+                    customer.setPhoneNumber(data[2]);
+                    customer.setPaymentMethod(data[3]);
+                    customer.setBalance(Float.parseFloat(data[4]));
+
+                    customers.add(customer);
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("CSV file not found. No customers loaded.");
+        } catch (IOException e) {
+            System.out.println("Error loading customers from file: " + e.getMessage());
+        }
+    }
+
+
+    public void customerLogin() {
+        // Implement customer login functionality here
+    }
+
 }
