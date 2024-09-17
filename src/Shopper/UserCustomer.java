@@ -387,9 +387,82 @@ public class UserCustomer {
 
     // Placeholder method for registered customer actions after login
     private void registeredUserCustomerItemCategory(String username, double balance) {
-        System.out.println("\tBrowsing item categories for " + username + "...");
-        System.out.println("\tYour remaining balance: " + balance + "...");
+
+
+        Scanner scanf = new Scanner(System.in);
+        String item_category;
+
+        // Create an instance of OrderProcessor to handle the guest's order
+        OrderProcessor order_processor = new OrderProcessor();
+
+        do {
+            System.out.println("\tBrowsing item categories for " + username + "...");
+            System.out.println("\tYour remaining balance: " + balance + "...");
+            System.out.println("\n\t----------------------------------------------");
+            System.out.println("\t|              Welcome Customer!             |");
+            System.out.println("\t|             What do you want to browse?    |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|        [1] Beverages                       |");
+            System.out.println("\t|        [2] Snacks                          |");
+            System.out.println("\t|        [3] Canned Goods                    |");
+            System.out.println("\t|        [4] Condiments                      |");
+            System.out.println("\t|        [5] Dairy                           |");
+            System.out.println("\t|        [6] Frozen Foods                    |");
+            System.out.println("\t|        [7] Body Care & Beauty Care         |");
+            System.out.println("\t|        [8] Detergents & Soaps              |\n");
+            System.out.println("\t|        [0] Go Back                         |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t----------------------------------------------");
+            System.out.println("\t|        Enter here: ");
+
+            item_category = scanf.nextLine();
+
+            // Variable to hold the products in the chosen category
+            List<Product> selected_products = null;
+
+            switch (item_category) {
+                case "0":
+                    user_customer_menu();
+                    return;  // Return to main menu
+                case "1":
+                    selected_products = BrowseProduct.browse_beverages(); // Browse beverages
+                    break;
+                case "2":
+                    selected_products = BrowseProduct.browse_snacks(); // Browse snacks
+                    break;
+                case "3":
+                    selected_products = BrowseProduct.browse_canned_goods(); // Browse canned goods
+                    break;
+                case "4":
+                    selected_products = BrowseProduct.browse_condiments(); // Browse condiments
+                    break;
+                case "5":
+                    selected_products = BrowseProduct.browse_dairy(); // Browse dairy
+                    break;
+                case "6":
+                    selected_products = BrowseProduct.browse_frozen_foods(); // Browse frozen foods
+                    break;
+                case "7":
+                    selected_products = BrowseProduct.browse_self_care_items(); // Browse self-care items
+                    break;
+                case "8":
+                    selected_products = BrowseProduct.browse_detergents(); // Browse detergents
+                    break;
+                default:
+                    System.out.println("\nInvalid input. Try again...");
+                    continue;
+            }
+
+            if (selected_products != null && !selected_products.isEmpty()) {
+                // After displaying products, process the order by asking for product code
+                order_processor.process_customer_order(selected_products);
+            } else {
+                System.out.println("No products available in this category.");
+            }
+            OrderProcessor.modify_menu_process();
+        } while (true);
     }
+
 
 
 }
