@@ -232,29 +232,6 @@ public class UserCustomer {
     }
 
 
-
-    // Add funds to customer's account
-    public void addFunds(String username) {
-        Scanner scanner = new Scanner(System.in);
-        for (Customer customer : customers) {
-            if (customer.getUsername().equals(username)) {
-                System.out.print("\tEnter amount to add: ");
-                float amount = scanner.nextFloat();
-                scanner.nextLine(); // consume the leftover newline
-
-                // Add the amount to the customer's balance
-                customer.setBalance(customer.getBalance() + amount);
-
-                // Save all customers back to the CSV
-                saveAllCustomersToCSV();
-
-                System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
-                return;
-            }
-        }
-        System.out.println("\n\tUsername not found. Please try again.");
-    }
-
     // Helper method to input hidden password
     private String inputPassword(Scanner scanner, String prompt) {
         System.out.print(prompt);
@@ -264,19 +241,22 @@ public class UserCustomer {
     // Save a single customer to the CSV file
     public void saveAllCustomersToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE))) {
+            // Write the header first
+            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
+
+            // Loop through the customer list and save each customer
             for (Customer customer : customers) {
                 writer.write(customer.getUsername() + "," +
                         customer.getPassword() + "," +
                         customer.getPhoneNumber() + "," +
                         customer.getPaymentMethod() + "," +
-                        customer.getBalance() + "," +
-                        customer.getPinCode() + "\n");  // Add PIN code
+                        customer.getBalance() + "," +      // Ensure balance is saved as a string
+                        customer.getPinCode() + "\n");     // Make sure to include the PIN
             }
         } catch (IOException e) {
             System.out.println("Error saving customers to CSV: " + e.getMessage());
         }
     }
-
 
 
     public void saveCustomerToFile(Customer customer) {
@@ -366,7 +346,7 @@ public class UserCustomer {
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.\n");
-                    registeredUserCustomerItemCategory(customer.getUsername(), customer.getBalance());
+                    registered_user_customer_item_category(customer.getUsername(), customer.getBalance());
                     loginSuccessful = true;
                     break;
                 }
@@ -386,9 +366,7 @@ public class UserCustomer {
     }
 
     // Placeholder method for registered customer actions after login
-    private void registeredUserCustomerItemCategory(String username, double balance) {
-
-
+    private void registered_user_customer_item_category(String username, double balance) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
@@ -396,11 +374,10 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            System.out.println("\tBrowsing item categories for " + username + "...");
-            System.out.println("\tYour remaining balance: " + balance + "...");
             System.out.println("\n\t----------------------------------------------");
-            System.out.println("\t|              Welcome Customer!             |");
-            System.out.println("\t|             What do you want to browse?    |");
+            System.out.println("\t|              Welcome Customer! " + username);
+            System.out.println("\t|         Your remaining balance: " + balance + "...");
+            System.out.println("\t|          What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
             System.out.println("\t|        [2] Snacks                          |");
@@ -409,7 +386,8 @@ public class UserCustomer {
             System.out.println("\t|        [5] Dairy                           |");
             System.out.println("\t|        [6] Frozen Foods                    |");
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
-            System.out.println("\t|        [8] Detergents & Soaps              |\n");
+            System.out.println("\t|        [8] Detergents & Soaps              |");
+            System.out.println("\t|        [9] Add funds                       |\n");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
@@ -448,6 +426,10 @@ public class UserCustomer {
                 case "8":
                     selected_products = BrowseProduct.browse_detergents(); // Browse detergents
                     break;
+                case "9":
+                    add_funds(username);
+                    registered_user_customer_item_category(username, balance);
+                    break;
                 default:
                     System.out.println("\nInvalid input. Try again...");
                     continue;
@@ -463,6 +445,28 @@ public class UserCustomer {
         } while (true);
     }
 
+    // Add funds to customer's account
+    public void add_funds(String username) {
+        Scanner scanner = new Scanner(System.in);
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username)) {
+                System.out.print("\tEnter amount to add: ");
+                float amount = scanner.nextFloat();
+                scanner.nextLine(); // consume the leftover newline
 
+                // Add the amount to the customer's balance
+                customer.setBalance(customer.getBalance() + amount);
+
+                // Save all customers back to the CSV after updating the balance
+                saveAllCustomersToCSV();
+
+                System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
+                return;
+            }
+        }
+        System.out.println("\n\tUsername not found. Please try again.");
+    }
+
+    
 
 }
