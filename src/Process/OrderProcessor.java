@@ -5,11 +5,19 @@ import Shopper.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.File;
+
 
 public class OrderProcessor {
     private static List<Product> cart;
     private static int total_items;
     private static double total_price;
+    private static int currentQueueNumber = 1;
 
     public OrderProcessor() {
         cart = new ArrayList<>();
@@ -152,7 +160,17 @@ public class OrderProcessor {
                     return;
                 case "P":
                 case "p":
-                    // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
+                    // Confirmation before checkout
+                    System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                    String confirmInput = scanf.nextLine().trim();
+
+                    if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
+                        System.out.println("\n\tProcessing checkout...");
+                        // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
+                        save_cart_to_csv();
+                    } else {
+                        System.out.println("\n\tCheckout cancelled.");
+                    }
                     break;
             }
         }
@@ -201,7 +219,75 @@ public class OrderProcessor {
         System.out.println("The cart has been reset.");
     }
 
+    public static void save_cart_to_csv() {
+        if (cart.isEmpty()) {
+            System.out.println("Cart is empty. Nothing to save.");
+            return;
+        }
+
+        String fileName = generate_file_name();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            // Write header
+            writer.println("OrderID,ProductCode,ProductName,Quantity,Price,Subtotal");
+
+            // Generate a unique order ID (you might want to implement a more robust system)
+            String order_id = generate_order_id();
+
+            // Write cart items
+            for (Product product : cart) {
+                double subtotal = product.getPrice() * product.getStock();
+                writer.printf("%s,%s,%s,%d,%.2f,%.2f%n",
+                        order_id,
+                        product.getCode(),
+                        product.getName(),
+                        product.getStock(),
+                        product.getPrice(),
+                        subtotal);
+            }
+            System.out.println("\tCart saved to " + fileName);
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the cart: " + e.getMessage());
+        }
+    }
 
 
+    private static String generate_file_name() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
+        String formattedDate = dateFormat.format(new Date());
+        String fileName = String.format("queue_number_%d_%s.csv", currentQueueNumber, formattedDate);
+
+        // Increment the queue number for the next file
+        currentQueueNumber++;
+
+        return fileName;
+    }
+
+    private static String generate_order_id() {
+        // This is a simple implementation. You might want to use a more robust system
+        return "ORD" + System.currentTimeMillis();
+    }
+
+    // Method to initialize the queue number by checking existing files
+    public static void initialize_queue_number() {
+        File directory = new File(".");
+        File[] files = directory.listFiles((dir, name) -> name.startsWith("queue_number_") && name.endsWith(".csv"));
+
+        if (files != null) {
+            for (File file : files) {
+                String fileName = file.getName();
+                int underscoreIndex = fileName.indexOf('_', 13); // Find the underscore after "queue_number_"
+                if (underscoreIndex != -1) {
+                    try {
+                        int fileNumber = Integer.parseInt(fileName.substring(13, underscoreIndex));
+                        currentQueueNumber = Math.max(currentQueueNumber, fileNumber + 1);
+                    } catch (NumberFormatException e) {
+                        // Ignore files with invalid number format
+                    }
+                }
+            }
+        }
+    }
 
 }
