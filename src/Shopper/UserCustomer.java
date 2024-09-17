@@ -151,7 +151,7 @@ public class UserCustomer {
             return;
         }
 
-        Customer newCustomer = new Customer(); // Only declared once
+        Customer newCustomer = new Customer();
         String confirmPassword;
         float initialFunds;
 
@@ -274,15 +274,25 @@ public class UserCustomer {
 
 
     public void saveCustomerToFile(Customer customer) {
-        try (FileWriter writer = new FileWriter("customers.csv", true)) {
+        File file = new File("customers.csv");
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            // Write header only if the file is empty or doesn't exist
+            if (!file.exists() || file.length() == 0) {
+                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
+            }
+
+            // Write customer data
             writer.append(customer.getUsername()).append(",");
             writer.append(customer.getPassword()).append(",");
             writer.append(customer.getPhoneNumber()).append(",");
             writer.append(customer.getPaymentMethod()).append(",");
             writer.append(String.valueOf(customer.getBalance())).append(",");
-            writer.append(customer.getPinCode()).append("\n"); // Add PIN to CSV
+            writer.append(customer.getPinCode()).append("\n");
+
         } catch (IOException e) {
-            e.printStackTrace();
+            // Handle exceptions gracefully
+            System.err.println("Error writing customer data to file: " + e.getMessage());
         }
     }
 
