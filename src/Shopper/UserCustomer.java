@@ -276,9 +276,12 @@ public class UserCustomer {
     public void saveCustomerToFile(Customer customer) {
         File file = new File("customers.csv");
 
+        // Check if the file exists before opening the writer
+        boolean fileExists = file.exists();
+
         try (FileWriter writer = new FileWriter(file, true)) {
-            // Write header only if the file is empty or doesn't exist
-            if (!file.exists() || file.length() == 0) {
+            // Write header only if the file doesn't exist (i.e., it's a new file)
+            if (!fileExists) {
                 writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
             }
 
@@ -295,6 +298,7 @@ public class UserCustomer {
             System.err.println("Error writing customer data to file: " + e.getMessage());
         }
     }
+
 
 
     // Load all customers from the CSV file
