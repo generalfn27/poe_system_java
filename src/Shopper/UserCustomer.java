@@ -398,9 +398,6 @@ public class UserCustomer {
             List<Product> selected_products = null;
 
             switch (item_category) {
-                case "0":
-                    user_customer_menu();
-                    return;  // Return to main menu
                 case "1":
                     selected_products = BrowseProduct.browse_beverages(); // Browse beverages
                     break;
@@ -428,6 +425,25 @@ public class UserCustomer {
                 case "9":
                     add_funds(username);
                     registered_user_customer_item_category(username, balance);
+                    break;
+                case "0":
+                    boolean logout_confirmed = false;
+                    while (!logout_confirmed) {
+                        System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
+                        System.out.println("\t[Y] for Yes  [N] for No: ");
+
+                        String exit_confirmation = scanf.nextLine().trim();
+
+                        if (exit_confirmation.equalsIgnoreCase("Y")) {
+                            return;
+                        } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                            // Do nothing, stay in the loop and return to the menu
+                            break;
+                        } else {
+                            System.out.println("\tInvalid input. Going back to menu.\n");
+                            // Do nothing, stay in the loop and return to the menu
+                        }
+                    }
                     break;
                 default:
                     System.out.println("\nInvalid input. Try again...");
