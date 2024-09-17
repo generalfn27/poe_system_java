@@ -1,16 +1,14 @@
 package Process;
 
 import Shopper.Product;
+import Shopper.UserCustomer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.File;
 
 
 public class OrderProcessor {
@@ -18,11 +16,13 @@ public class OrderProcessor {
     private static int total_items;
     private static double total_price;
     private static int currentQueueNumber = 1;
+    private static final String QUEUE_NUMBER_FILE = "current_queue_number.txt";
 
     public OrderProcessor() {
         cart = new ArrayList<>();
         total_items = 0;
         total_price = 0;
+        initialize_queue_number();
     }
 
     public void process_customer_order(List<Product> products) {
@@ -166,8 +166,21 @@ public class OrderProcessor {
 
                     if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
                         System.out.println("\n\tProcessing checkout...");
-                        // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
-                        save_cart_to_csv();
+
+                        System.out.println("\n\tPress [E] to checkout or press any key to shop again: ");
+                        char exit_choice = scanf.next().charAt(0);
+
+                        if (exit_choice == 'E' || exit_choice == 'e') {
+                            // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
+                            save_cart_to_csv();
+                            reset_cart();
+                            UserCustomer user_customer = new UserCustomer();
+                            user_customer.user_customer_menu();
+                            return;
+                        } else {
+                            OrderProcessor.modify_menu_process();
+                        }
+
                     } else {
                         System.out.println("\n\tCheckout cancelled.");
                     }
@@ -245,7 +258,19 @@ public class OrderProcessor {
                         product.getPrice(),
                         subtotal);
             }
-            System.out.println("\tCart saved to " + fileName);
+            System.out.printf("\tYour queue number is: %d\n", currentQueueNumber - 1);
+
+            System.out.println("\t����������������������������������������������������������������������������������������");
+            System.out.println("\t�                                                                                      �\n");
+            System.out.printf ("\t�                            Your queue number is: %d                                  �", currentQueueNumber - 1);
+            System.out.println("\t�                           Cart saved to " + fileName);
+            System.out.println("\t�                                                                                      �");
+            System.out.println("\t�                                                                                      �");
+            System.out.println("\t�Thank you for ordering! Please remember your queue number and proceed to the cashier. �");
+            System.out.println("\t����������������������������������������������������������������������������������������\n\n");
+
+            // Save the updated queue number
+            save_queue_number();
 
         } catch (IOException e) {
             System.out.println("An error occurred while saving the cart: " + e.getMessage());
@@ -260,6 +285,7 @@ public class OrderProcessor {
 
         // Increment the queue number for the next file
         currentQueueNumber++;
+        save_queue_number(); // Save the updated queue number
 
         return fileName;
     }
@@ -269,24 +295,25 @@ public class OrderProcessor {
         return "ORD" + System.currentTimeMillis();
     }
 
-    // Method to initialize the queue number by checking existing files
+    // Method to initialize the queue number by reading from a file
     public static void initialize_queue_number() {
-        File directory = new File(".");
-        File[] files = directory.listFiles((dir, name) -> name.startsWith("queue_number_") && name.endsWith(".csv"));
-
-        if (files != null) {
-            for (File file : files) {
-                String fileName = file.getName();
-                int underscoreIndex = fileName.indexOf('_', 13); // Find the underscore after "queue_number_"
-                if (underscoreIndex != -1) {
-                    try {
-                        int fileNumber = Integer.parseInt(fileName.substring(13, underscoreIndex));
-                        currentQueueNumber = Math.max(currentQueueNumber, fileNumber + 1);
-                    } catch (NumberFormatException e) {
-                        // Ignore files with invalid number format
-                    }
-                }
+        try (BufferedReader reader = new BufferedReader(new FileReader(QUEUE_NUMBER_FILE))) {
+            String line = reader.readLine();
+            if (line != null) {
+                currentQueueNumber = Integer.parseInt(line);
             }
+        } catch (IOException | NumberFormatException e) {
+            // If file doesn't exist or is invalid, start from 1
+            currentQueueNumber = 1;
+        }
+    }
+
+    // Method to save the current queue number to a file
+    private static void save_queue_number() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(QUEUE_NUMBER_FILE))) {
+            writer.println(currentQueueNumber);
+        } catch (IOException e) {
+            System.out.println("Error saving queue number: " + e.getMessage());
         }
     }
 
