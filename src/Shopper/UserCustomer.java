@@ -33,7 +33,6 @@ public class UserCustomer {
             System.out.println("\t|        [0] Go Back                             |");
             System.out.println("\t|                                                |");
             System.out.println("\t----------------------------------------------");
-
             System.out.print("\n\tEnter Here: ");
             choice = scanf.next();
 
@@ -91,7 +90,7 @@ public class UserCustomer {
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
-            System.out.println("\t|        Enter here: ");
+            System.out.print("\t|        Enter here: ");
 
             item_category = scanf.nextLine();
 
@@ -299,7 +298,6 @@ public class UserCustomer {
                     customer.setPaymentMethod(data[3]);
                     customer.setBalance(Float.parseFloat(data[4]));
                     customer.setPinCode(data[5]);
-
                     customers.add(customer);
                 }
             }
@@ -388,7 +386,7 @@ public class UserCustomer {
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
-            System.out.println("\t|        Enter here: ");
+            System.out.print("\t|        Enter here: ");
 
             item_category = scanf.nextLine();
 
