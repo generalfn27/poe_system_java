@@ -9,13 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserCustomer {
-    private UserType userType;
-
-    private List<Customer> customers = new ArrayList<>();
-    private final int MAX_CUSTOMERS = 100;
+    private final List<Customer> customers = new ArrayList<>();
     private final String CSV_FILE = "customers.csv"; // CSV file name
-
-    private int MAX_ATTEMPTS = 5; // Maximum number of login attempts
 
 
     public UserCustomer() {
@@ -60,7 +55,7 @@ public class UserCustomer {
                     customerRegister();
                     break;
                 case "0":
-                    return; // Go back to the previous menu
+                    UserType.user_type_menu();
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     // Implement a method for pressAnyKey() if needed
@@ -149,6 +144,7 @@ public class UserCustomer {
     // Customer registration function
     public void customerRegister() {
         Scanner scanner = new Scanner(System.in);
+        final int MAX_CUSTOMERS = 100;
         if (customers.size() >= MAX_CUSTOMERS) {
             System.out.println("\n\tCustomer limit reached. Cannot register new customers.");
             return;
@@ -328,6 +324,8 @@ public class UserCustomer {
         }
 
         // Loop until login is successful or maximum attempts reached
+        // Maximum number of login attempts
+        final int MAX_ATTEMPTS = 5;
         while (attemptCount < MAX_ATTEMPTS) {
             System.out.println("\n===================================");
             System.out.println("|                                 |");
