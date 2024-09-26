@@ -11,6 +11,6 @@ public class Main {
         UserType user_type = new UserType();
         user_type.user_type_menu();
 
-        //System.out.flush();
+        System.out.flush();
     }
 }
