@@ -12,12 +12,12 @@ public class UserType {
 
         while (true) {
             System.out.println("Please enter what user type you are:");
-            System.out.println(" ");
+            System.out.println();
             System.out.println("[1] Customer");
             System.out.println("[2] Cashier");
             System.out.println("[3] Manager");
             System.out.println("\n[0] Exit");
-            System.out.println("Type here: ");
+            System.out.print("Type here: ");
 
             String user_type_choice = scanf.next();
 
@@ -44,7 +44,7 @@ public class UserType {
                     while (!exit_confirmed) {
                         System.out.flush();
                         System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
-                        System.out.println("\t[Y] for Yes  [N] for No: ");
+                        System.out.print("\t[Y] for Yes  [N] for No: ");
 
                         String exit_confirmation = scanf.nextLine().trim();
 
