@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class UserType {
 
-    public void user_type_menu() {
+    public static void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 
         while (true) {
