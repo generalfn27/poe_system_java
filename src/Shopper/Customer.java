@@ -33,7 +33,6 @@ public class Customer {
         this.pinCode = pinCode; // Initialize PIN code
     }
 
-    private List<Product> cart = new ArrayList<>();
 
     // Getters and setters
     public String getUsername() {
