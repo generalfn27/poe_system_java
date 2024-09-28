@@ -135,7 +135,6 @@ public class UserCustomer {
             } else {
                 System.out.println("No products available in this category.");
             }
-            //OrderProcessor.modify_menu_process();
         } while (true);
     }
 
@@ -448,12 +447,10 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
-            } else if (selected_products == null && selected_products.isEmpty()) {
-                //it needs to call out itself to show menu again
+                OrderProcessor.modify_menu_process();
             }else {
                 System.out.println("No products available in this category.");
             }
-            OrderProcessor.modify_menu_process();
         } while (true);
     }
 
