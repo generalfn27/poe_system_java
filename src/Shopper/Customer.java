@@ -22,6 +22,7 @@ public class Customer {
         this.username = username;
     }
 
+    //eto ay hindi nagamit dahil may ibang style na ginamit sa pag save ng customer details
     // Constructor for registered user
     public Customer(String username, String password, String phoneNumber, String paymentMethod, float balance, String pinCode) {
         this.username = username;
