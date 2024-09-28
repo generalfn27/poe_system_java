@@ -6,7 +6,6 @@ import cashier.*;
 import java.util.Scanner;
 
 public class UserType {
-
     public static void user_type_menu() {
         Scanner scanf = new Scanner(System.in);
 

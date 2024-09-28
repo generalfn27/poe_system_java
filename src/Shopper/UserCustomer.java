@@ -138,6 +138,7 @@ public class UserCustomer {
         } while (true);
     }
 
+
     // Customer registration function
     public void customerRegister() {
         Scanner scanner = new Scanner(System.in);
@@ -230,6 +231,7 @@ public class UserCustomer {
         return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
     }
 
+
     // Save a single customer to the CSV file
     public void saveAllCustomersToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE))) {
@@ -262,7 +264,6 @@ public class UserCustomer {
             if (!fileExists) {
                 writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
             }
-
             // Write customer data
             writer.append(customer.getUsername()).append(",");
             writer.append(customer.getPassword()).append(",");
@@ -276,7 +277,6 @@ public class UserCustomer {
             System.err.println("Error writing customer data to file: " + e.getMessage());
         }
     }
-
 
 
     // Load all customers from the CSV file
@@ -306,7 +306,6 @@ public class UserCustomer {
             System.out.println("Error loading customers from file: " + e.getMessage());
         }
     }
-
 
 
     public void customer_login() {
