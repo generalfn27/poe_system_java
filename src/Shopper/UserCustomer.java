@@ -63,7 +63,6 @@ public class UserCustomer {
     }
 
 
-
     // Placeholder for the guest customer item category function
     public void guest_customer_item_category(Customer guest) {
         Scanner scanf = new Scanner(System.in);
@@ -74,7 +73,6 @@ public class UserCustomer {
 
         do {
             System.out.println("\n\nBrowsing as guest: " + guest.getUsername());
-
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|              Welcome Customer!             |");
             System.out.println("\t|             What do you want to browse?    |");
