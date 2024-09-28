@@ -124,7 +124,7 @@ public class OrderProcessor {
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tDisplay cart(V)");
             System.out.println("\tGo Back (B)");
-            System.out.println("\n\tEnter choice: ");
+            System.out.print("\n\tEnter choice: ");
 
             choice = scanf.nextLine();
 
