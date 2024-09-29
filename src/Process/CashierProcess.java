@@ -2,6 +2,7 @@ package Process;
 
 import Shopper.Product;
 
+import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.*;
@@ -45,12 +46,26 @@ public class CashierProcess extends OrderProcessor {
         reset_cart_no_display();
     }
 
+
     public void process_payment() {
+        Scanner scanf = new Scanner(System.in);
         display_counter();
         // Add logic for accepting payment, calculating change, etc.
 
+        while (true) {
+            System.out.printf("Total Amount need Pay: %.2f\n", calculate_total_price());
+            System.out.println("\tDo you want to proceed with the payment?\n");
+            System.out.println("\\t[1] Yes");
+            System.out.println("[2] Cancel");
+            System.out.print("Enter choice: ");
+            String choice = scanf.nextLine();
+
+
+
+        }
 
     }
+
 
     private void display_counter() {
         System.out.println("\nItems at the counter:");
@@ -61,6 +76,7 @@ public class CashierProcess extends OrderProcessor {
         System.out.printf("Total Items: %d\n", calculate_total_items());
         System.out.printf("Total Price: %.2f\n", calculate_total_price());
     }
+
 
     private int calculate_total_items() {
         int total = 0;
