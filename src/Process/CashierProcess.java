@@ -60,7 +60,22 @@ public class CashierProcess extends OrderProcessor {
             System.out.print("Enter choice: ");
             String choice = scanf.nextLine();
 
+            switch (choice) {
+                case "1":
+                    System.out.println("\tEnter rendered amount");
+                    Double payment = scanf.nextDouble();
 
+                    if (payment >= calculate_total_price()) {
+                        System.out.println("\tPayment accepted.\n");
+                    if (payment > calculate_total_price()) {
+                        System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
+                    }
+                    // Print receipt after successful payment
+                    //print_receipt(counter, total_items, *total_price, payment);
+                }
+                case "2":
+                    //di ko sure kung reset ba or go back nalang sa last function bukas ko na alamin
+            }
 
         }
 
