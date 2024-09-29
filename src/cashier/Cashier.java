@@ -11,11 +11,12 @@ import java.util.Scanner;
 
 public class Cashier {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
-    private CashierProcess cashier_process; // Class-level instance variable for CashierProcess
+    private final CashierProcess cashier_process; // Class-level instance variable for CashierProcess
 
     public Cashier() {
-        CashierProcess cashier_process = new CashierProcess(); // Initialize in constructor
+        this.cashier_process = new CashierProcess(); // Assign to the class-level variable
     }
+
 
     public void user_cashier() {
         cashier_login();
@@ -134,7 +135,7 @@ public class Cashier {
         }
 
         if (!csvFiles.isEmpty()) {
-            System.out.println("\t[0] Log Out");
+            System.out.println("\t[0] 0 para return dun sa logout or re select ewan na");
             System.out.print("\tEnter the number of the file to open: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -172,7 +173,9 @@ public class Cashier {
 
             switch (choice) {
                 case '1':
-                    // Call method to proceed to payment and handle discount coupon
+
+                    cashier_process.process_payment();
+
                     break;
 
                 case '2':

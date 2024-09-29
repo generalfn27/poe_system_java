@@ -15,12 +15,6 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    public void process_order(String filename) {
-        read_order_from_csv(filename);
-        transfer_cart_to_counter();
-        process_payment();
-    }
-
     public void read_order_from_csv(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -51,9 +45,11 @@ public class CashierProcess extends OrderProcessor {
         reset_cart();
     }
 
-    private void process_payment() {
+    public void process_payment() {
         display_counter();
         // Add logic for accepting payment, calculating change, etc.
+
+
     }
 
     private void display_counter() {
