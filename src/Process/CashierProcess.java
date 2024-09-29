@@ -21,7 +21,7 @@ public class CashierProcess extends OrderProcessor {
         process_payment();
     }
 
-    private void read_order_from_csv(String filename) {
+    public void read_order_from_csv(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             boolean first_line = true;

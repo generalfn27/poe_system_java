@@ -3,10 +3,19 @@ package cashier;
 import User_Types.UserType;
 import Process.CashierProcess;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 
 public class Cashier {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
+    private CashierProcess cashier_process; // Class-level instance variable for CashierProcess
+
+    public Cashier() {
+        CashierProcess cashier_process = new CashierProcess(); // Initialize in constructor
+    }
 
     public void user_cashier() {
         cashier_login();
@@ -35,7 +44,7 @@ public class Cashier {
             if (validate_cashier_login(inputUsername, inputPassword)) {
                 valid = true; // Set flag to exit loop
                 System.out.println("\tLogin successful!");
-                //cashier_process_choice();
+                cashier_dashboard();
             } else {
                 attempt_count++;
                 cashier_increment_attempts(attempt_count, inputUsername);
@@ -72,6 +81,7 @@ public class Cashier {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
+
         while (true) {
             System.out.println("\t[1] Process Queue Orders");
             System.out.println("\t[2] hindi pa alam ano dapat talaga dito");
@@ -82,7 +92,7 @@ public class Cashier {
 
             switch (choice) {
                 case "1":
-                    // Call method to proceed to payment and handle discount coupon
+                    selecting_queue_list_to_process();
                     break;
 
                 case "2":
@@ -101,6 +111,46 @@ public class Cashier {
             }
         }
     }
+
+
+    public void selecting_queue_list_to_process() {
+        Scanner scanner = new Scanner(System.in);
+        File directory = new File(".");
+        File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
+        List<String> csvFiles = new ArrayList<>();
+
+        System.out.println("=======================================");
+        System.out.println("|                                     |");
+        System.out.println("|          Cashier Dashboard          |");
+        System.out.println("|                                     |");
+        System.out.println("=======================================\n");
+        System.out.println("\n\nCSV Files to Open:");
+
+        if (files != null) {
+            for (File file : files) {
+                csvFiles.add(file.getName());
+                System.out.println("[" + (csvFiles.size()) + "] " + file.getName());
+            }
+        }
+
+        if (!csvFiles.isEmpty()) {
+            System.out.println("\t[0] Log Out");
+            System.out.print("\tEnter the number of the file to open: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            if (choice > 0 && choice <= csvFiles.size()) {
+                String selectedFile = csvFiles.get(choice - 1);
+                System.out.println("\tYou selected: " + selectedFile);
+                cashier_process.read_order_from_csv(selectedFile); // Now accessible
+                cashier_process_choice();
+            }
+        } else {
+            System.out.println("\tNo CSV files found.");
+            System.out.println("\tNo Queue Order to process.");
+        }
+    }
+
 
 
     private void cashier_process_choice() {
