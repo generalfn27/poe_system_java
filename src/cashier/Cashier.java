@@ -8,10 +8,10 @@ public class Cashier {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
 
     public void user_cashier() {
-        cashierLogin();
+        cashier_login();
     }
 
-    private void cashierLogin() {
+    private void cashier_login() {
         Scanner scanner = new Scanner(System.in);
         int attempt_count = 0; // Count failed login attempts
         boolean valid = false; // Indicate if login is valid
@@ -32,8 +32,8 @@ public class Cashier {
 
             // Validate login
             if (validate_cashier_login(inputUsername, inputPassword)) {
-                System.out.println("\tLogin successful!");
                 valid = true; // Set flag to exit loop
+                System.out.println("\tLogin successful!");
                 cashier_process_choice();
             } else {
                 attempt_count++;
@@ -56,9 +56,11 @@ public class Cashier {
         return inputUsername.equals(username) && inputPassword.equals(password);
     }
 
+
     private void cashier_increment_attempts(int attemptCount, String username) {
         System.out.println("Invalid login attempt #" + attemptCount + " for user: " + username);
     }
+
 
     private void cashier_process_choice() {
         System.out.flush();
@@ -109,7 +111,6 @@ public class Cashier {
                         }
                     }
                     break;
-
                 default:
                     // Handle invalid input
                     System.out.println("\n\tInvalid input. Try again...");

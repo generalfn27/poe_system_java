@@ -103,6 +103,7 @@ public class BrowseProduct {
         return condiments;
     }
 
+
     public static List<Product> browse_dairy() {
         BrowseProduct browse_dairy = new BrowseProduct();
         List<Product> dairy = browse_dairy.load_products_from_CSV("dairy.csv");
@@ -110,12 +111,14 @@ public class BrowseProduct {
         return dairy;
     }
 
+
     public static List<Product> browse_frozen_foods() {
         BrowseProduct browse_frozen_foods = new BrowseProduct();
         List<Product> dairy = browse_frozen_foods.load_products_from_CSV("frozen_foods.csv");
         browse_frozen_foods.display_products(dairy); // Display the loaded products
         return dairy;
     }
+
 
     public static List<Product> browse_self_care_items() {
         Scanner scanf = new Scanner(System.in);
@@ -154,6 +157,7 @@ public class BrowseProduct {
             }
         }
     }
+
 
     public static List<Product> browse_detergents() {
         Scanner scanf = new Scanner(System.in);
