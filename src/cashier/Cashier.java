@@ -97,22 +97,9 @@ public class Cashier {
                     break;
 
                 case '0':
-                    boolean logout_confirmed = false;
-                    while (!logout_confirmed) {
-                        System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
-                        System.out.println("\t[Y] for Yes  [N] for No: ");
-
-                        String exit_confirmation = scanf.nextLine().trim();
-
-                        if (exit_confirmation.equalsIgnoreCase("Y")) {
-                            UserType.user_type_menu();
-                        } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                            // Do nothing, stay in the loop and return to the menu
-                            break;
-                        } else {
-                            System.out.println("\tInvalid input. Going back to menu.\n");
-                            // Do nothing, stay in the loop and return to the menu
-                        }
+                    boolean logout_confirmed = handle_logout(scanf);
+                    if (logout_confirmed) {
+                        return; // Exit the method if logout is confirmed
                     }
                     break;
                 default:
@@ -122,4 +109,26 @@ public class Cashier {
             }
         }
     }
+
+
+    private boolean handle_logout(Scanner scanf) {
+        while (true) {
+            System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
+            System.out.println("\t[Y] for Yes  [N] for No: ");
+
+            String exit_confirmation = scanf.next().trim();
+
+            if (exit_confirmation.equalsIgnoreCase("Y")) {
+                UserType.user_type_menu();
+                return true;
+            } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                return false;
+            } else {
+                System.out.println("\tInvalid input. Please enter Y or N.\n");
+            }
+        }
+    }
+
+
+
 }
