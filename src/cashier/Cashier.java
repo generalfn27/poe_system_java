@@ -47,8 +47,12 @@ public class Cashier {
         }
     }
 
+
     private boolean validate_cashier_login(String inputUsername, String inputPassword) {
         // Add logic to validate the cashier's credentials here
+
+        //madaming changes pa dito if gagawa ng multiple accounts for cashier employees
+
         // Default username
         String username = "admin";
         // Default password

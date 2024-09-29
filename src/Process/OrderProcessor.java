@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 public class OrderProcessor {
-    private static List<Product> cart;
+    static List<Product> cart;
     private static int total_items;
     private static double total_price;
     private static int currentQueueNumber = 1;
@@ -95,7 +95,7 @@ public class OrderProcessor {
                 product.getName(), product.getPrice(), product.getStock());}
 
 
-    private void add_to_cart(Product product, int quantity) {
+    public void add_to_cart(Product product, int quantity) {
         //babawasan ung stock at dagdagan ung asa cart pero need pa ayusin kasi baka d mag update ung csv
         product.update_stock(-quantity);  // Adjust stock in the Product class
         total_items += quantity;
