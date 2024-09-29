@@ -174,19 +174,14 @@ public class Cashier {
 
             switch (choice) {
                 case '1':
-
                     cashier_process.process_payment();
-
                     break;
-
                 case '2':
                     // Call method to modify counter items (under development)
                     break;
-
                 case '3':
                     // Call method to view and select receipt from list
                     break;
-
                 case '0':
                     return;
                 default:

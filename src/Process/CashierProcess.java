@@ -53,10 +53,10 @@ public class CashierProcess extends OrderProcessor {
         // Add logic for accepting payment, calculating change, etc.
 
         while (true) {
-            System.out.printf("Total Amount need Pay: %.2f\n", calculate_total_price());
+            System.out.printf("\nTotal Amount need Pay: %.2f\n", calculate_total_price());
             System.out.println("\tDo you want to proceed with the payment?\n");
             System.out.println("\\t[1] Yes");
-            System.out.println("[2] Cancel");
+            System.out.println("[0] Cancel");
             System.out.print("Enter choice: ");
             String choice = scanf.nextLine();
 
@@ -73,10 +73,9 @@ public class CashierProcess extends OrderProcessor {
                     // Print receipt after successful payment
                     //print_receipt(counter, total_items, *total_price, payment);
                 }
-                case "2":
+                case "0":
                     //di ko sure kung reset ba or go back nalang sa last function bukas ko na alamin
             }
-
         }
 
     }
@@ -88,7 +87,7 @@ public class CashierProcess extends OrderProcessor {
             System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
                     product.getCode(), product.getName(), product.getStock(), product.getPrice());
         }
-        System.out.printf("Total Items: %d\n", calculate_total_items());
+        System.out.printf("\nTotal Items: %d\n", calculate_total_items());
         System.out.printf("Total Price: %.2f\n", calculate_total_price());
     }
 
