@@ -1,6 +1,7 @@
 package cashier;
 
 import User_Types.UserType;
+import Process.CashierProcess;
 
 import java.util.Scanner;
 
@@ -34,7 +35,7 @@ public class Cashier {
             if (validate_cashier_login(inputUsername, inputPassword)) {
                 valid = true; // Set flag to exit loop
                 System.out.println("\tLogin successful!");
-                cashier_process_choice();
+                //cashier_process_choice();
             } else {
                 attempt_count++;
                 cashier_increment_attempts(attempt_count, inputUsername);
@@ -66,6 +67,42 @@ public class Cashier {
     }
 
 
+    //next development dapat pinapasa na username sa parameter as welcome sa employee
+    private void cashier_dashboard() {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+
+        while (true) {
+            System.out.println("\t[1] Process Queue Orders");
+            System.out.println("\t[2] hindi pa alam ano dapat talaga dito");
+            System.out.println("\t[0] Exit");
+
+            System.out.print("\n\n\tEnter Here: ");
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "1":
+                    // Call method to proceed to payment and handle discount coupon
+                    break;
+
+                case "2":
+                    // Call method to modify counter items (under development)
+                    break;
+
+                case "0":
+                    boolean logout_confirmed = handle_logout(scanf);
+                    if (logout_confirmed) {
+                        return; // Exit the method if logout is confirmed
+                    }
+                default:
+                    // Handle invalid input
+                    System.out.println("\n\tInvalid input. Try again...");
+                    break;
+            }
+        }
+    }
+
+
     private void cashier_process_choice() {
         System.out.flush();
         Scanner scanf = new Scanner(System.in);
@@ -78,7 +115,7 @@ public class Cashier {
 
             System.out.println("\t[1] Proceed to pay");
             System.out.println("\t[2] Modify Counter Items (under development)");
-            System.out.println("\t[0] Exit");
+            System.out.println("\t[0] Go back");
 
             System.out.print("\n\n\tEnter Here: ");
             choice = scanf.next().charAt(0); // Read choice
@@ -97,11 +134,7 @@ public class Cashier {
                     break;
 
                 case '0':
-                    boolean logout_confirmed = handle_logout(scanf);
-                    if (logout_confirmed) {
-                        return; // Exit the method if logout is confirmed
-                    }
-                    break;
+                    return;
                 default:
                     // Handle invalid input
                     System.out.println("\n\tInvalid input. Try again...");

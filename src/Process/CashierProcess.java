@@ -14,6 +14,7 @@ public class CashierProcess extends OrderProcessor {
         counter = new ArrayList<>();
     }
 
+
     public void process_order(String filename) {
         read_order_from_csv(filename);
         transfer_cart_to_counter();
