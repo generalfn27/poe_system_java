@@ -43,6 +43,10 @@ public class OrderProcessor {
                 System.out.println("Press Enter to continue...");
                 scanf.nextLine(); // Wait for user input
             }
+
+            //gagawan ng option para mag go back kung wala mapili
+            //example enter 000 if you want to cancel/go back
+
         } while (selected_product == null);
 
         //display ung detalye ng product na pinili
@@ -76,6 +80,7 @@ public class OrderProcessor {
         }
     }
 
+
     private Product find_product_code(String product_code, List<Product> products) {
         for (Product product : products) {
             if (product.getCode().equals(product_code)) {
@@ -84,9 +89,11 @@ public class OrderProcessor {
         } return null;
     }
 
+
     private void display_product_details(Product product) {
         System.out.printf("Product: %-22s\tPrice: %6.2f\tStock: %4d\n",
                 product.getName(), product.getPrice(), product.getStock());}
+
 
     private void add_to_cart(Product product, int quantity) {
         //babawasan ung stock at dagdagan ung asa cart pero need pa ayusin kasi baka d mag update ung csv
@@ -96,6 +103,7 @@ public class OrderProcessor {
 
         cart.add(new Product(product.getCode(), product.getName(), product.getPrice(), quantity));
     }
+
 
     public static void display_cart() {
         System.out.println("\nYour Cart:");
@@ -111,13 +119,14 @@ public class OrderProcessor {
         }
     }
 
+
     public static void modify_menu_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
         while (true) {
             display_cart();
-            System.out.println("\n\tAdd more items (A)");
+            System.out.println("\n\tAdd more items (A)"); //pwedeng add more quantity to the item nalang to
             System.out.println("\tRemove Items (R)");
             System.out.println("\tDeduct Quantity (D)");
             System.out.println("\tClear Cart (C)");
@@ -131,13 +140,14 @@ public class OrderProcessor {
             switch (choice) {
                 case "A":
                 case "a":
+                    //pwedeng add more quantity to the item nalang to
                     //UserCustomer.guest_customer_item_category(guest);
                     break;
                 case "R":
                 case "r":
                     System.out.print("Enter product code to remove: ");
                     String codeToRemove = scanf.nextLine();
-                    remove_item(codeToRemove);  // Remove the item
+                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "D":
                 case "d":
@@ -189,6 +199,7 @@ public class OrderProcessor {
         }
     }
 
+
     public static void deduct_item_quantity(String product_code, int quantity) {
         for (Product product : cart) {
             if (product.getCode().equals(product_code)) {
@@ -206,6 +217,7 @@ public class OrderProcessor {
         }
         System.out.println("Product not found in the cart.");
     }
+
 
     public static void remove_item(String product_code) {
         Product to_remove = null;
@@ -231,6 +243,7 @@ public class OrderProcessor {
         total_price = 0;
         System.out.println("The cart has been reset.");
     }
+
 
     public static void save_cart_to_csv() {
         if (cart.isEmpty()) {
@@ -293,6 +306,7 @@ public class OrderProcessor {
 
         return fileName;
     }
+
 
     private static String generate_order_id() {
         // This is a simple implementation. You might want to use a more robust system

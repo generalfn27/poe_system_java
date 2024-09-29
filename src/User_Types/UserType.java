@@ -19,8 +19,6 @@ public class UserType {
             System.out.print("Type here: ");
 
             String user_type_choice = scanf.next();
-
-            // Consume the leftover newline from nextInt
             scanf.nextLine();
 
             switch (user_type_choice) {
@@ -64,7 +62,6 @@ public class UserType {
                             // Do nothing, stay in the loop and return to the menu
                         }
                     }
-
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }

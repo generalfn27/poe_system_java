@@ -475,6 +475,4 @@ public class UserCustomer {
         System.out.println("\n\tUsername not found. Please try again.");
     }
 
-
-
 }
