@@ -244,6 +244,12 @@ public class OrderProcessor {
         System.out.println("The cart has been reset.");
     }
 
+    public static void reset_cart_no_display() {
+        cart.clear();
+        total_items = 0;
+        total_price = 0;
+    }
+
 
     public static void save_cart_to_csv() {
         if (cart.isEmpty()) {

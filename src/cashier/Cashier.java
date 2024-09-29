@@ -144,6 +144,7 @@ public class Cashier {
                 String selectedFile = csvFiles.get(choice - 1);
                 System.out.println("\tYou selected: " + selectedFile);
                 cashier_process.read_order_from_csv(selectedFile); // Now accessible
+                cashier_process.transfer_cart_to_counter();
                 cashier_process_choice();
             }
         } else {

@@ -40,9 +40,9 @@ public class CashierProcess extends OrderProcessor {
             System.out.println("Error reading CSV file: " + e.getMessage());
         }
     }
-    private void transfer_cart_to_counter() {
+    public void transfer_cart_to_counter() {
         counter.addAll(super.cart);
-        reset_cart();
+        reset_cart_no_display();
     }
 
     public void process_payment() {
