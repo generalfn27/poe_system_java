@@ -72,6 +72,10 @@ public class CashierProcess extends OrderProcessor {
                     }
                     // Print receipt after successful payment
                     //print_receipt(counter, total_items, *total_price, payment);
+                        //after generating ng resibo dapat uupdate sa audit sales
+                        // at update ng inventory stock ibabawas ung mga items
+                        // save resibo at pupunta na
+                        // ulit sa menu kung saan mamimili anong next queue number aasikasuhin
                 }
                 case "0":
                     //di ko sure kung reset ba or go back nalang sa last function bukas ko na alamin
