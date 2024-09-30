@@ -1,4 +1,4 @@
-package cashier;
+package Employee;
 
 import User_Types.UserType;
 import Process.CashierProcess;
@@ -60,8 +60,6 @@ public class Cashier {
 
 
     private boolean validate_cashier_login(String inputUsername, String inputPassword) {
-        // Add logic to validate the cashier's credentials here
-
         //madaming changes pa dito if gagawa ng multiple accounts for cashier employees
 
         // Default username
@@ -155,7 +153,7 @@ public class Cashier {
 
 
 
-    private void cashier_process_choice() {
+    public void cashier_process_choice() {
         System.out.flush();
         Scanner scanf = new Scanner(System.in);
         char choice;

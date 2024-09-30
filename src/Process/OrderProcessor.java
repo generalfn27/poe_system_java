@@ -257,7 +257,7 @@ public class OrderProcessor {
             return;
         }
 
-        String fileName = generate_file_name();
+        String fileName = generate_queue_file_name();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header
@@ -301,7 +301,7 @@ public class OrderProcessor {
     }
 
 
-    private static String generate_file_name() {
+    private static String generate_queue_file_name() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
         String formattedDate = dateFormat.format(new Date());
         String fileName = String.format("queue_number_%d_%s.csv", currentQueueNumber, formattedDate);
