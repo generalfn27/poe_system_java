@@ -77,7 +77,7 @@ public class CashierProcess extends OrderProcessor {
                         }
 
                         // Print receipt after successful payment
-                        print_receipt(counter, calculate_total_items(), calculate_total_price(), payment);
+                        print_receipt(counter, payment);
 
                         // Reset the counter and go back to queue selection
                         counter.clear();
@@ -123,7 +123,7 @@ public class CashierProcess extends OrderProcessor {
 
 
     // Method to print the receipt
-    private void print_receipt(List<Product> counter, int total_items, double total_price, double payment) {
+    private void print_receipt(List<Product> counter, double payment) {
         Scanner scanf = new Scanner(System.in);
         System.out.println("\n\n----- RECEIPT -----");
         System.out.println("CODE\t\tProduct Name\t Quantity  Price");
@@ -134,18 +134,18 @@ public class CashierProcess extends OrderProcessor {
         }
 
         System.out.println("----------------------------------------");
-        System.out.printf("Total Price: %.2f\n", total_price);
-        System.out.printf("Payment: %.2f\n", payment);
+        System.out.printf("\nTotal Items: %d\n", calculate_total_items());
+        System.out.printf("Total Price: %.2f\n", calculate_total_price());
 
-        if (payment > total_price) {
-            System.out.printf("Change: %.2f\n", payment - total_price);
+        if (payment > calculate_total_price()) {
+            System.out.printf("Change: %.2f\n", payment - calculate_total_price());
         }
         System.out.println("------------------------------------------");
         System.out.print("\tDo you want to go back to cashier menu (press any key) or Save & Exit (E): ");
 
         String choice = scanf.nextLine();
         if (choice.equalsIgnoreCase("E")) {
-            save_receipt_to_csv(counter, total_items, total_price, payment);
+            save_receipt_to_csv(counter, calculate_total_price(), payment);
             counter.clear();
             //cashier_process_choice(); // Return to cashier process menu
         } else {
@@ -155,7 +155,7 @@ public class CashierProcess extends OrderProcessor {
 
 
     // Dummy method for saving the receipt to a CSV file
-    public static void save_receipt_to_csv(List<Product> counter, int totalItems, double totalPrice, double payment) {
+    public static void save_receipt_to_csv(List<Product> counter, double totalPrice, double payment) {
         if (counter.isEmpty()) {
             System.out.println("No items in the counter. Nothing to save.");
             return;
@@ -205,7 +205,7 @@ public class CashierProcess extends OrderProcessor {
         return fileName;
     }
 
-    // Method to initialize the queue number by reading from a file
+    // Method to initialize the resibo number by reading from a file
     public static void initialize_receipt_number() {
         try (BufferedReader reader = new BufferedReader(new FileReader(RECEIPT_NUMBER_FILE))) {
             String line = reader.readLine();
@@ -218,7 +218,7 @@ public class CashierProcess extends OrderProcessor {
         }
     }
 
-    // Method to save the current queue number to a file
+    // Method to save the current resibo number to a file
     private static void save_receipt_number() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(RECEIPT_NUMBER_FILE))) {
             writer.println(currentReceiptNumber);
