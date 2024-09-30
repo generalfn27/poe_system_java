@@ -196,7 +196,7 @@ public class CashierProcess extends OrderProcessor {
     private static String generate_receipt_file_name() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
         String formattedDate = dateFormat.format(new Date());
-        String fileName = String.format("queue_number_%d_%s.csv", currentReceiptNumber, formattedDate);
+        String fileName = String.format("receipt_number_%d_%s.csv", currentReceiptNumber, formattedDate);
 
         // Increment the queue number for the next file
         currentReceiptNumber++;
