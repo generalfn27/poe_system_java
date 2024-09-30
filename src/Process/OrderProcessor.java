@@ -55,7 +55,7 @@ public class OrderProcessor {
         //quantity check at error handling din kung kulang or sobra order ng kupal
         boolean valid_input;
         do {
-            System.out.println("Enter quantity: ");
+            System.out.print("Enter quantity: ");
             if (scanf.hasNextInt()) {
                 quantity = scanf.nextInt();
                 valid_input = true;

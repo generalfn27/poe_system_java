@@ -58,20 +58,20 @@ public class CashierProcess extends OrderProcessor {
         // Add logic for accepting payment, calculating change, etc.
 
         while (true) {
-            System.out.printf("\nTotal Amount need Pay: %.2f\n", calculate_total_price());
+            System.out.printf("\n\tTotal Amount need Pay: %.2f\n", calculate_total_price());
             System.out.println("\tDo you want to proceed with the payment?\n");
-            System.out.println("\\t[1] Yes");
-            System.out.println("[0] Cancel");
-            System.out.print("Enter choice: ");
+            System.out.println("\t[1] Yes");
+            System.out.println("\t[0] Cancel");
+            System.out.print("\tEnter choice: ");
             String choice = scanf.nextLine();
 
             switch (choice) {
                 case "1":
-                    System.out.println("\tEnter rendered amount: ");
+                    System.out.print("\tEnter rendered amount: ");
                     double payment = scanf.nextDouble();
 
                     if (payment >= calculate_total_price()) {
-                        System.out.println("\tPayment accepted.\n");
+                        System.out.println("\n\tPayment accepted.\n");
                         if (payment > calculate_total_price()) {
                             System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
                         }
@@ -94,7 +94,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    private void display_counter() {
+    void display_counter() {
         System.out.println("\nItems at the counter:");
         for (Product product : counter) {
             System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
@@ -105,7 +105,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    private int calculate_total_items() {
+    int calculate_total_items() {
         int total = 0;
         for (Product product : counter) {
             total += product.getStock();
@@ -113,7 +113,7 @@ public class CashierProcess extends OrderProcessor {
         return total;
     }
 
-    private double calculate_total_price() {
+    double calculate_total_price() {
         double total = 0;
         for (Product product : counter) {
             total += product.getPrice() * product.getStock();
@@ -184,8 +184,7 @@ public class CashierProcess extends OrderProcessor {
             if (payment > totalPrice) {
                 writer.printf("Change: ,%.2f%n", payment - totalPrice);
             }
-
-            System.out.println("\nReceipt successfully saved to " + fileName);
+            System.out.println("\n\tReceipt successfully saved to " + fileName + "\n\n");
 
         } catch (IOException e) {
             System.out.println("Error saving the receipt: " + e.getMessage());
