@@ -1,15 +1,12 @@
 package Shopper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Customer {
 
     private String username;
     private String password;
     private String phoneNumber;
     private String paymentMethod;
-    private float balance;
+    private double balance;
     private String pinCode; // New field for the 4-digit PIN code
 
     public Customer() {
@@ -67,11 +64,11 @@ public class Customer {
         this.paymentMethod = paymentMethod;
     }
 
-    public float getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

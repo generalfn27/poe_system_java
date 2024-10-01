@@ -13,7 +13,7 @@ public class CashierProcess extends OrderProcessor {
     private final List<Product> counter;
     private static int currentReceiptNumber = 1;
     private static final String RECEIPT_NUMBER_FILE = "current_receipt_number.txt";
-    private String currentQueueOrderFile; // New field to store the current queue order file name para nasa track kung ano ddelete
+    private String currentQueueOrderFile; // New field to store the current queue order file name para nasa track kung ano d-delete
 
     public CashierProcess() {
         super(); // hinihiram lahat ng mga asa initialization na meron si OrderProcessor dahil sya ang parent
@@ -48,6 +48,8 @@ public class CashierProcess extends OrderProcessor {
             System.out.println("Error reading CSV file: " + e.getMessage());
         }
     }
+
+
     public void transfer_cart_to_counter() {
         counter.addAll(cart);
         reset_cart_no_display();
@@ -204,6 +206,7 @@ public class CashierProcess extends OrderProcessor {
         return fileName;
     }
 
+
     // Method to initialize the resibo number by reading from a file
     public static void initialize_receipt_number() {
         try (BufferedReader reader = new BufferedReader(new FileReader(RECEIPT_NUMBER_FILE))) {
@@ -217,6 +220,7 @@ public class CashierProcess extends OrderProcessor {
         }
     }
 
+
     // Method to save the current resibo number to a file
     private static void save_receipt_number() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(RECEIPT_NUMBER_FILE))) {
@@ -225,6 +229,7 @@ public class CashierProcess extends OrderProcessor {
             System.out.println("Error saving queue number: " + e.getMessage());
         }
     }
+
 
     private void delete_queue_order_file() {
         if (currentQueueOrderFile != null) {

@@ -345,7 +345,7 @@ public class UserCustomer {
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.\n");
-                    registered_user_customer_item_category(customer.getUsername(), customer.getBalance());
+                    registered_user_customer_item_category(customer.getUsername(), customer.getBalance(), customer);
                     loginSuccessful = true;
                     break;
                 }
@@ -365,11 +365,11 @@ public class UserCustomer {
     }
 
     // Placeholder method for registered customer actions after login
-    private void registered_user_customer_item_category(String username, double balance) {
+    private void registered_user_customer_item_category(String username, double balance, Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
-        // Create an instance of OrderProcessor to handle the guest's order
+        // Create an instance of OrderProcessor to handle the registered user's order
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
@@ -387,6 +387,7 @@ public class UserCustomer {
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
             System.out.println("\t|        [8] Detergents & Soaps              |");
             System.out.println("\t|        [9] Add funds                       |\n");
+
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
@@ -424,7 +425,7 @@ public class UserCustomer {
                     break;
                 case "9":
                     add_funds(username);
-                    registered_user_customer_item_category(username, balance);
+                    registered_user_customer_item_category(username, balance, customer);
                     break;
                 case "0":
                     while (true) {
@@ -452,9 +453,9 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
-                OrderProcessor.modify_menu_process();
+                OrderProcessor.registered_user_modify_menu_process(customer.getUsername());
             }else {
-                System.out.println("No products available in this category.");
+                //System.out.println("No products available in this category.");
             }
         } while (true);
     }
@@ -479,6 +480,16 @@ public class UserCustomer {
             }
         }
         System.out.println("\n\tUsername not found. Please try again.");
+    }
+
+
+    public Customer getCustomerByUsername(String username) {
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username)) {
+                return customer;
+            }
+        }
+        return null;
     }
 
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 public class OrderProcessor {
     static List<Product> cart;
     private static int total_items;
-    private static double total_price;
+    public static double total_price;
     private static int currentQueueNumber = 1;
     private static final String QUEUE_NUMBER_FILE = "current_queue_number.txt";
 
@@ -65,7 +65,7 @@ public class OrderProcessor {
                 valid_input = false;
             }
         } while (!valid_input);
-        
+
         System.out.printf("Price: %.2f\n", selected_product.getPrice() * quantity);
 
         //tatanong kung sigurado ba ung kupal pag may pangbili sya
@@ -141,7 +141,6 @@ public class OrderProcessor {
                 case "A":
                 case "a":
                     //pwedeng add more quantity to the item nalang to
-                    //UserCustomer.guest_customer_item_category(guest);
                     break;
                 case "R":
                 case "r":
@@ -191,6 +190,91 @@ public class OrderProcessor {
                             OrderProcessor.modify_menu_process();
                         }
 
+                    } else {
+                        System.out.println("\n\tCheckout cancelled.");
+                    }
+                    break;
+            }
+        }
+    }
+
+
+    public static void registered_user_modify_menu_process(String username) {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+
+        while (true) {
+            display_cart();
+            System.out.println("\n\tAdd more items (A)"); //pwedeng add more quantity to the item nalang to
+            System.out.println("\tRemove Items (R)");
+            System.out.println("\tDeduct Quantity (D)");
+            System.out.println("\tClear Cart (C)");
+            System.out.println("\tProceed to checkout (P)");
+            System.out.println("\tDisplay cart(V)");
+            System.out.println("\tGo Back (B)");
+            System.out.print("\n\tEnter choice: ");
+
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "A":
+                case "a":
+                    //pwedeng add more quantity to the item nalang to
+                    break;
+                case "R":
+                case "r":
+                    System.out.print("Enter product code to remove: ");
+                    String codeToRemove = scanf.nextLine();
+                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                    break;
+                case "D":
+                case "d":
+                    System.out.print("Enter product code to deduct: ");
+                    String codeToDeduct = scanf.nextLine();
+                    System.out.print("Enter quantity to deduct: ");
+                    int quantityToDeduct = scanf.nextInt();
+                    deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+                    break;
+                case "C":
+                case "c":
+                    reset_cart();  // Reset the cart
+                    break;
+                case "V":
+                case "v":
+                    display_cart();
+                    break;
+                case "B":
+                case "b":
+                    return;
+                case "P":
+                case "p":
+                    // Confirmation before checkout
+                    System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                    String confirmInput = scanf.nextLine().trim();
+
+                    if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
+                        System.out.println("\n\tProcessing checkout...");
+                        System.out.println("\n\tChoose payment method:");
+                        System.out.println("\t1. Cash (Queue Number)");
+                        System.out.println("\t2. E-Wallet (Self-Checkout)");
+                        System.out.print("\tEnter choice: ");
+                        String paymentChoice = scanf.nextLine().trim();
+
+                        if (paymentChoice.equals("1")) {
+                            // Existing cash payment process
+                            save_cart_to_csv();
+                            reset_cart();
+                            UserCustomer user_customer = new UserCustomer();
+                            user_customer.user_customer_menu();
+                            return;
+                        } else if (paymentChoice.equals("2")) {
+                            // New e-wallet self-checkout process
+                            SelfCheckout selfCheckout = new SelfCheckout(new OrderProcessor(), new UserCustomer());
+                            selfCheckout.processSelfCheckout(username);
+                            return;
+                        } else {
+                            System.out.println("\n\tInvalid choice. Returning to menu.");
+                        }
                     } else {
                         System.out.println("\n\tCheckout cancelled.");
                     }
