@@ -69,15 +69,14 @@ public class CashierProcess extends OrderProcessor {
 
             switch (choice) {
                 case "1":
-                    System.out.println("\n\n\tEnter rendered amount: ");
+                    System.out.print("\n\tEnter rendered amount: ");
                     double payment = scanf.nextDouble();
 
                     if (payment >= calculate_total_price()) {
-                        System.out.println("\n\tPayment accepted.\n");
+                        System.out.println("\tPayment accepted.");
                         if (payment > calculate_total_price()) {
                             System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
                         }
-
                         // Print receipt after successful payment
                         print_receipt(counter, payment);
 
@@ -97,7 +96,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    void display_counter() {
+    public void display_counter() {
         System.out.println("\nItems at the counter:");
         for (Product product : counter) {
             System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",

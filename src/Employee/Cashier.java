@@ -82,6 +82,11 @@ public class Cashier {
 
 
         while (true) {
+            System.out.println("=======================================");
+            System.out.println("|                                     |");
+            System.out.println("|          Cashier Dashboard          |");
+            System.out.println("|                                     |");
+            System.out.println("=======================================\n");
             System.out.println("\t[1] Process Queue Orders");
             System.out.println("\t[2] hindi pa alam ano dapat talaga dito");
             System.out.println("\t[0] Exit");
@@ -122,13 +127,13 @@ public class Cashier {
         System.out.println("|                                     |");
         System.out.println("|          Cashier Dashboard          |");
         System.out.println("|                                     |");
-        System.out.println("=======================================\n");
-        System.out.println("\n\nCSV Files to Open:");
+        System.out.println("=======================================");
+        System.out.println("\n\tCSV Files to Open:");
 
         if (files != null) {
             for (File file : files) {
                 csvFiles.add(file.getName());
-                System.out.println("[" + (csvFiles.size()) + "] " + file.getName());
+                System.out.println("\t[" + (csvFiles.size()) + "] " + file.getName());
             }
         }
 
@@ -163,6 +168,12 @@ public class Cashier {
             // Reset the counter, total items, and total price
             // Select the queue list to process
 
+            System.out.println("=======================================");
+            System.out.println("|                                     |");
+            System.out.println("|          Cashier Dashboard          |");
+            System.out.println("|                                     |");
+            System.out.println("=======================================\n");
+
             System.out.println("\n\t[1] Proceed to pay");
             System.out.println("\t[2] Modify Counter Items (under development)");
             System.out.println("\t[3] wat if ang nakalagay dito view items lang parang preview items nalang?");
@@ -179,10 +190,10 @@ public class Cashier {
                     // Call method to modify counter items (under development)
                     break;
                 case '3':
-                    // Call method to view and select receipt from list
+                    cashier_process.display_counter();
                     break;
                 case '0':
-                    return;
+                    selecting_queue_list_to_process();
                 default:
                     // Handle invalid input
                     System.out.println("\n\tInvalid input. Try again...");
