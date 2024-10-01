@@ -13,6 +13,7 @@ public class CashierProcess extends OrderProcessor {
     private final List<Product> counter;
     private static int currentReceiptNumber = 1;
     private static final String RECEIPT_NUMBER_FILE = "current_receipt_number.txt";
+    private String currentQueueOrderFile; // New field to store the current queue order file name para nasa track kung ano ddelete
 
     public CashierProcess() {
         super(); // hinihiram lahat ng mga asa initialization na meron si OrderProcessor dahil sya ang parent
@@ -22,6 +23,7 @@ public class CashierProcess extends OrderProcessor {
 
 
     public void read_order_from_csv(String filename) {
+        this.currentQueueOrderFile = filename; // Store the filename
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             boolean first_line = true;
@@ -67,7 +69,7 @@ public class CashierProcess extends OrderProcessor {
 
             switch (choice) {
                 case "1":
-                    System.out.print("\tEnter rendered amount: ");
+                    System.out.println("\n\n\tEnter rendered amount: ");
                     double payment = scanf.nextDouble();
 
                     if (payment >= calculate_total_price()) {
@@ -129,7 +131,7 @@ public class CashierProcess extends OrderProcessor {
         System.out.println("CODE\t\tProduct Name\t Quantity  Price");
 
         for (Product product : counter) {
-            System.out.printf("%-8s \t%-24s \t  x%d  \t%5.2f\n",
+            System.out.printf("%-8s \t%-24s \t\t\t  x%d  \t%5.2f\n",
                     product.getCode(), product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
 
@@ -155,14 +157,13 @@ public class CashierProcess extends OrderProcessor {
 
 
     // Dummy method for saving the receipt to a CSV file
-    public static void save_receipt_to_csv(List<Product> counter, double totalPrice, double payment) {
+    public void save_receipt_to_csv(List<Product> counter, double totalPrice, double payment) {
         if (counter.isEmpty()) {
             System.out.println("No items in the counter. Nothing to save.");
             return;
         }
 
         String fileName = generate_receipt_file_name();
-
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header
             writer.println("Code,Name,Quantity,Price");
@@ -176,7 +177,6 @@ public class CashierProcess extends OrderProcessor {
                         product.getPrice());
             }
 
-            // Write total price and payment details
             writer.printf("%nTotal Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
 
@@ -185,7 +185,7 @@ public class CashierProcess extends OrderProcessor {
                 writer.printf("Change: ,%.2f%n", payment - totalPrice);
             }
             System.out.println("\n\tReceipt successfully saved to " + fileName + "\n\n");
-
+            delete_queue_order_file();
         } catch (IOException e) {
             System.out.println("Error saving the receipt: " + e.getMessage());
         }
@@ -223,6 +223,22 @@ public class CashierProcess extends OrderProcessor {
             writer.println(currentReceiptNumber);
         } catch (IOException e) {
             System.out.println("Error saving queue number: " + e.getMessage());
+        }
+    }
+
+    private void delete_queue_order_file() {
+        if (currentQueueOrderFile != null) {
+            File file = new File(currentQueueOrderFile);
+            if (file.exists()) {
+                if (file.delete()) {
+                    System.out.println("Queue order file " + currentQueueOrderFile + " has been deleted successfully.");
+                } else {
+                    System.out.println("Failed to delete the queue order file " + currentQueueOrderFile);
+                }
+            } else {
+                System.out.println("Queue order file " + currentQueueOrderFile + " does not exist.");
+            }
+            currentQueueOrderFile = null; // Reset the file name after deletion attempt
         }
     }
 
