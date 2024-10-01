@@ -162,7 +162,6 @@ public class Cashier {
         System.out.flush();
         Scanner scanf = new Scanner(System.in);
         char choice;
-        char confirm;
 
         while (true) { // Loop until the cashier chooses to exit
             // Reset the counter, total items, and total price

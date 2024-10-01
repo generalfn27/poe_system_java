@@ -93,7 +93,7 @@ public class UserCustomer {
             item_category = scanf.nextLine();
 
             // Variable to hold the products in the chosen category
-            List<Product> selected_products = null;
+            List<Product> selected_products;
 
             switch (item_category) {
                 case "0":
@@ -141,7 +141,7 @@ public class UserCustomer {
 
     // Customer registration function
     public void customerRegister() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanf = new Scanner(System.in);
         final int MAX_CUSTOMERS = 100;
         if (customers.size() >= MAX_CUSTOMERS) {
             System.out.println("\n\tCustomer limit reached. Cannot register new customers.");
@@ -149,41 +149,45 @@ public class UserCustomer {
         }
 
         Customer newCustomer = new Customer();
-        String confirmPassword;
+        String confirmPassword = "";
         float initialFunds;
 
         System.out.print("\n\tEnter Username: ");
-        String username = scanner.nextLine();
+        String username = scanf.nextLine();
 
         // Check if the username already exists
         for (Customer customer : customers) {
             if (customer.getUsername().equals(username)) {
                 System.out.println("\n\tUsername already exists. Please choose a different username.");
-                return;
+                System.out.print("\n\tEnter Username: ");
+                username = scanf.nextLine();
             }
         }
         newCustomer.setUsername(username);
 
         // Password input
-        String password = inputPassword(scanner, "Enter Password: ");
+        String password = inputPassword(scanf, "\nEnter Password: ");
         newCustomer.setPassword(password);
 
-        // Confirm password
-        confirmPassword = inputPassword(scanner, "Confirm Password: ");
-        if (!newCustomer.getPassword().equals(confirmPassword)) {
-            System.out.println("\n\tPasswords do not match. Please try again.");
-            return;
+        while (!newCustomer.getPassword().equals(confirmPassword)) {
+            confirmPassword = inputPassword(scanf, "\nConfirm Password: ");
+            if (!newCustomer.getPassword().equals(confirmPassword)) {
+                System.out.println("\n\tPasswords do not match. Please try again.");
+            }
         }
 
         // Phone number
         System.out.print("\tEnter Phone Number: ");
-        String phoneNumber = scanner.nextLine();
+        String phoneNumber = scanf.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
+
+
+
 
         // Payment method choice
         String paymentMethod;
         System.out.print("\tIs the phone number for GCash (G) or PayMaya (P)? ");
-        char paymentChoice = scanner.nextLine().toUpperCase().charAt(0);
+        char paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
         if (paymentChoice == 'G') {
             paymentMethod = "GCash";
         } else if (paymentChoice == 'P') {
@@ -194,11 +198,13 @@ public class UserCustomer {
         }
         newCustomer.setPaymentMethod(paymentMethod);
 
+
+
         // Prompt for 4-digit PIN code
         String pinCode;
         while (true) {
             System.out.print("\tEnter a 4-digit PIN code: ");
-            pinCode = scanner.nextLine();
+            pinCode = scanf.nextLine();
 
             // Check if the entered PIN is exactly 4 digits
             if (pinCode.matches("\\d{4}")) {
@@ -211,8 +217,8 @@ public class UserCustomer {
 
         // Initial funds
         System.out.print("\tEnter initial amount to add to your account: ");
-        initialFunds = scanner.nextFloat();
-        scanner.nextLine(); // consume the leftover newline
+        initialFunds = scanf.nextFloat();
+        scanf.nextLine(); // consume the leftover newline
         newCustomer.setBalance(initialFunds);
 
         // Save the customer to the CSV file
@@ -225,7 +231,8 @@ public class UserCustomer {
     }
 
 
-    // Helper method to input hidden password
+    // Helper method to input hidden password pero dapat magiging ****
+    //shortcut sa pag fill ups thanks sa AI
     private String inputPassword(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
@@ -241,11 +248,11 @@ public class UserCustomer {
             // Loop through the customer list and save each customer
             for (Customer customer : customers) {
                 writer.write(customer.getUsername() + "," +
-                        customer.getPassword() + "," +
-                        customer.getPhoneNumber() + "," +
-                        customer.getPaymentMethod() + "," +
-                        customer.getBalance() + "," +      // Ensure balance is saved as a string
-                        customer.getPinCode() + "\n");     // Make sure to include the PIN
+                                 customer.getPassword() + "," +
+                                 customer.getPhoneNumber() + "," +
+                                 customer.getPaymentMethod() + "," +
+                                 customer.getBalance() + "," +      // Ensure balance is saved as a string
+                                 customer.getPinCode() + "\n");     // Make sure to include the PIN
             }
         } catch (IOException e) {
             System.out.println("Error saving customers to CSV: " + e.getMessage());
@@ -420,15 +427,14 @@ public class UserCustomer {
                     registered_user_customer_item_category(username, balance);
                     break;
                 case "0":
-                    boolean logout_confirmed = false;
-                    while (!logout_confirmed) {
+                    while (true) {
                         System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
                         System.out.println("\t[Y] for Yes  [N] for No: ");
 
                         String exit_confirmation = scanf.nextLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
-                            return;
+                            user_customer_menu();
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             // Do nothing, stay in the loop and return to the menu
                             break;
