@@ -264,6 +264,11 @@ public class OrderProcessor {
                             // Existing cash payment process
                             save_cart_to_csv();
                             reset_cart();
+
+                            //dapat hindi muna auto logout
+                            //so may notif sa dashboard na proceed sya sa cashier or may option na logout and cashier
+                            //at may confirmations din
+
                             UserCustomer user_customer = new UserCustomer();
                             user_customer.user_customer_menu();
                             return;
