@@ -8,16 +8,12 @@ import java.util.Scanner;
 import java.util.List;
 
 public class SelfCheckout {
-    private final OrderProcessor orderProcessor;
     private final UserCustomer userCustomer;
-    private final Scanner scanner;
     private final CashierProcess cashierProcess;
-    private List<Product> cart;
+    private final List<Product> cart;
 
-    public SelfCheckout(OrderProcessor orderProcessor, UserCustomer userCustomer, List<Product> cart) {
-        this.orderProcessor = orderProcessor;
+    public SelfCheckout(UserCustomer userCustomer, List<Product> cart) {
         this.userCustomer = userCustomer;
-        this.scanner = new Scanner(System.in);
         this.cashierProcess = new CashierProcess();
         this.cart = cart;
     }
@@ -52,12 +48,13 @@ public class SelfCheckout {
     }
 
     private void processEWalletPayment(Customer customer) {
+        Scanner scanf = new Scanner(System.in);
         System.out.println("\tProcessing e-wallet payment for " + customer.getUsername());
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
         double totalPrice = calculateTotal();
 
         System.out.print("\tEnter your PIN: ");
-        String enteredPin = scanner.nextLine().trim();
+        String enteredPin = scanf.nextLine().trim();
 
         if (!enteredPin.equals(customer.getPinCode())) {
             System.out.println("\tIncorrect PIN. Payment cancelled.");
@@ -69,29 +66,32 @@ public class SelfCheckout {
             return;
         }
 
+        //nababawasan na ung balance ng account
         customer.setBalance(customer.getBalance() - totalPrice);
         System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
 
         // Generate and print receipt
         generateReceipt(customer, totalPrice);
 
-        OrderProcessor.reset_cart();
+        OrderProcessor.reset_cart_no_display();
         userCustomer.saveAllCustomersToCSV();
+        //next dapat ay mag uupdate mga product stock
     }
 
     private void generateReceipt(Customer customer, double totalPrice) {
         System.out.println("\n\t----- E-WALLET RECEIPT -----");
         System.out.println("\tCustomer: " + customer.getUsername());
         System.out.println("\tPayment Method: " + customer.getPaymentMethod());
-        System.out.println("\tItems purchased:");
+        System.out.println("\n\tItems purchased:");
+        System.out.println("CODE\t\tProduct Name\t Quantity  Price");
 
         for (Product product : this.cart) {
             System.out.printf("\t%-20s x%d  $%.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
 
         System.out.println("\t-----------------------------");
-        System.out.printf("\tTotal Amount: $%.2f\n", totalPrice);
-        System.out.printf("\tNew Balance: $%.2f\n", customer.getBalance());
+        System.out.printf("\tTotal Amount: %.2f\n", totalPrice);
+        System.out.printf("\tNew Balance: %.2f\n", customer.getBalance());
         System.out.println("\t-----------------------------");
         System.out.println("\tThank you for your purchase!");
 

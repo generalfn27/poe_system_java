@@ -180,10 +180,7 @@ public class UserCustomer {
         System.out.print("\tEnter Phone Number: ");
         String phoneNumber = scanf.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
-
-
-
-
+        
         // Payment method choice
         String paymentMethod;
         System.out.print("\tIs the phone number for GCash (G) or PayMaya (P)? ");
@@ -374,9 +371,9 @@ public class UserCustomer {
 
         do {
             System.out.println("\n\t----------------------------------------------");
-            System.out.println("\t|              Welcome Customer! " + username);
-            System.out.println("\t|         Your remaining balance: " + balance + "...");
-            System.out.println("\t|          What do you want to browse?       |");
+            System.out.println("\t|           Welcome Customer! " + username);
+            System.out.println("\t|     Your remaining balance: " + balance + "       |");
+            System.out.println("\t|        What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
             System.out.println("\t|        [2] Snacks                          |");
@@ -453,7 +450,6 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
-                System.out.println("Debug: After processing order, cart size: " + OrderProcessor.cart.size());
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
             }else {
                 //System.out.println("No products available in this category.");

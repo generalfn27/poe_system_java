@@ -270,7 +270,7 @@ public class OrderProcessor {
                         } else if (paymentChoice.equals("2")) {
                             // New e-wallet self-checkout process
                             UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
-                            SelfCheckout selfCheckout = new SelfCheckout(this, userCustomer, cart);
+                            SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
                             selfCheckout.processSelfCheckout(username);
                             return;
                         } else {
