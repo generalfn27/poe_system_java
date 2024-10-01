@@ -163,8 +163,9 @@ public class Cashier {
             // Reset the counter, total items, and total price
             // Select the queue list to process
 
-            System.out.println("\t[1] Proceed to pay");
+            System.out.println("\n\t[1] Proceed to pay");
             System.out.println("\t[2] Modify Counter Items (under development)");
+            System.out.println("\t[3] wat if ang nakalagay dito view items lang parang preview items nalang?");
             System.out.println("\t[0] Go back");
 
             System.out.print("\n\n\tEnter Here: ");

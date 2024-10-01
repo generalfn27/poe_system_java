@@ -114,7 +114,7 @@ public class OrderProcessor {
                 System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
                         product.getCode(), product.getName(), product.getStock(), product.getPrice());
             }
-            System.out.printf("Total Items: %d\n", total_items);
+            System.out.printf("\nTotal Items: %d\n", total_items);
             System.out.printf("Total Price: %.2f\n", total_price);
         }
     }

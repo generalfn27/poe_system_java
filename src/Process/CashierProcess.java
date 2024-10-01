@@ -90,6 +90,7 @@ public class CashierProcess extends OrderProcessor {
                     break;
                 case "0":
                     //di ko sure kung reset ba or go back nalang sa last function bukas ko na alamin
+                    return;
             }
         }
 
