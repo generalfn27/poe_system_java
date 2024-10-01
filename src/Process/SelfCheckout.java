@@ -86,7 +86,7 @@ public class SelfCheckout {
         System.out.println("CODE\t\tProduct Name\t Quantity  Price");
 
         for (Product product : this.cart) {
-            System.out.printf("\t%-20s x%d  $%.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
+            System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
 
         System.out.println("\t-----------------------------");

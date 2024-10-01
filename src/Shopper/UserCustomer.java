@@ -180,7 +180,7 @@ public class UserCustomer {
         System.out.print("\tEnter Phone Number: ");
         String phoneNumber = scanf.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
-        
+
         // Payment method choice
         String paymentMethod;
         System.out.print("\tIs the phone number for GCash (G) or PayMaya (P)? ");
@@ -195,9 +195,6 @@ public class UserCustomer {
         }
         newCustomer.setPaymentMethod(paymentMethod);
 
-
-
-        // Prompt for 4-digit PIN code
         String pinCode;
         while (true) {
             System.out.print("\tEnter a 4-digit PIN code: ");
@@ -342,7 +339,7 @@ public class UserCustomer {
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.\n");
-                    registered_user_customer_item_category(customer.getUsername(), customer.getBalance(), customer);
+                    registered_user_customer_item_category(customer.getUsername(), customer);
                     loginSuccessful = true;
                     break;
                 }
@@ -362,7 +359,7 @@ public class UserCustomer {
     }
 
     // Placeholder method for registered customer actions after login
-    private void registered_user_customer_item_category(String username, double balance, Customer customer) {
+    private void registered_user_customer_item_category(String username, Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
@@ -370,9 +367,10 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            System.out.println("\n\t----------------------------------------------");
+            saveAllCustomersToCSV();
+            System.out.println("\t----------------------------------------------");
             System.out.println("\t|           Welcome Customer! " + username);
-            System.out.println("\t|     Your remaining balance: " + balance + "       |");
+            System.out.println("\t|     Your remaining balance: " + customer.getBalance() + "       |");
             System.out.println("\t|        What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
@@ -422,11 +420,12 @@ public class UserCustomer {
                     break;
                 case "9":
                     add_funds(username);
-                    registered_user_customer_item_category(username, balance, customer);
+                    saveAllCustomersToCSV();
+                    registered_user_customer_item_category(username, customer);
                     break;
                 case "0":
                     while (true) {
-                        System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
+                        System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
                         System.out.println("\t[Y] for Yes  [N] for No: ");
 
                         String exit_confirmation = scanf.nextLine().trim();
@@ -434,11 +433,9 @@ public class UserCustomer {
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
                             user_customer_menu();
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                            // Do nothing, stay in the loop and return to the menu
                             break;
                         } else {
                             System.out.println("\tInvalid input. Going back to menu.\n");
-                            // Do nothing, stay in the loop and return to the menu
                         }
                     }
                     break;
@@ -451,8 +448,9 @@ public class UserCustomer {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
+                saveAllCustomersToCSV(); //PARA NAG UUPDATE SYA AFTER FUNDINGS
             }else {
-                //System.out.println("No products available in this category.");
+                System.out.println("No products available in this category.");
             }
         } while (true);
     }
