@@ -453,7 +453,8 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
-                OrderProcessor.registered_user_modify_menu_process(customer.getUsername());
+                System.out.println("Debug: After processing order, cart size: " + OrderProcessor.cart.size());
+                order_processor.registered_user_modify_menu_process(customer.getUsername());
             }else {
                 //System.out.println("No products available in this category.");
             }

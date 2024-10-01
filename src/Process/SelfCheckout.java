@@ -12,12 +12,14 @@ public class SelfCheckout {
     private final UserCustomer userCustomer;
     private final Scanner scanner;
     private final CashierProcess cashierProcess;
+    private List<Product> cart;
 
-    public SelfCheckout(OrderProcessor orderProcessor, UserCustomer userCustomer) {
+    public SelfCheckout(OrderProcessor orderProcessor, UserCustomer userCustomer, List<Product> cart) {
         this.orderProcessor = orderProcessor;
         this.userCustomer = userCustomer;
         this.scanner = new Scanner(System.in);
         this.cashierProcess = new CashierProcess();
+        this.cart = cart;
     }
 
     public void processSelfCheckout(String username) {
@@ -27,19 +29,32 @@ public class SelfCheckout {
             return;
         }
 
-        if (OrderProcessor.cart.isEmpty()) {
+        if (this.cart.isEmpty()) {
             System.out.println("\tYour cart is empty. Please add items before checking out.");
             return;
         }
 
-        OrderProcessor.display_cart();
+        displayCart();
         processEWalletPayment(customer);
+    }
+
+    private void displayCart() {
+        System.out.println("\n\tYour Cart:");
+        for (Product product : this.cart) {
+            System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
+        }
+        System.out.println("\t-----------------------------");
+        System.out.printf("\tTotal: %.2f\n", calculateTotal());
+    }
+
+    private double calculateTotal() {
+        return this.cart.stream().mapToDouble(p -> p.getPrice() * p.getStock()).sum();
     }
 
     private void processEWalletPayment(Customer customer) {
         System.out.println("\tProcessing e-wallet payment for " + customer.getUsername());
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
-        double totalPrice = OrderProcessor.total_price;
+        double totalPrice = calculateTotal();
 
         System.out.print("\tEnter your PIN: ");
         String enteredPin = scanner.nextLine().trim();
@@ -70,7 +85,7 @@ public class SelfCheckout {
         System.out.println("\tPayment Method: " + customer.getPaymentMethod());
         System.out.println("\tItems purchased:");
 
-        for (Product product : OrderProcessor.cart) {
+        for (Product product : this.cart) {
             System.out.printf("\t%-20s x%d  $%.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
 
@@ -81,6 +96,6 @@ public class SelfCheckout {
         System.out.println("\tThank you for your purchase!");
 
         // Save receipt to CSV
-        cashierProcess.save_receipt_to_csv(OrderProcessor.cart, totalPrice, totalPrice);
+        cashierProcess.save_receipt_to_csv(this.cart, totalPrice, totalPrice);
     }
 }

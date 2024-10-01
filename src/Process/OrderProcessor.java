@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 public class OrderProcessor {
-    static List<Product> cart;
+    public static List<Product> cart;
     private static int total_items;
     public static double total_price;
     private static int currentQueueNumber = 1;
@@ -199,7 +199,7 @@ public class OrderProcessor {
     }
 
 
-    public static void registered_user_modify_menu_process(String username) {
+    public void registered_user_modify_menu_process(String username) {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -269,7 +269,8 @@ public class OrderProcessor {
                             return;
                         } else if (paymentChoice.equals("2")) {
                             // New e-wallet self-checkout process
-                            SelfCheckout selfCheckout = new SelfCheckout(new OrderProcessor(), new UserCustomer());
+                            UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
+                            SelfCheckout selfCheckout = new SelfCheckout(this, userCustomer, cart);
                             selfCheckout.processSelfCheckout(username);
                             return;
                         } else {
