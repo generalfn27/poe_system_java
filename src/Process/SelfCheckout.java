@@ -66,17 +66,29 @@ public class SelfCheckout {
             return;
         }
 
-        //nababawasan na ung balance ng account
-        customer.setBalance(customer.getBalance() - totalPrice);
-        System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
+        // Deduct funds from customer's account
+        userCustomer.minus_funds(customer.getUsername(), totalPrice);
 
-        // Generate and print receipt
+
+        System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");
+        userCustomer.saveAllCustomersToCSV();
+        System.out.println("\tSave process complete.");
+
+
+        // Confirm the balance has been updated
+        double newBalance = customer.getBalance(); // Ensure this reflects the new balance
+
+        System.out.printf("\tPayment successful. New balance: %.2f\n", newBalance);
+
+        // Generate and print the receipt
         generateReceipt(customer, totalPrice);
 
+        // Reset the cart
         OrderProcessor.reset_cart_no_display();
-        userCustomer.saveAllCustomersToCSV();
-        //next dapat ay mag uupdate mga product stock
     }
+
+
+
 
     private void generateReceipt(Customer customer, double totalPrice) {
         System.out.println("\n\t----- E-WALLET RECEIPT -----");

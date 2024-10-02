@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 public class UserCustomer {
     private final List<Customer> customers = new ArrayList<>();
-    private final String CSV_FILE = "customers.csv"; // CSV file name
 
     public UserCustomer() {
         // Load customers from CSV file when the program starts
@@ -231,21 +230,19 @@ public class UserCustomer {
 
     // Save a single customer to the CSV file
     public void saveAllCustomersToCSV() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE))) {
-            // Write the header first
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("customers.csv"))) {
             writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
-
-            // Loop through the customer list and save each customer
             for (Customer customer : customers) {
-                writer.write(customer.getUsername() + "," +
-                                 customer.getPassword() + "," +
-                                 customer.getPhoneNumber() + "," +
-                                 customer.getPaymentMethod() + "," +
-                                 customer.getBalance() + "," +      // Ensure balance is saved as a string
-                                 customer.getPinCode() + "\n");     // Make sure to include the PIN
+                // Debug: Print customer information that will be saved
+                System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
+
+                writer.write(customer.getUsername() + "," + customer.getPassword() + "," + customer.getPhoneNumber() + ","
+                        + customer.getPaymentMethod() + "," + customer.getBalance() + "," + customer.getPinCode());
+                writer.newLine();
             }
+            System.out.println("\tCustomer data saved to CSV.");
         } catch (IOException e) {
-            System.out.println("Error saving customers to CSV: " + e.getMessage());
+            System.out.println("\tError saving customer data: " + e.getMessage());
         }
     }
 
@@ -278,7 +275,9 @@ public class UserCustomer {
 
     // Load all customers from the CSV file
     private void loadCustomersFromCSV() {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CSV_FILE))) {
+        // CSV file name
+        String CUSTOMER_CSV_FILE = "customers.csv";
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CUSTOMER_CSV_FILE))) {
             String line;
             // Skip the header line
             bufferedReader.readLine();
@@ -439,7 +438,6 @@ public class UserCustomer {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
-                saveAllCustomersToCSV();
                 registered_user_customer_item_category(username, customer);
             }else {
                 System.out.println("No products available in this category.");
@@ -469,6 +467,26 @@ public class UserCustomer {
         System.out.println("\n\tUsername not found. Please try again.");
     }
 
+    // Deduct funds from customer's account
+    public void minus_funds(String username, Double amount) {
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username)) {
+                // Deduct the amount from the customer's balance
+                customer.setBalance(customer.getBalance() - amount);
+
+                // Debug: Print balance after deduction
+                System.out.printf("\n\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
+
+                // Save all customers back to the CSV after updating the balance
+                saveAllCustomersToCSV(); // Ensure this works as expected
+                return;
+            }
+        }
+        System.out.println("\n\tUsername not found. Please try again.");
+    }
+
+
+
 
     public Customer getCustomerByUsername(String username) {
         for (Customer customer : customers) {
@@ -479,12 +497,4 @@ public class UserCustomer {
         return null;
     }
 
-    public void updateCustomer(Customer updatedCustomer) {
-        for (int i = 0; i < customers.size(); i++) {
-            if (customers.get(i).getUsername().equals(updatedCustomer.getUsername())) {
-                customers.set(i, updatedCustomer);
-                break;
-            }
-        }
-    }
 }
