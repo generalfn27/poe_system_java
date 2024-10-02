@@ -350,14 +350,14 @@ public class UserCustomer {
     }
 
     // Placeholder method for registered customer actions after login
-    private void registered_user_customer_item_category(String username, Customer customer) {
+    public void registered_user_customer_item_category(String username, Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
         // Create an instance of OrderProcessor to handle the registered user's order
         OrderProcessor order_processor = new OrderProcessor();
 
-        do {
+        while (true) {
             System.out.println("\t----------------------------------------------");
             System.out.println("\t|           Welcome Customer! " + username);
             System.out.println("\t|     Your remaining balance: hindi nag uupdate" + customer.getBalance() + "    |");
@@ -410,7 +410,6 @@ public class UserCustomer {
                     break;
                 case "9":
                     add_funds(username);
-                    saveAllCustomersToCSV();
                     registered_user_customer_item_category(username, customer);
                     break;
                 case "0":
@@ -420,7 +419,6 @@ public class UserCustomer {
                         String exit_confirmation = scanf.nextLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
-                            saveAllCustomersToCSV(); // Save before exiting
                             user_customer_menu();
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             break;
@@ -439,10 +437,10 @@ public class UserCustomer {
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
                 registered_user_customer_item_category(username, customer);
-            }else {
+            } else {
                 System.out.println("No products available in this category.");
             }
-        } while (true);
+        }
     }
 
     // Add funds to customer's account

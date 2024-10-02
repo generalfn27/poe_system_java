@@ -85,6 +85,7 @@ public class SelfCheckout {
 
         // Reset the cart
         OrderProcessor.reset_cart_no_display();
+        userCustomer.registered_user_customer_item_category(customer.getUsername(), customer);
     }
 
 
