@@ -12,7 +12,6 @@ public class UserCustomer {
     private final List<Customer> customers = new ArrayList<>();
     private final String CSV_FILE = "customers.csv"; // CSV file name
 
-
     public UserCustomer() {
         // Load customers from CSV file when the program starts
         loadCustomersFromCSV();
@@ -34,10 +33,7 @@ public class UserCustomer {
             System.out.println("\t|                                                |");
             System.out.println("\t----------------------------------------------");
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.next();
-
-            // Consume the leftover newline from nextInt
-            scanf.nextLine();
+            choice = scanf.nextLine();
 
             switch (choice) {
                 case "1":
@@ -310,9 +306,10 @@ public class UserCustomer {
 
 
     public void customer_login() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanf = new Scanner(System.in);
         int attemptCount = 0;
         boolean loginSuccessful = false;
+        final int MAX_ATTEMPTS = 5;
 
         // Load customers from the CSV if not already loaded
         if (customers.isEmpty()) {
@@ -321,41 +318,36 @@ public class UserCustomer {
 
         // Loop until login is successful or maximum attempts reached
         // Maximum number of login attempts
-        final int MAX_ATTEMPTS = 5;
         while (attemptCount < MAX_ATTEMPTS) {
             System.out.println("\n===================================");
             System.out.println("|                                 |");
             System.out.println("|          Shopper Login          |");
             System.out.println("|                                 |");
             System.out.println("===================================\n");
-
             System.out.print("\tEnter Username: ");
-            String username = scanner.nextLine();
+            String username = scanf.nextLine();
 
             // Get hidden password input
-            String password = inputPassword(scanner, "\tEnter Password: ");
+            String password = inputPassword(scanf, "\tEnter Password: ");
 
             // Check if the username and password match any customer record
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.\n");
-                    registered_user_customer_item_category(customer.getUsername(), customer);
                     loginSuccessful = true;
+                    registered_user_customer_item_category(customer.getUsername(), customer);
                     break;
                 }
             }
 
-            if (loginSuccessful) {
-                break;
-            } else {
+            if (loginSuccessful) { break; }
+            else {
                 attemptCount++;
                 System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
             }
         }
 
-        if (!loginSuccessful) {
-            System.out.println("\n\tMaximum login attempts reached. Please try again later.");
-        }
+        if (!loginSuccessful) { System.out.println("\n\tMaximum login attempts reached. Please try again later."); }
     }
 
     // Placeholder method for registered customer actions after login
@@ -369,7 +361,7 @@ public class UserCustomer {
         do {
             System.out.println("\t----------------------------------------------");
             System.out.println("\t|           Welcome Customer! " + username);
-            System.out.println("\t|     Your remaining balance: " + customer.getBalance() + "       |");
+            System.out.println("\t|     Your remaining balance: hindi nag uupdate" + customer.getBalance() + "    |");
             System.out.println("\t|        What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
@@ -380,16 +372,16 @@ public class UserCustomer {
             System.out.println("\t|        [6] Frozen Foods                    |");
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
             System.out.println("\t|        [8] Detergents & Soaps              |");
-            System.out.println("\t|        [9] Add funds                       |\n");
-
+            System.out.println("\t|        [9] Add funds                       |");
+            System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
             System.out.print("\t|        Enter here: ");
-
             item_category = scanf.nextLine();
 
             // Variable to hold the products in the chosen category
+            //variable declaration lang to pero ang datatype nya ay array list
             List<Product> selected_products = null;
 
             switch (item_category) {
@@ -426,10 +418,10 @@ public class UserCustomer {
                     while (true) {
                         System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
                         System.out.println("\t[Y] for Yes  [N] for No: ");
-
                         String exit_confirmation = scanf.nextLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
+                            saveAllCustomersToCSV(); // Save before exiting
                             user_customer_menu();
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             break;
@@ -447,6 +439,8 @@ public class UserCustomer {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
+                saveAllCustomersToCSV();
+                registered_user_customer_item_category(username, customer);
             }else {
                 System.out.println("No products available in this category.");
             }
@@ -485,4 +479,12 @@ public class UserCustomer {
         return null;
     }
 
+    public void updateCustomer(Customer updatedCustomer) {
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).getUsername().equals(updatedCustomer.getUsername())) {
+                customers.set(i, updatedCustomer);
+                break;
+            }
+        }
+    }
 }
