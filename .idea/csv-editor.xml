@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\receipt_number_1_02_10_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
