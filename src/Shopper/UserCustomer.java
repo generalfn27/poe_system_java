@@ -367,7 +367,6 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         do {
-            saveAllCustomersToCSV();
             System.out.println("\t----------------------------------------------");
             System.out.println("\t|           Welcome Customer! " + username);
             System.out.println("\t|     Your remaining balance: " + customer.getBalance() + "       |");
@@ -448,7 +447,6 @@ public class UserCustomer {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
-                saveAllCustomersToCSV(); //PARA NAG UUPDATE SYA AFTER FUNDINGS
             }else {
                 System.out.println("No products available in this category.");
             }
