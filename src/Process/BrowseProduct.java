@@ -91,6 +91,9 @@ public class BrowseProduct {
                     return canned_meat;  // Return the list of products to the caller
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
@@ -154,6 +157,9 @@ public class BrowseProduct {
                     return beauty_care;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
@@ -199,6 +205,9 @@ public class BrowseProduct {
                     return liquid_soap;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }

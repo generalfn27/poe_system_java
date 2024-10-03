@@ -279,7 +279,9 @@ public class OrderProcessor {
                             selfCheckout.processSelfCheckout(username);
                             return;
                         } else {
-                            System.out.println("\n\tInvalid choice. Returning to menu.");
+                            System.out.println("\n\tAn error has occurred. Returning to menu.");
+                            System.out.println("\t\tPress Enter key to continue.\n");
+                            scanf.nextLine(); //used for press any key to continue
                         }
                     } else {
                         System.out.println("\n\tCheckout cancelled.");
