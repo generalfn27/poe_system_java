@@ -69,11 +69,8 @@ public class SelfCheckout {
         // Deduct funds from customer's account
         userCustomer.minus_funds(customer.getUsername(), totalPrice);
 
-
-        System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");
+        //System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");  //debugger
         userCustomer.saveAllCustomersToCSV();
-        System.out.println("\tSave process complete.");
-
 
         // Confirm the balance has been updated
         double newBalance = customer.getBalance(); // Ensure this reflects the new balance
@@ -87,8 +84,6 @@ public class SelfCheckout {
         OrderProcessor.reset_cart_no_display();
         userCustomer.registered_user_customer_item_category(customer.getUsername(), customer);
     }
-
-
 
 
     private void generateReceipt(Customer customer, double totalPrice) {

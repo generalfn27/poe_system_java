@@ -453,8 +453,8 @@ public class UserCustomer {
                     continue;
             }
 
+            // After displaying products, process the order by asking for product code
             if (selected_products != null && !selected_products.isEmpty()) {
-                // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
                 registered_user_customer_item_category(username, customer);
