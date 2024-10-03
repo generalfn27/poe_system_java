@@ -57,14 +57,16 @@ public class UserType {
                             user_type_menu();
                             break;
                         } else {
-                            System.out.println("\tInvalid input. Going back to menu.\n");
-                            System.out.println("\tPress any key to continue.\n");
+                            System.out.println("\n\tAn error has occurred");
+                            System.out.println("\t\tPress Enter key to continue.\n");
                             scanf.nextLine(); //used for press any key to continue
                             // Do nothing, stay in the loop and return to the menu
                         }
                     }
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
             }
             System.out.println();
         }

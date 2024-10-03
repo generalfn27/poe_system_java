@@ -51,9 +51,8 @@ public class UserCustomer {
                 case "0":
                     UserType.user_type_menu();
                 default:
-                    System.out.println("\n\tInvalid input. Try again...");
-                    // Implement a method for pressAnyKey() if needed
-                    System.out.println("\nPress any key to continue...");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -121,8 +120,8 @@ public class UserCustomer {
                     selected_products = BrowseProduct.browse_detergents(); // Browse detergents
                     break;
                 default:
-                    System.out.println("\nInvalid input. Try again...");
-                    System.out.println("\nPress any key to continue...");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
                     continue;
             }
@@ -441,15 +440,15 @@ public class UserCustomer {
                             registered_user_customer_item_category(username, customer);
                             break;
                         } else {
-                            System.out.println("\tInvalid input. Going back to menu.\n");
-                            System.out.println("\nPress any key to continue...");
+                            System.out.println("\n\tAn error has occurred");
+                            System.out.println("\t\tPress Enter key to continue.\n");
                             scanf.nextLine(); //used for press any key to continue
                         }
                     }
                     break;
                 default:
-                    System.out.println("\nInvalid input. Try again...");
-                    System.out.println("\nPress any key to continue...");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
                     continue;
             }
