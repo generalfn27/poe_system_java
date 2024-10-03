@@ -53,6 +53,8 @@ public class UserCustomer {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     // Implement a method for pressAnyKey() if needed
+                    System.out.println("\nPress any key to continue...");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
@@ -120,6 +122,8 @@ public class UserCustomer {
                     break;
                 default:
                     System.out.println("\nInvalid input. Try again...");
+                    System.out.println("\nPress any key to continue...");
+                    scanf.nextLine(); //used for press any key to continue
                     continue;
             }
 
@@ -438,11 +442,15 @@ public class UserCustomer {
                             break;
                         } else {
                             System.out.println("\tInvalid input. Going back to menu.\n");
+                            System.out.println("\nPress any key to continue...");
+                            scanf.nextLine(); //used for press any key to continue
                         }
                     }
                     break;
                 default:
                     System.out.println("\nInvalid input. Try again...");
+                    System.out.println("\nPress any key to continue...");
+                    scanf.nextLine(); //used for press any key to continue
                     continue;
             }
 
