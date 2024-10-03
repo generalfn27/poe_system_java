@@ -66,7 +66,7 @@ public class UserCustomer {
         // Create an instance of OrderProcessor to handle the guest's order
         OrderProcessor order_processor = new OrderProcessor();
 
-        do {
+        while (true) {
             System.out.println("\n\nBrowsing as guest: " + guest.getUsername());
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|              Welcome Customer!             |");
@@ -130,12 +130,12 @@ public class UserCustomer {
             } else {
                 System.out.println("No products available in this category.");
             }
-        } while (true);
+        }
     }
 
 
     // Customer registration function
-    public void customerRegister() {
+    private void customerRegister() {
         Scanner scanf = new Scanner(System.in);
         final int MAX_CUSTOMERS = 100;
         if (customers.size() >= MAX_CUSTOMERS) {
@@ -161,34 +161,41 @@ public class UserCustomer {
         newCustomer.setUsername(username);
 
         // Password input
-        String password = inputPassword(scanf, "\nEnter Password: ");
+        String password = inputPassword(scanf, "\n\tEnter Password: ");
         newCustomer.setPassword(password);
 
         while (!newCustomer.getPassword().equals(confirmPassword)) {
-            confirmPassword = inputPassword(scanf, "\nConfirm Password: ");
+            confirmPassword = inputPassword(scanf, "\n\tConfirm Password: ");
             if (!newCustomer.getPassword().equals(confirmPassword)) {
                 System.out.println("\n\tPasswords do not match. Please try again.");
             }
         }
 
         // Phone number
+        //dapat 11digits at nag sstart sa 09 palagi
         System.out.print("\tEnter Phone Number: ");
         String phoneNumber = scanf.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
 
-        // Payment method choice
-        String paymentMethod;
+        String paymentMethod = "";
         System.out.print("\tIs the phone number for GCash (G) or PayMaya (P)? ");
         char paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
-        if (paymentChoice == 'G') {
-            paymentMethod = "GCash";
-        } else if (paymentChoice == 'P') {
-            paymentMethod = "PayMaya";
-        } else {
-            System.out.println("\n\tInvalid choice. Please try again.");
-            return;
-        }
+
+        // Use a do-while loop for more efficient validation
+        do {
+            if (paymentChoice == 'G') {
+                paymentMethod = "GCash";
+                break;
+            } else if (paymentChoice == 'P') {
+                paymentMethod = "PayMaya";
+                break;
+            } else {
+                System.out.println("\n\tInvalid choice. Please try again.");
+                paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
+            }
+        } while (true);
         newCustomer.setPaymentMethod(paymentMethod);
+        System.out.println("\tThe payment method of user: " + newCustomer.getUsername() + " is " + newCustomer.getPaymentMethod());
 
         String pinCode;
         while (true) {
@@ -210,13 +217,13 @@ public class UserCustomer {
         scanf.nextLine(); // consume the leftover newline
         newCustomer.setBalance(initialFunds);
 
-        // Save the customer to the CSV file
         saveCustomerToFile(newCustomer);
 
         // Add the customer to the in-memory list
         customers.add(newCustomer);
 
         System.out.println("\n\tRegistration successful. You can now log in.");
+        registered_user_customer_item_category(newCustomer.getUsername(), newCustomer);
     }
 
 
@@ -247,7 +254,7 @@ public class UserCustomer {
     }
 
 
-    public void saveCustomerToFile(Customer customer) {
+    private void saveCustomerToFile(Customer customer) {
         File file = new File("customers.csv");
 
         // Check if the file exists before opening the writer
@@ -279,7 +286,7 @@ public class UserCustomer {
         String CUSTOMER_CSV_FILE = "customers.csv";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CUSTOMER_CSV_FILE))) {
             String line;
-            // Skip the header line
+            // Skip the field name / header line
             bufferedReader.readLine();
 
             while ((line = bufferedReader.readLine()) != null) {
@@ -304,7 +311,7 @@ public class UserCustomer {
     }
 
 
-    public void customer_login() {
+    private void customer_login() {
         Scanner scanf = new Scanner(System.in);
         int attemptCount = 0;
         boolean loginSuccessful = false;
@@ -360,7 +367,7 @@ public class UserCustomer {
         while (true) {
             System.out.println("\t----------------------------------------------");
             System.out.println("\t|           Welcome Customer! " + username);
-            System.out.println("\t|     Your remaining balance: hindi nag uupdate" + customer.getBalance() + "    |");
+            System.out.println("\t|     Your remaining balance: " + customer.getBalance() + "    |");
             System.out.println("\t|        What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
@@ -421,6 +428,7 @@ public class UserCustomer {
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
                             user_customer_menu();
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                            registered_user_customer_item_category(username, customer);
                             break;
                         } else {
                             System.out.println("\tInvalid input. Going back to menu.\n");
