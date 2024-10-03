@@ -53,16 +53,26 @@ public class OrderProcessor {
         display_product_details(selected_product);
 
         //quantity check at error handling din kung kulang or sobra order ng kupal
-        boolean valid_input;
+        boolean valid_input = false;
         do {
             System.out.print("Enter quantity: ");
+
+            // Check if input is an integer
             if (scanf.hasNextInt()) {
                 quantity = scanf.nextInt();
-                valid_input = true;
+
+                // Validate quantity range (1 to stock)
+                if (quantity > 0 && quantity <= selected_product.getStock()) {
+                    valid_input = true;
+                } else {
+                    System.out.println("\n\tInvalid quantity. Please enter a value between 1 and " + selected_product.getStock() + ".");
+                    System.out.println("\tType any key and enter to continue.");
+                    scanf.next(); // Clear buffer (optional)
+                }
             } else {
-                System.out.println("Invalid input. Please enter a valid quantity.");
-                scanf.next();
-                valid_input = false;
+                System.out.println("\n\tInvalid input. Please enter a number.");
+                System.out.println("\tType any key and enter to continue.");
+                scanf.next(); // Clear buffer to avoid issues with next calls
             }
         } while (!valid_input);
 
