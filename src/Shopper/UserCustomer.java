@@ -147,6 +147,9 @@ public class UserCustomer {
         String confirmPassword = "";
         float initialFunds;
 
+        System.out.println("\n\t----------------------------------------------");
+        System.out.println("\t|        suggestion another scanf para                  |");
+        System.out.println("\t|            sa agreement consent sa data etc.            |");
         System.out.print("\n\tEnter Username: ");
         String username = scanf.nextLine();
 
@@ -165,7 +168,7 @@ public class UserCustomer {
         newCustomer.setPassword(password);
 
         while (!newCustomer.getPassword().equals(confirmPassword)) {
-            confirmPassword = inputPassword(scanf, "\n\tConfirm Password: ");
+            confirmPassword = inputPassword(scanf, "\tConfirm Password: ");
             if (!newCustomer.getPassword().equals(confirmPassword)) {
                 System.out.println("\n\tPasswords do not match. Please try again.");
             }
@@ -173,12 +176,12 @@ public class UserCustomer {
 
         // Phone number
         //dapat 11digits at nag sstart sa 09 palagi
-        System.out.print("\tEnter Phone Number: ");
+        System.out.print("\n\tEnter Phone Number: ");
         String phoneNumber = scanf.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
 
         String paymentMethod = "";
-        System.out.print("\tIs the phone number for GCash (G) or PayMaya (P)? ");
+        System.out.print("\tIs the phone number #"+ newCustomer.getPhoneNumber()+" for GCash (G) or PayMaya (P)? ");
         char paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
 
         // Use a do-while loop for more efficient validation
@@ -199,7 +202,7 @@ public class UserCustomer {
 
         String pinCode;
         while (true) {
-            System.out.print("\tEnter a 4-digit PIN code: ");
+            System.out.print("\n\tEnter a 4-digit PIN code: ");
             pinCode = scanf.nextLine();
 
             // Check if the entered PIN is exactly 4 digits
@@ -222,7 +225,10 @@ public class UserCustomer {
         // Add the customer to the in-memory list
         customers.add(newCustomer);
 
-        System.out.println("\n\tRegistration successful. You can now log in.");
+        System.out.println("\n\tRegistration successful. You can now log in. Just press any key to continue.\n");
+        scanf.nextLine(); //used for press any key to continue
+        // para pause muna sa bawat pagkakamli para isipin muna sa susunod tama
+
         registered_user_customer_item_category(newCustomer.getUsername(), newCustomer);
     }
 
@@ -452,7 +458,7 @@ public class UserCustomer {
     }
 
     // Add funds to customer's account
-    public void add_funds(String username) {
+    private void add_funds(String username) {
         Scanner scanner = new Scanner(System.in);
         for (Customer customer : customers) {
             if (customer.getUsername().equals(username)) {

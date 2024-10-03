@@ -58,6 +58,8 @@ public class UserType {
                             break;
                         } else {
                             System.out.println("\tInvalid input. Going back to menu.\n");
+                            System.out.println("\tPress any key to continue.\n");
+                            scanf.nextLine(); //used for press any key to continue
                             // Do nothing, stay in the loop and return to the menu
                         }
                     }
