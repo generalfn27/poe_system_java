@@ -250,13 +250,13 @@ public class UserCustomer {
             writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
             for (Customer customer : customers) {
                 // Debug: Print customer information that will be saved
-                System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
+                //System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
 
                 writer.write(customer.getUsername() + "," + customer.getPassword() + "," + customer.getPhoneNumber() + ","
                         + customer.getPaymentMethod() + "," + customer.getBalance() + "," + customer.getPinCode());
                 writer.newLine();
             }
-            System.out.println("\tCustomer data saved to CSV.");
+            System.out.println("\n\tCustomer data saved to CSV.");
         } catch (IOException e) {
             System.out.println("\tError saving customer data: " + e.getMessage());
         }

@@ -33,9 +33,9 @@ public class BrowseProduct {
 
     // Method to display the products
     public void display_products(List<Product> products) {
-        System.out.println("\nAvailable Products:");
+        System.out.println("\n\tAvailable Products:");
         for (Product product : products) {
-            System.out.println(product);
+            System.out.println("\t" + product);
         }
     }
 

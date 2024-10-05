@@ -53,13 +53,19 @@ public class SelfCheckout {
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
         double totalPrice = calculateTotal();
 
-        System.out.print("\tEnter your PIN: ");
-        String enteredPin = scanf.nextLine().trim();
+        String enteredPin = "";
 
-        if (!enteredPin.equals(customer.getPinCode())) {
-            System.out.println("\tIncorrect PIN. Payment cancelled.");
-            return;
+        while (!enteredPin.equals(customer.getPinCode())) {
+            System.out.print("\tEnter your PIN: ");
+            enteredPin = scanf.nextLine().trim();
+            if (!enteredPin.equals(customer.getPinCode())) {
+                System.out.println("\n\tPin do not match. Please try again.");
+            }
         }
+
+        //if (!enteredPin.equals(customer.getPinCode())) {
+           // System.out.println("\tIncorrect PIN. Payment cancelled.");
+        //}
 
         if (customer.getBalance() < totalPrice) {
             System.out.println("\tInsufficient balance. Payment cancelled.");
@@ -73,9 +79,9 @@ public class SelfCheckout {
         userCustomer.saveAllCustomersToCSV();
 
         // Confirm the balance has been updated
-        double newBalance = customer.getBalance(); // Ensure this reflects the new balance
+        //double newBalance = customer.getBalance(); // Ensure this reflects the new balance
 
-        System.out.printf("\tPayment successful. New balance: %.2f\n", newBalance);
+        System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
 
         // Generate and print the receipt
         generateReceipt(customer, totalPrice);
@@ -87,17 +93,18 @@ public class SelfCheckout {
 
 
     private void generateReceipt(Customer customer, double totalPrice) {
+        Scanner scanf = new Scanner(System.in);
         System.out.println("\n\t----- E-WALLET RECEIPT -----");
         System.out.println("\tCustomer: " + customer.getUsername());
         System.out.println("\tPayment Method: " + customer.getPaymentMethod());
         System.out.println("\n\tItems purchased:");
-        System.out.println("CODE\t\tProduct Name\t Quantity  Price");
+        System.out.println("\tCODE\t  Product Name\t Quantity  Price");
 
         for (Product product : this.cart) {
-            System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
+            System.out.printf("\t%-6s\t%-20s x%d  %.2f\n",product.getCode(), product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
 
-        System.out.println("\t-----------------------------");
+        System.out.println("\n\t-----------------------------");
         System.out.printf("\tTotal Amount: %.2f\n", totalPrice);
         System.out.printf("\tNew Balance: %.2f\n", customer.getBalance());
         System.out.println("\t-----------------------------");
@@ -105,5 +112,11 @@ public class SelfCheckout {
 
         // Save receipt to CSV
         cashierProcess.save_receipt_to_csv(this.cart, totalPrice, totalPrice);
+
+        System.out.println("ano dapat ung choice kung sakali after order, order again & log out and exit");
+        System.out.println("\n\nOr okay na topagka enter mag auto balik sa dashboard");
+
+        System.out.println("\tPress Enter key to continue.\n");
+        scanf.nextLine(); //used for press any key to continue
     }
 }

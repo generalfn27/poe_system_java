@@ -32,15 +32,15 @@ public class OrderProcessor {
         Product selected_product;
 
         do {
-            System.out.println("\nEnter product code: ");
-            product_code = scanf.nextLine();
+            System.out.print("\n\tEnter product code: ");
+            product_code = scanf.nextLine().toUpperCase();
 
             //find product code kung nag eexist
             selected_product = find_product_code(product_code, products);
 
             if (selected_product == null) {
-                System.out.println("Invalid product code. Try again.");
-                System.out.println("Press Enter to continue...");
+                System.out.println("\tInvalid product code. Try again.");
+                System.out.println("\tPress Enter to continue...");
                 scanf.nextLine(); // Wait for user input
             }
 
@@ -55,7 +55,7 @@ public class OrderProcessor {
         //quantity check at error handling din kung kulang or sobra order ng kupal
         boolean valid_input = false;
         do {
-            System.out.print("Enter quantity: ");
+            System.out.print("\tEnter quantity: ");
 
             // Check if input is an integer
             if (scanf.hasNextInt()) {
@@ -76,18 +76,22 @@ public class OrderProcessor {
             }
         } while (!valid_input);
 
-        System.out.printf("Price: %.2f\n", selected_product.getPrice() * quantity);
+        System.out.printf("\tPrice: %.2f\n", selected_product.getPrice() * quantity);
 
+        String choice;
         //tatanong kung sigurado ba ung kupal pag may pangbili sya
-        System.out.print("Add to cart (A) or cancel (C)? ");
-        char choice = scanf.next().charAt(0);
+        do {
+            System.out.print("\tAdd to cart (A) or cancel (C)? ");
+            choice = scanf.nextLine().toUpperCase();  // Convert to uppercase
 
-        if (choice == 'A' || choice == 'a') {
-            add_to_cart(selected_product, quantity);
-            System.out.println("Item added to cart.");
-        } else if (choice == 'C' || choice == 'c') {
-            System.out.println("Item not added to cart.");
-        }
+            if (choice.equals("A")) {
+                add_to_cart(selected_product, quantity);
+                System.out.println("\tItem added to cart.");
+            } else if (choice.equals("C")) {
+                System.out.println("\tItem not added to cart.");
+            }
+        } while (choice.equals("A") || choice.equals("C"));
+
     }
 
 
@@ -101,7 +105,7 @@ public class OrderProcessor {
 
 
     private void display_product_details(Product product) {
-        System.out.printf("Product: %-22s\tPrice: %6.2f\tStock: %4d\n",
+        System.out.printf("\tProduct: %-22s\tPrice: %6.2f\tStock: %4d\n",
                 product.getName(), product.getPrice(), product.getStock());}
 
 
@@ -116,16 +120,16 @@ public class OrderProcessor {
 
 
     public static void display_cart() {
-        System.out.println("\nYour Cart:");
+        System.out.println("\n\tYour Cart:");
         if (cart.isEmpty()) {
-            System.out.println("Your cart is empty.");
+            System.out.println("\tYour cart is empty.");
         } else {
             for (Product product : cart) {
-                System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
+                System.out.printf("\tProduct Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
                         product.getCode(), product.getName(), product.getStock(), product.getPrice());
             }
-            System.out.printf("\nTotal Items: %d\n", total_items);
-            System.out.printf("Total Price: %.2f\n", total_price);
+            System.out.printf("\n\tTotal Items: %d\n", total_items);
+            System.out.printf("\tTotal Price: %.2f\n", total_price);
         }
     }
 
