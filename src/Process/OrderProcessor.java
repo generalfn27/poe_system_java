@@ -78,20 +78,16 @@ public class OrderProcessor {
 
         System.out.printf("\tPrice: %.2f\n", selected_product.getPrice() * quantity);
 
-        String choice;
         //tatanong kung sigurado ba ung kupal pag may pangbili sya
-        do {
-            System.out.print("\tAdd to cart (A) or cancel (C)? ");
-            choice = scanf.nextLine().toUpperCase();  // Convert to uppercase
+        System.out.print("\tAdd to cart (A) or cancel (C)? ");
+        char choice = scanf.next().charAt(0);
 
-            if (choice.equals("A")) {
-                add_to_cart(selected_product, quantity);
-                System.out.println("\tItem added to cart.");
-            } else if (choice.equals("C")) {
-                System.out.println("\tItem not added to cart.");
-            }
-        } while (choice.equals("A") || choice.equals("C"));
-
+        if (choice == 'A' || choice == 'a') {
+            add_to_cart(selected_product, quantity);
+            System.out.println("\tItem added to cart.");
+        } else if (choice == 'C' || choice == 'c') {
+            System.out.println("\tItem not added to cart.");
+        }
     }
 
 
