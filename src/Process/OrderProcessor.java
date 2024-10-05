@@ -79,15 +79,33 @@ public class OrderProcessor {
         System.out.printf("\tPrice: %.2f\n", selected_product.getPrice() * quantity);
 
         //tatanong kung sigurado ba ung kupal pag may pangbili sya
-        System.out.print("\tAdd to cart (A) or cancel (C)? ");
-        char choice = scanf.next().charAt(0);
+        char choice;
 
-        if (choice == 'A' || choice == 'a') {
-            add_to_cart(selected_product, quantity);
-            System.out.println("\tItem added to cart.");
-        } else if (choice == 'C' || choice == 'c') {
-            System.out.println("\tItem not added to cart.");
+        while (true) {
+            System.out.print("\tAdd to cart (A) or cancel (C)? ");
+            choice = scanf.next().charAt(0);
+
+            switch (choice){
+                case 'a':
+                case 'A':
+                    add_to_cart(selected_product, quantity);
+                    System.out.println("\tItem added to cart.");
+                    break; // Exit the switch statement, but still in the loop
+
+                case 'c':
+                case 'C':
+                    System.out.println("\tItem not added to cart.");
+                    break; // Exit the switch statement, but still in the loop
+
+                default:
+                    System.out.println("\tInvalid input. Please enter A or C only.");
+                    continue; // Go back to the beginning of the loop if invalid input
+            }
+
+            // Exit the loop after valid input
+            break;
         }
+
     }
 
 
@@ -136,7 +154,8 @@ public class OrderProcessor {
 
         while (true) {
             display_cart();
-            System.out.println("\n\tAdd more items (A)"); //pwedeng add more quantity to the item nalang to
+            System.out.println("\n\tMODIFY MENU:");
+            System.out.println("\tAdd more items (A)\tpwedeng add more quantity to the item nalang to");
             System.out.println("\tRemove Items (R)");
             System.out.println("\tDeduct Quantity (D)");
             System.out.println("\tClear Cart (C)");
