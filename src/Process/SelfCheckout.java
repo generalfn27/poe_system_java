@@ -56,7 +56,7 @@ public class SelfCheckout {
         String enteredPin = "";
 
         while (!enteredPin.equals(customer.getPinCode())) {
-            System.out.print("\tEnter your PIN: ");
+            System.out.print("\n\tEnter your PIN: ");
             enteredPin = scanf.nextLine().trim();
             if (!enteredPin.equals(customer.getPinCode())) {
                 System.out.println("\n\tPin do not match. Please try again.");
@@ -83,10 +83,8 @@ public class SelfCheckout {
 
         System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
 
-        // Generate and print the receipt
         generateReceipt(customer, totalPrice);
 
-        // Reset the cart
         OrderProcessor.reset_cart_no_display();
         userCustomer.registered_user_customer_item_category(customer.getUsername(), customer);
     }

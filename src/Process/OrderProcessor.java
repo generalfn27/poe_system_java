@@ -205,7 +205,7 @@ public class OrderProcessor {
                     if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
                         System.out.println("\n\tProcessing checkout...");
 
-                        System.out.println("\n\tPress [E] to checkout or press any key to shop again: ");
+                        System.out.print("\n\tPress [E] to checkout or press any key to shop again: ");
                         char exit_choice = scanf.next().charAt(0);
 
                         if (exit_choice == 'E' || exit_choice == 'e') {
@@ -410,7 +410,7 @@ public class OrderProcessor {
 
             Scanner scanf = new Scanner(System.in);
 
-            System.out.println("\nPress any key to continue...");
+            System.out.println("\nType and Enter any key to continue...");
             scanf.next(); // Read any input from the user
 
             // Save the updated queue number

@@ -313,9 +313,9 @@ public class UserCustomer {
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("CSV file not found. No customers loaded.");
+            System.out.println("\tCSV file not found. No customers loaded.");
         } catch (IOException e) {
-            System.out.println("Error loading customers from file: " + e.getMessage());
+            System.out.println("\tError loading customers from file: " + e.getMessage());
         }
     }
 
@@ -334,11 +334,11 @@ public class UserCustomer {
         // Loop until login is successful or maximum attempts reached
         // Maximum number of login attempts
         while (attemptCount < MAX_ATTEMPTS) {
-            System.out.println("\n===================================");
-            System.out.println("|                                 |");
-            System.out.println("|          Shopper Login          |");
-            System.out.println("|                                 |");
-            System.out.println("===================================\n");
+            System.out.println("\n\t===================================");
+            System.out.println("\t|                                 |");
+            System.out.println("\t|          Shopper Login          |");
+            System.out.println("\t|                                 |");
+            System.out.println("\t===================================\n");
             System.out.print("\tEnter Username: ");
             String username = scanf.nextLine();
 

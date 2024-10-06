@@ -138,7 +138,7 @@ public class Cashier {
         }
 
         if (!csvFiles.isEmpty()) {
-            System.out.println("\t[0] 0 para return dun sa logout or re select ewan na");
+            System.out.println("\t[0] Go back");
             System.out.print("\tEnter the number of the file to open: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -157,11 +157,10 @@ public class Cashier {
     }
 
 
-
     public void cashier_process_choice() {
         System.out.flush();
         Scanner scanf = new Scanner(System.in);
-        char choice;
+        String choice;
 
         while (true) { // Loop until the cashier chooses to exit
             // Reset the counter, total items, and total price
@@ -179,23 +178,24 @@ public class Cashier {
             System.out.println("\t[0] Go back");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanf.next().charAt(0); // Read choice
+            choice = scanf.nextLine();
 
             switch (choice) {
-                case '1':
+                case "1":
                     cashier_process.process_payment();
                     break;
-                case '2':
+                case "2":
                     // Call method to modify counter items (under development)
                     break;
-                case '3':
+                case "3":
                     cashier_process.display_counter();
                     break;
-                case '0':
+                case "0":
                     selecting_queue_list_to_process();
                 default:
-                    // Handle invalid input
-                    System.out.println("\n\tInvalid input. Try again...");
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
                     break;
             }
         }
