@@ -10,36 +10,35 @@ public class UserType {
         Scanner scanf = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Please enter what user type you are:");
-            System.out.println();
-            System.out.println("[1] Customer");
-            System.out.println("[2] Cashier");
-            System.out.println("[3] Manager");
-            System.out.println("\n[0] Exit");
-            System.out.print("Type here: ");
+            System.out.println("\tPlease enter what user type you are:\n");
+            System.out.println("\t[1] Customer");
+            System.out.println("\t[2] Cashier");
+            System.out.println("\t[3] Manager");
+            System.out.println("\n\t[0] Exit\n");
+            System.out.print("\tType here: ");
 
             String user_type_choice = scanf.next();
             scanf.nextLine();
 
             switch (user_type_choice) {
                 case "1":
-                    System.out.println("You selected Customer.");
+                    System.out.println("\tYou selected Customer.");
                     UserCustomer user_customer = new UserCustomer();
                     user_customer.user_customer_menu();
                     break;
                 case "2":
-                    System.out.println("You selected Cashier.");
+                    System.out.println("\tYou selected Cashier.");
                     Cashier cashier = new Cashier();
                     cashier.user_cashier();
                     break;
                 case "3":
-                    System.out.println("You selected Manager.");
+                    System.out.println("\tYou selected Manager.");
                     // Call out manager class function
                     break;
                 case "0":
                     while (true) {
                         System.out.flush();
-                        System.out.println("\n\n\n\n\tAre you sure you want to close the program?\n");
+                        System.out.println("\n\n\tAre you sure you want to close the program?\n");
                         System.out.print("\t[Y] for Yes  [N] for No: ");
 
                         String exit_confirmation = scanf.nextLine().trim();

@@ -23,23 +23,23 @@ public class Cashier {
     }
 
     private void cashier_login() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanf = new Scanner(System.in);
         int attempt_count = 0; // Count failed login attempts
         boolean valid = false; // Indicate if login is valid
 
         while (!valid && attempt_count < MAX_ATTEMPTS) {
-            System.out.println("===================================");
-            System.out.println("|                                 |");
-            System.out.println("|          Cashier Login          |");
-            System.out.println("|                                 |");
-            System.out.println("===================================");
+            System.out.println("\t===================================");
+            System.out.println("\t|                                 |");
+            System.out.println("\t|          Cashier Login          |");
+            System.out.println("\t|                                 |");
+            System.out.println("\t===================================");
             System.out.println("\tEnter Credentials\n");
 
             System.out.print("\tEnter username: ");
-            String inputUsername = scanner.nextLine();
+            String inputUsername = scanf.nextLine();
 
             System.out.print("\tEnter password: ");
-            String inputPassword = scanner.nextLine(); // Capture password input directly without hiding
+            String inputPassword = scanf.nextLine(); // Capture password input directly without hiding
 
             // Validate login
             if (validate_cashier_login(inputUsername, inputPassword)) {
@@ -51,7 +51,9 @@ public class Cashier {
                 cashier_increment_attempts(attempt_count, inputUsername);
 
                 if (attempt_count >= MAX_ATTEMPTS) {
-                    System.out.println("Maximum attempts reached. Exiting.");
+                    System.out.println("\tMaximum attempts reached. Exiting.");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
                     break;
                 }
             }
@@ -71,7 +73,7 @@ public class Cashier {
 
 
     private void cashier_increment_attempts(int attemptCount, String username) {
-        System.out.println("Invalid login attempt #" + attemptCount + " for user: " + username);
+        System.out.println("\tInvalid login attempt #" + attemptCount + " for user: " + username);
     }
 
 
@@ -80,13 +82,12 @@ public class Cashier {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
-
         while (true) {
-            System.out.println("=======================================");
-            System.out.println("|                                     |");
-            System.out.println("|          Cashier Dashboard          |");
-            System.out.println("|                                     |");
-            System.out.println("=======================================\n");
+            System.out.println("\t=======================================");
+            System.out.println("\t|                                     |");
+            System.out.println("\t|          Cashier Dashboard          |");
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
             System.out.println("\t[1] Process Queue Orders");
             System.out.println("\t[2] hindi pa alam ano dapat talaga dito");
             System.out.println("\t[0] Exit");
@@ -109,8 +110,9 @@ public class Cashier {
                         return; // Exit the method if logout is confirmed
                     }
                 default:
-                    // Handle invalid input
                     System.out.println("\n\tInvalid input. Try again...");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
                     break;
             }
         }
@@ -123,12 +125,13 @@ public class Cashier {
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
         List<String> csvFiles = new ArrayList<>();
 
-        System.out.println("=======================================");
-        System.out.println("|                                     |");
-        System.out.println("|          Cashier Dashboard          |");
-        System.out.println("|                                     |");
-        System.out.println("=======================================");
+        System.out.println("\t=======================================");
+        System.out.println("\t|                                     |");
+        System.out.println("\t|          Cashier Dashboard          |");
+        System.out.println("\t|                                     |");
+        System.out.println("\t=======================================");
         System.out.println("\n\tCSV Files to Open:");
+        System.out.println("\n\tneed error handling");
 
         if (files != null) {
             for (File file : files) {
@@ -166,15 +169,15 @@ public class Cashier {
             // Reset the counter, total items, and total price
             // Select the queue list to process
 
-            System.out.println("=======================================");
-            System.out.println("|                                     |");
-            System.out.println("|          Cashier Dashboard          |");
-            System.out.println("|                                     |");
-            System.out.println("=======================================\n");
+            System.out.println("\t=======================================");
+            System.out.println("\t|                                     |");
+            System.out.println("\t|          Cashier Dashboard          |");
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
 
             System.out.println("\n\t[1] Proceed to pay");
             System.out.println("\t[2] Modify Counter Items (under development)");
-            System.out.println("\t[3] wat if ang nakalagay dito view items lang parang preview items nalang?");
+            System.out.println("\t[3] Preview items");
             System.out.println("\t[0] Go back");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -189,6 +192,8 @@ public class Cashier {
                     break;
                 case "3":
                     cashier_process.display_counter();
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
                     break;
                 case "0":
                     selecting_queue_list_to_process();
@@ -204,7 +209,7 @@ public class Cashier {
 
     private boolean handle_logout(Scanner scanf) {
         while (true) {
-            System.out.println("\n\n\n\n\tAre you sure you want to Logout and go back to menu?\n");
+            System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
             System.out.println("\t[Y] for Yes  [N] for No: ");
 
             String exit_confirmation = scanf.next().trim();

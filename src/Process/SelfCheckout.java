@@ -63,9 +63,6 @@ public class SelfCheckout {
             }
         }
 
-        //if (!enteredPin.equals(customer.getPinCode())) {
-           // System.out.println("\tIncorrect PIN. Payment cancelled.");
-        //}
 
         if (customer.getBalance() < totalPrice) {
             System.out.println("\tInsufficient balance. Payment cancelled.");

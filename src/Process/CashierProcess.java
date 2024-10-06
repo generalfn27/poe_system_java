@@ -99,13 +99,13 @@ public class CashierProcess extends OrderProcessor {
 
 
     public void display_counter() {
-        System.out.println("\nItems at the counter:");
+        System.out.println("\n\tItems at the counter:");
         for (Product product : counter) {
-            System.out.printf("Product Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
+            System.out.printf("\tProduct Code: %-6s\tName: %-20s\tQuantity: %d\tPrice: %.2f\n",
                     product.getCode(), product.getName(), product.getStock(), product.getPrice());
         }
-        System.out.printf("\nTotal Items: %d\n", calculate_total_items());
-        System.out.printf("Total Price: %.2f\n", calculate_total_price());
+        System.out.printf("\n\tTotal Items: %d\n", calculate_total_items());
+        System.out.printf("\tTotal Price: %.2f\n\n", calculate_total_price());
     }
 
 
@@ -129,32 +129,29 @@ public class CashierProcess extends OrderProcessor {
     // Method to print the receipt
     private void print_receipt(List<Product> counter, double payment) {
         Scanner scanf = new Scanner(System.in);
-        System.out.println("\n\n----- RECEIPT -----");
-        System.out.println("CODE\t\tProduct Name\t Quantity  Price");
+        System.out.println("\n\n\t----- RECEIPT -----");
+        System.out.println("\tCODE\t\tProduct Name\t Quantity  Price");
 
         for (Product product : counter) {
-            System.out.printf("%-8s \t%-24s \t\t\t  x%d  \t%5.2f\n",
+            System.out.printf("\t%-8s \t%-24s \t\t\t  x%d  \t%5.2f\n",
                     product.getCode(), product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
 
-        System.out.println("----------------------------------------");
-        System.out.printf("\nTotal Items: %d\n", calculate_total_items());
-        System.out.printf("Total Price: %.2f\n", calculate_total_price());
+        System.out.println("\t----------------------------------------");
+        System.out.printf("\n\tTotal Items: %d\n", calculate_total_items());
+        System.out.printf("\tTotal Price: %.2f\n", calculate_total_price());
 
         if (payment > calculate_total_price()) {
-            System.out.printf("Change: %.2f\n", payment - calculate_total_price());
+            System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
         }
-        System.out.println("------------------------------------------");
-        System.out.print("\tDo you want to go back to cashier menu (press any key) or Save & Exit (E): ");
+        System.out.println("\t------------------------------------------");
+        System.out.print("\tPress any key to Save & Exit: ");
+        scanf.nextLine(); //used for press any key to continue
 
-        String choice = scanf.nextLine();
-        if (choice.equalsIgnoreCase("E")) {
-            save_receipt_to_csv(counter, calculate_total_price(), payment);
-            counter.clear();
-            //cashier_process_choice(); // Return to cashier process menu
-        } else {
-            System.out.println("\tExiting...");
-        }
+        save_receipt_to_csv(counter, calculate_total_price(), payment);
+        System.out.println("\t\tPress Enter key to continue.\n");
+        scanf.nextLine(); //used for press any key to continue
+        counter.clear();
     }
 
 
@@ -236,12 +233,12 @@ public class CashierProcess extends OrderProcessor {
             File file = new File(currentQueueOrderFile);
             if (file.exists()) {
                 if (file.delete()) {
-                    System.out.println("Queue order file " + currentQueueOrderFile + " has been deleted successfully.");
+                    System.out.println("\tQueue order file " + currentQueueOrderFile + " has been deleted successfully.");
                 } else {
-                    System.out.println("Failed to delete the queue order file " + currentQueueOrderFile);
+                    System.out.println("\tFailed to delete the queue order file " + currentQueueOrderFile);
                 }
             } else {
-                System.out.println("Queue order file " + currentQueueOrderFile + " does not exist.");
+                System.out.println("\tQueue order file " + currentQueueOrderFile + " does not exist.");
             }
             currentQueueOrderFile = null; // Reset the file name after deletion attempt
         }
