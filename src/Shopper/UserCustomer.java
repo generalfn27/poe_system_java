@@ -183,7 +183,7 @@ public class UserCustomer {
         String phoneNumber = scanf.nextLine();
         newCustomer.setPhoneNumber(phoneNumber);
 
-        String paymentMethod = "";
+        String paymentMethod;
         System.out.print("\tIs the phone number #"+ newCustomer.getPhoneNumber()+" for GCash (G) or PayMaya (P)? ");
         char paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
 
@@ -457,7 +457,7 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
-                registered_user_customer_item_category(username, customer);
+                //registered_user_customer_item_category(username, customer);
             } else {
                 System.out.println("No products available in this category.");
             }

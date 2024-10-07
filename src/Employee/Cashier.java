@@ -27,7 +27,7 @@ public class Cashier {
         int attempt_count = 0; // Count failed login attempts
         boolean valid = false; // Indicate if login is valid
 
-        while (!valid && attempt_count < MAX_ATTEMPTS) {
+        while (!valid) {
             System.out.println("\t===================================");
             System.out.println("\t|                                 |");
             System.out.println("\t|          Cashier Login          |");
@@ -51,7 +51,7 @@ public class Cashier {
                 cashier_increment_attempts(attempt_count, inputUsername);
 
                 if (attempt_count >= MAX_ATTEMPTS) {
-                    System.out.println("\tMaximum attempts reached. Exiting.");
+                    System.out.println("\tMaximum attempts reached.");
                     System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
                     break;
@@ -201,6 +201,84 @@ public class Cashier {
                     System.out.println("\n\tAn error has occurred");
                     System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
+                    break;
+            }
+        }
+    }
+
+
+    //edit
+    public static void modify_counter_process() {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+
+        while (true) {
+            //display counter
+            System.out.println("\n\tMODIFY MENU:");
+            System.out.println("\tAdd more items (A)\tpwedeng add more quantity to the item nalang to");
+            System.out.println("\tRemove Items (R)");
+            System.out.println("\tDeduct Quantity (D)");
+            System.out.println("\tClear Cart (C)");
+            System.out.println("\tProceed to checkout (P)");
+            System.out.println("\tDisplay cart(V)");
+            System.out.println("\tGo Back (B)");
+            System.out.print("\n\tEnter choice: ");
+
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "A":
+                case "a":
+                    //pwedeng add more quantity to the item nalang to
+                    break;
+                case "R":
+                case "r":
+                    System.out.print("Enter product code to remove: ");
+                    String codeToRemove = scanf.nextLine();
+                    //remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                    break;
+                case "D":
+                case "d":
+                    System.out.print("Enter product code to deduct: ");
+                    String codeToDeduct = scanf.nextLine();
+                    System.out.print("Enter quantity to deduct: ");
+                    int quantityToDeduct = scanf.nextInt();
+                    //deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+                    break;
+                case "C":
+                case "c":
+                      // Reset the counter
+                    break;
+                case "V":
+                case "v":
+                    //display cart
+                    break;
+                case "B":
+                case "b":
+                    return;
+                case "P":
+                case "p":
+                    // Confirmation before checkout
+                    System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                    String confirmInput = scanf.nextLine().trim();
+
+                    if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
+                        System.out.println("\n\tProcessing checkout...");
+
+                        System.out.print("\n\tPress [E] to checkout or press any key to shop again: ");
+                        char exit_choice = scanf.next().charAt(0);
+
+                        if (exit_choice == 'E' || exit_choice == 'e') {
+                            // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
+
+                            return;
+                        } else {
+                            modify_counter_process();
+                        }
+
+                    } else {
+                        System.out.println("\n\tCheckout cancelled.");
+                    }
                     break;
             }
         }
