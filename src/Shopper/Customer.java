@@ -8,6 +8,7 @@ public class Customer {
     private String paymentMethod;
     private double balance;
     private String pinCode; // New field for the 4-digit PIN code
+    private double transaction;
 
 
     public Customer() {
@@ -69,4 +70,11 @@ public class Customer {
         this.pinCode = pinCode;
     }
 
+    public double getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(double transaction) {
+        this.transaction = transaction;
+    }
 }
