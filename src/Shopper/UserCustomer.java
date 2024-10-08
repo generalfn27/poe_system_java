@@ -80,7 +80,8 @@ public class UserCustomer {
             System.out.println("\t|        [5] Dairy                           |");
             System.out.println("\t|        [6] Frozen Foods                    |");
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
-            System.out.println("\t|        [8] Detergents & Soaps              |\n");
+            System.out.println("\t|        [8] Detergents & Soaps              |");
+            System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
@@ -404,9 +405,9 @@ public class UserCustomer {
 
         while (true) {
             System.out.println("\t----------------------------------------------");
-            System.out.println("\t|           Welcome Customer! " + username);
-            System.out.printf ("\t|       Your remaining balance: %6.2f    |\n", customer.getBalance());
-            System.out.println("\t|        What do you want to browse?       |");
+            System.out.printf ("\t|          Welcome Customer! %-16s|\n", username);
+            System.out.printf ("\t|        Your remaining balance: %-7.2f     |\n", customer.getBalance());
+            System.out.println("\t|          What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
             System.out.println("\t|        [2] Snacks                          |");
@@ -419,7 +420,7 @@ public class UserCustomer {
             System.out.println("\t|        [9] Add funds                       |");
             System.out.println("\t|        [10] View Purchase History          |");
             System.out.println("\t|                                            |");
-            System.out.println("\t|        [0] Go Back                         |");
+            System.out.println("\t|        [0] Log Out                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
             System.out.print("\t|        Enter here: ");
@@ -572,7 +573,7 @@ public class UserCustomer {
             System.out.println("\t[0] Go back");
 
             while (true) {
-                System.out.print("\tEnter the number of the file to open: ");
+                System.out.print("\n\tEnter the number of the file to open: ");
                 try {
                     String input = scanf.nextLine().trim();
                     int choice = Integer.parseInt(input);
