@@ -353,7 +353,7 @@ public class UserCustomer {
         Scanner scanf = new Scanner(System.in);
         int attemptCount = 0;
         boolean loginSuccessful = false;
-        final int MAX_ATTEMPTS = 5;
+        final int MAX_ATTEMPTS = 3;
 
         // Load customers from the CSV if not already loaded
         if (customers.isEmpty()) {
@@ -417,6 +417,7 @@ public class UserCustomer {
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
             System.out.println("\t|        [8] Detergents & Soaps              |");
             System.out.println("\t|        [9] Add funds                       |");
+            System.out.println("\t|        [10] View Purchase History          |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
@@ -457,6 +458,10 @@ public class UserCustomer {
                     add_funds(username);
                     registered_user_customer_item_category(username, customer);
                     break;
+                case "10":
+                    display_purchase_history_menu(customer);
+                    registered_user_customer_item_category(username, customer);
+                    break;
                 case "0":
                     while (true) {
                         System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
@@ -486,9 +491,8 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
-                //registered_user_customer_item_category(username, customer);
             } else {
-                System.out.println("No products available in this category.");
+                System.out.println("\tNo products available in this category.");
             }
         }
     }
@@ -534,8 +538,6 @@ public class UserCustomer {
     }
 
 
-
-
     public Customer getCustomerByUsername(String username) {
         for (Customer customer : customers) {
             if (customer.getUsername().equals(username)) {
@@ -544,5 +546,107 @@ public class UserCustomer {
         }
         return null;
     }
+
+
+    private void display_purchase_history_menu(Customer customer) {
+        Scanner scanf = new Scanner(System.in);
+        File directory = new File(".");
+        File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith(customer.getUsername()));
+        List<String> csvFiles = new ArrayList<>();
+
+        System.out.println("\t=======================================");
+        System.out.println("\t|                                     |");
+        System.out.println("\t|           Purchase History          |");
+        System.out.println("\t|                                     |");
+        System.out.println("\t=======================================");
+        System.out.println("\n\tCSV Files to Open:");
+
+        if (files != null) {
+            for (File file : files) {
+                csvFiles.add(file.getName());
+                System.out.println("\t[" + (csvFiles.size()) + "] " + file.getName());
+            }
+        }
+
+        if (!csvFiles.isEmpty()) {
+            System.out.println("\t[0] Go back");
+
+            while (true) {
+                System.out.print("\tEnter the number of the file to open: ");
+                try {
+                    String input = scanf.nextLine().trim();
+                    int choice = Integer.parseInt(input);
+
+                    if (choice >= 0 && choice <= csvFiles.size()) {
+                        if (choice == 0) {
+                            System.out.println("\tReturning to previous menu...");
+                            return;
+                        }
+
+                        String selectedFile = csvFiles.get(choice - 1);
+                        System.out.println("\tYou selected: " + selectedFile);
+                        read_history_from_csv(selectedFile);
+                        System.out.println("\tPress Enter key to continue.\n");
+                        scanf.nextLine();
+                        display_purchase_history_menu(customer);
+                        break;
+                    } else {
+                        System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid input! Please enter a valid number.");
+                }
+            }
+        } else {
+            System.out.println("\tNo CSV files found.");
+            System.out.println("\tPress Enter key to continue.\n");
+            scanf.nextLine();
+            System.out.println("\tReturning to previous menu.");
+        }
+    }
+
+    public void read_history_from_csv(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+
+            System.out.println("\n\t=== Purchase History ===\n");
+            // Read and print the first header line
+            if ((line = reader.readLine()) != null) {
+                String[] headers1 = line.split(",");
+                System.out.print("\t");
+                for (String header : headers1) {
+                    System.out.print(header + "\t\t");
+                }
+                System.out.println();
+            }
+
+            // Read and print the second header line
+            if ((line = reader.readLine()) != null) {
+                String[] headers2 = line.split(",");
+                for (String header : headers2) {
+                    System.out.print("\t" + header + "\t\t");
+                }
+                System.out.println();
+                System.out.println("\t" + "-".repeat(80));  // Print a separator line
+            }
+
+            // Read and print all data lines
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                for (String column : columns) {
+                    System.out.print("\t" + column + "\t");
+                }
+                System.out.println();
+            }
+
+            System.out.println("\n\tEnd of purchase history\n");
+
+        } catch (IOException e) {
+            System.out.println("\tError reading CSV file: " + e.getMessage());
+        }
+    }
+
+
+
 
 }

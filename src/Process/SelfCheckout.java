@@ -94,7 +94,6 @@ public class SelfCheckout {
 
 
     private void generateReceipt(Customer customer, double totalPrice) {
-        Scanner scanf = new Scanner(System.in);
         System.out.println("\n\t----- E-WALLET RECEIPT -----");
         System.out.println("\tCustomer: " + customer.getUsername());
         System.out.println("\tPayment Method: " + customer.getPaymentMethod());
