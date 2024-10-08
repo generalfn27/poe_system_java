@@ -148,6 +148,7 @@ public class UserCustomer {
 
         Customer newCustomer = new Customer();
         String confirmPassword = "";
+        String confirmPin = "";
         float initialFunds;
 
         System.out.println("\n\t----------------------------------------------");
@@ -177,31 +178,42 @@ public class UserCustomer {
             }
         }
 
-        // Phone number
-        //dapat 11digits at nag sstart sa 09 palagi
-        System.out.print("\n\tEnter Phone Number: ");
-        String phoneNumber = scanf.nextLine();
+
+        String phoneNumber;
+        while (true) {
+            System.out.print("\n\tEnter Phone Number: ");
+            phoneNumber = scanf.nextLine();
+            //  Check if the entered Phone Number starts with "09" and is exactly 11 digits
+            //  ^: This is a beginning-of-line anchor, which means that the pattern must match from the very start of the string.
+            //  09: This simply matches the literal characters "09".
+            //  \d: This matches any single digit character (0-9).
+            //  {9}: This is a quantifier that specifies that the preceding element (\d) must occur exactly 9 times.
+            //  $: This is an end-of-line anchor, which means that the pattern must match up to the very end of the string.
+            if (phoneNumber.matches("^09\\d{9}$")) {
+                break;
+            } else {
+                System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");
+            }
+        }
         newCustomer.setPhoneNumber(phoneNumber);
 
         String paymentMethod;
-        System.out.print("\tIs the phone number #"+ newCustomer.getPhoneNumber()+" for GCash (G) or PayMaya (P)? ");
-        char paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
-
         // Use a do-while loop for more efficient validation
         do {
-            if (paymentChoice == 'G') {
+            System.out.print("\tIs the phone number #"+ newCustomer.getPhoneNumber()+" for GCash (G) or PayMaya (P)? ");
+            String paymentChoice = scanf.nextLine().trim().toUpperCase();
+            if (paymentChoice.equals("G")) {
                 paymentMethod = "GCash";
                 break;
-            } else if (paymentChoice == 'P') {
+            } else if (paymentChoice.equals("P")) {
                 paymentMethod = "PayMaya";
                 break;
             } else {
                 System.out.println("\n\tInvalid choice. Please try again.");
-                paymentChoice = scanf.nextLine().toUpperCase().charAt(0);
             }
         } while (true);
         newCustomer.setPaymentMethod(paymentMethod);
-        System.out.println("\tThe payment method of user: " + newCustomer.getUsername() + " is " + newCustomer.getPaymentMethod());
+        System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using" + newCustomer.getPaymentMethod());
 
         String pinCode;
         while (true) {
@@ -217,8 +229,15 @@ public class UserCustomer {
         }
         newCustomer.setPinCode(pinCode);
 
+        while (!newCustomer.getPinCode().equals(confirmPin)) {
+            confirmPin = inputPin(scanf);
+            if (!newCustomer.getPinCode().equals(confirmPin)) {
+                System.out.println("\n\tPin do not match. Please try again.");
+            }
+        }
+
         // Initial funds
-        System.out.print("\tEnter initial amount to add to your account: ");
+        System.out.print("\n\tEnter initial amount to add to your account: ");
         initialFunds = scanf.nextFloat();
         scanf.nextLine(); // consume the leftover newline
         newCustomer.setBalance(initialFunds);
@@ -228,7 +247,7 @@ public class UserCustomer {
         // Add the customer to the in-memory list
         customers.add(newCustomer);
 
-        System.out.println("\n\tRegistration successful. You can now log in. Just press any key to continue.\n");
+        System.out.println("\n\tCongratulations! Your registration was successful.  " + newCustomer.getUsername() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
         // para pause muna sa bawat pagkakamli para isipin muna sa susunod tama
 
@@ -240,6 +259,11 @@ public class UserCustomer {
     //shortcut sa pag fill ups thanks sa AI
     private String inputPassword(Scanner scanner, String prompt) {
         System.out.print(prompt);
+        return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
+    }
+
+    private String inputPin(Scanner scanner) {
+        System.out.print("\tConfirm Pin: ");
         return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
     }
 
