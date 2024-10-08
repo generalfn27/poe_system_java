@@ -76,13 +76,17 @@ public class SelfCheckout {
         // Deduct funds from customer's account
         userCustomer.minus_funds(customer.getUsername(), totalPrice);
 
-        //System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");  //debugger
-        userCustomer.saveAllCustomersToCSV();
-
         System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
 
-        generate_personal_receipt(customer,totalPrice);
         generateReceipt(customer, totalPrice);
+        generate_personal_receipt(customer,totalPrice);
+
+        double new_transaction = customer.getTransaction() + 1.0;
+        customer.setTransaction(new_transaction);
+        //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction()); //debugger
+
+        //System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");  //debugger
+        userCustomer.saveAllCustomersToCSV();
 
         OrderProcessor.reset_cart_no_display();
         userCustomer.registered_user_customer_item_category(customer.getUsername(), customer);
@@ -110,32 +114,15 @@ public class SelfCheckout {
         // Save receipt to CSV
         cashierProcess.save_receipt_to_csv(this.cart, totalPrice, totalPrice);
 
-        System.out.println("ano dapat ung choice kung sakali after order, order again & log out and exit");
-        System.out.println("\n\nOr okay na topagka enter mag auto balik sa dashboard");
-
-        System.out.println("\tPress Enter key to continue.\n");
-        scanf.nextLine(); //used for press any key to continue
     }
 
     private void generate_personal_receipt(Customer customer, double totalPrice) {
         Scanner scanf = new Scanner(System.in);
-        System.out.println("\n\t----- E-WALLET RECEIPT -----");
-        System.out.println("\tCustomer: " + customer.getUsername());
-        System.out.println("\tPayment Method: " + customer.getPaymentMethod());
-        System.out.println("\n\tItems purchased:");
-        System.out.println("\tCODE\t  Product Name\t Quantity  Price");
-
-        for (Product product : this.cart) {
-            System.out.printf("\t%-6s\t%-20s x%d  %.2f\n",product.getCode(), product.getName(), product.getStock(), product.getPrice() * product.getStock());
-        }
-
-        System.out.println("\n\t-----------------------------");
-        System.out.printf("\tTotal Amount: %.2f\n", totalPrice);
-        System.out.printf("\tNew Balance: %.2f\n", customer.getBalance());
-        System.out.println("\t-----------------------------");
-        System.out.println("\tThank you for your purchase!");
 
         save_personal_receipt_to_csv(customer, this.cart, totalPrice, totalPrice);
+
+        System.out.println("\tPress Enter key to continue.\n");
+        scanf.nextLine(); //used for press any key to continue
 
     }
 
@@ -178,7 +165,7 @@ public class SelfCheckout {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
         String formattedDate = dateFormat.format(new Date());
 
-        return String.format("%s_%s.csv", customer.getUsername(), formattedDate);
+        return String.format("%s_transaction_#%.0f_%s.csv", customer.getUsername(), customer.getTransaction(), formattedDate);
     }
 
 }
