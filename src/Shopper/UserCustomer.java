@@ -242,6 +242,9 @@ public class UserCustomer {
         scanf.nextLine(); // consume the leftover newline
         newCustomer.setBalance(initialFunds);
 
+        double transaction = 1;
+        newCustomer.setTransaction(transaction);
+
         saveCustomerToFile(newCustomer);
 
         // Add the customer to the in-memory list
@@ -271,13 +274,13 @@ public class UserCustomer {
     // Save a single customer to the CSV file
     public void saveAllCustomersToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("customers.csv"))) {
-            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
+            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction\n");
             for (Customer customer : customers) {
                 // Debug: Print customer information that will be saved
                 //System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
 
                 writer.write(customer.getUsername() + "," + customer.getPassword() + "," + customer.getPhoneNumber() + ","
-                        + customer.getPaymentMethod() + "," + customer.getBalance() + "," + customer.getPinCode());
+                        + customer.getPaymentMethod() + "," + customer.getBalance() + "," + customer.getPinCode()+ "," + customer.getTransaction());
                 writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
@@ -296,7 +299,7 @@ public class UserCustomer {
         try (FileWriter writer = new FileWriter(file, true)) {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
-                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN\n");
+                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction\n");
             }
             // Write customer data
             writer.append(customer.getUsername()).append(",");
@@ -304,7 +307,8 @@ public class UserCustomer {
             writer.append(customer.getPhoneNumber()).append(",");
             writer.append(customer.getPaymentMethod()).append(",");
             writer.append(String.valueOf(customer.getBalance())).append(",");
-            writer.append(customer.getPinCode()).append("\n");
+            writer.append(customer.getPinCode()).append(",");
+            writer.append(String.valueOf(customer.getTransaction())).append("\n");
 
         } catch (IOException e) {
             // Handle exceptions gracefully
@@ -324,7 +328,7 @@ public class UserCustomer {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 6) { // Expect 6 fields: username, password, phone number, payment method, balance, PIN
+                if (data.length == 7) { // Expect 7 fields: username, password, phone number, payment method, balance, PIN, transaction
                     Customer customer = new Customer();
                     customer.setUsername(data[0]);
                     customer.setPassword(data[1]);
@@ -332,6 +336,7 @@ public class UserCustomer {
                     customer.setPaymentMethod(data[3]);
                     customer.setBalance(Float.parseFloat(data[4]));
                     customer.setPinCode(data[5]);
+                    customer.setTransaction(Float.parseFloat(data[6]));
                     customers.add(customer);
                 }
             }
@@ -400,7 +405,7 @@ public class UserCustomer {
         while (true) {
             System.out.println("\t----------------------------------------------");
             System.out.println("\t|           Welcome Customer! " + username);
-            System.out.println("\t|     Your remaining balance: " + customer.getBalance() + "    |");
+            System.out.printf ("\t|       Your remaining balance: %6.2f    |\n", customer.getBalance());
             System.out.println("\t|        What do you want to browse?       |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
