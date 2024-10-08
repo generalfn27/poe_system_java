@@ -63,7 +63,6 @@ public class SelfCheckout {
             }
         }
 
-
         if (customer.getBalance() < totalPrice) {
             System.out.println("\tInsufficient balance. Payment cancelled.");
             return;
@@ -74,9 +73,6 @@ public class SelfCheckout {
 
         //System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");  //debugger
         userCustomer.saveAllCustomersToCSV();
-
-        // Confirm the balance has been updated
-        //double newBalance = customer.getBalance(); // Ensure this reflects the new balance
 
         System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
 
