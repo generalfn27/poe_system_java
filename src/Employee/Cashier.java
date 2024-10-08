@@ -120,7 +120,7 @@ public class Cashier {
 
 
     public void selecting_queue_list_to_process() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanf = new Scanner(System.in);
         File directory = new File(".");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
         List<String> csvFiles = new ArrayList<>();
@@ -131,7 +131,6 @@ public class Cashier {
         System.out.println("\t|                                     |");
         System.out.println("\t=======================================");
         System.out.println("\n\tCSV Files to Open:");
-        System.out.println("\n\tneed error handling");
 
         if (files != null) {
             for (File file : files) {
@@ -142,20 +141,38 @@ public class Cashier {
 
         if (!csvFiles.isEmpty()) {
             System.out.println("\t[0] Go back");
-            System.out.print("\tEnter the number of the file to open: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
 
-            if (choice > 0 && choice <= csvFiles.size()) {
-                String selectedFile = csvFiles.get(choice - 1);
-                System.out.println("\tYou selected: " + selectedFile);
-                cashier_process.read_order_from_csv(selectedFile); // Now accessible
-                cashier_process.transfer_cart_to_counter();
-                cashier_process_choice();
+            while (true) {
+                System.out.print("\tEnter the number of the file to open: ");
+                try {
+                    String input = scanf.nextLine().trim();
+                    int choice = Integer.parseInt(input);
+
+                    if (choice >= 0 && choice <= csvFiles.size()) {
+                        if (choice == 0) {
+                            System.out.println("\tReturning to previous menu...");
+                            return;
+                        }
+
+                        String selectedFile = csvFiles.get(choice - 1);
+                        System.out.println("\tYou selected: " + selectedFile);
+                        cashier_process.read_order_from_csv(selectedFile);
+                        cashier_process.transfer_cart_to_counter();
+                        cashier_process_choice();
+                        break;
+                    } else {
+                        System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid input! Please enter a valid number.");
+                }
             }
         } else {
             System.out.println("\tNo CSV files found.");
             System.out.println("\tNo Queue Order to process.");
+            System.out.println("\t\tPress Enter key to continue.\n");
+            scanf.nextLine(); //used for press any key to continue
+
             System.out.println("\tReturning to Cashier Dashboard.");
             cashier_dashboard();
         }
@@ -167,10 +184,10 @@ public class Cashier {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
-        while (true) { // Loop until the cashier chooses to exit
+        while (true) {
+            // Loop until the cashier chooses to exit
             // Reset the counter, total items, and total price
             // Select the queue list to process
-
             System.out.println("\t=======================================");
             System.out.println("\t|                                     |");
             System.out.println("\t|          Cashier Dashboard          |");
