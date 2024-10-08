@@ -127,7 +127,7 @@ public class Cashier {
 
         System.out.println("\t=======================================");
         System.out.println("\t|                                     |");
-        System.out.println("\t|          Cashier Dashboard          |");
+        System.out.println("\t|       Select Queue To Process       |");
         System.out.println("\t|                                     |");
         System.out.println("\t=======================================");
         System.out.println("\n\tCSV Files to Open:");
@@ -156,6 +156,8 @@ public class Cashier {
         } else {
             System.out.println("\tNo CSV files found.");
             System.out.println("\tNo Queue Order to process.");
+            System.out.println("\tReturning to Cashier Dashboard.");
+            cashier_dashboard();
         }
     }
 
