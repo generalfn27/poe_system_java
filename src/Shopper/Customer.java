@@ -9,25 +9,14 @@ public class Customer {
     private double balance;
     private String pinCode; // New field for the 4-digit PIN code
 
+
     public Customer() {
         // Default constructor, you can initialize default values if needed
     }
 
 
-    // Constructor/function for guest customers (no account details)
     public Customer(String username) {
         this.username = username;
-    }
-
-    //eto ay hindi nagamit dahil may ibang style na ginamit sa pag save ng customer details
-    // Constructor for registered user
-    public Customer(String username, String password, String phoneNumber, String paymentMethod, float balance, String pinCode) {
-        this.username = username;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.paymentMethod = paymentMethod;
-        this.balance = balance;
-        this.pinCode = pinCode; // Initialize PIN code
     }
 
 
