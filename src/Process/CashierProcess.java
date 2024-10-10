@@ -51,6 +51,7 @@ public class CashierProcess extends OrderProcessor {
 
 
     public void transfer_cart_to_counter() {
+        counter.clear();
         counter.addAll(cart);
         reset_cart_no_display();
     }
