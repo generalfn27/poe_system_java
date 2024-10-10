@@ -48,7 +48,7 @@ public class Cashier {
                 cashier_dashboard();
             } else {
                 attempt_count++;
-                cashier_increment_attempts(attempt_count, inputUsername);
+                System.out.println("\tInvalid login attempt #" + attempt_count + " for user: " + inputUsername);
 
                 if (attempt_count >= MAX_ATTEMPTS) {
                     System.out.println("\tMaximum attempts reached.");
@@ -69,11 +69,6 @@ public class Cashier {
         // Default password
         String password = "password";
         return inputUsername.equals(username) && inputPassword.equals(password);
-    }
-
-
-    private void cashier_increment_attempts(int attemptCount, String username) {
-        System.out.println("\tInvalid login attempt #" + attemptCount + " for user: " + username);
     }
 
 
@@ -242,7 +237,6 @@ public class Cashier {
             System.out.println("\tDisplay cart(V)");
             System.out.println("\tGo Back (B)");
             System.out.print("\n\tEnter choice: ");
-
             choice = scanf.nextLine();
 
             switch (choice) {
