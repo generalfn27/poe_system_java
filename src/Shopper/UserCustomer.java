@@ -50,6 +50,7 @@ public class UserCustomer {
                     break;
                 case "0":
                     UserType.user_type_menu();
+                    return;
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.println("\t\tPress Enter key to continue.\n");
@@ -418,6 +419,7 @@ public class UserCustomer {
             System.out.println("\t|        [8] Detergents & Soaps              |");
             System.out.println("\t|        [9] Add funds                       |");
             System.out.println("\t|        [10] View Purchase History          |");
+            System.out.println("\t|        [11] Change Password                |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Log Out                         |");
             System.out.println("\t|                                            |");
@@ -462,6 +464,9 @@ public class UserCustomer {
                     display_purchase_history_menu(customer);
                     registered_user_customer_item_category(username, customer);
                     break;
+                case "11":
+                    registered_customer_change_password(username, customer);
+                    break;
                 case "0":
                     while (true) {
                         System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
@@ -470,6 +475,7 @@ public class UserCustomer {
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
                             user_customer_menu();
+                            return;
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             registered_user_customer_item_category(username, customer);
                             break;
@@ -646,6 +652,63 @@ public class UserCustomer {
         }
     }
 
+    private void registered_customer_change_password(String username, Customer customer) {
+        Scanner scanf = new Scanner(System.in);
+        String new_password;
+        String confirm_password = "";
+        int attemptCount = 0;
+        final int MAX_ATTEMPTS = 3;
+
+        while (attemptCount < MAX_ATTEMPTS) {
+
+            System.out.print("\n\tAre you sure changing password (Y/N): ");
+            String change_password_confirmation = scanf.nextLine().trim();
+
+            if (change_password_confirmation.equalsIgnoreCase("Y")) {
+                System.out.print("\tEnter your current password: ");
+                String current_password = scanf.nextLine();
+
+                if (current_password.equals(customer.getPassword())) {
+                    System.out.print("\tSet your new password: ");
+                    new_password = scanf.nextLine();
+
+                    while (!new_password.equals(confirm_password)) {
+                        System.out.print("\tConfirm the new password: ");
+                        confirm_password = scanf.nextLine();
+                        if (!new_password.equals(confirm_password)) {
+                            System.out.println("\n\tPasswords do not match. Please try again.");
+                        }
+                    }
+                    customer.setPassword(new_password);
+                    saveAllCustomersToCSV();
+                    System.out.print("\n\tThe password is successfully changed.\n");
+                    scanf.nextLine();
+                    registered_user_customer_item_category(username, customer);
+                    break;
+                } else {
+                    attemptCount++;
+                    System.out.println("\n\tIncorrect current password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine();
+                }
+
+            } else if (change_password_confirmation.equalsIgnoreCase("N")) {
+                registered_user_customer_item_category(username, customer);
+                return;
+            } else {
+                System.out.println("\t\tPress Enter key to continue.\n");
+                scanf.nextLine();
+            }
+
+        }
+
+        // Handle case where attempts are exhausted
+        if (attemptCount == MAX_ATTEMPTS) {
+            System.out.println("\n\tMaximum attempts reached. Password change failed.\n");
+            System.out.println("\t\tPress Enter key to continue.\n");
+            scanf.nextLine();
+        }
+    }
 
 
 
