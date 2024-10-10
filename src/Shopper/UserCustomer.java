@@ -391,7 +391,6 @@ public class UserCustomer {
                 System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
             }
         }
-
         if (!loginSuccessful) { System.out.println("\n\tMaximum login attempts reached. Please try again later."); }
     }
 
