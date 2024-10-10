@@ -45,18 +45,24 @@ public class SelfCheckout {
             System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
         System.out.println("\t-----------------------------");
-        System.out.printf("\tTotal: %.2f\n", calculateTotal());
+        System.out.printf("\tTotal: %.2f\n", calculate_total_price());
     }
 
-    private double calculateTotal() {
-        return this.cart.stream().mapToDouble(p -> p.getPrice() * p.getStock()).sum();
+
+    private double calculate_total_price() {
+        double total = 0;
+        for (Product product : cart) {
+            total += product.getPrice() * product.getStock();
+        }
+        return total;
     }
+
 
     private void processEWalletPayment(Customer customer) {
         Scanner scanf = new Scanner(System.in);
         System.out.println("\tProcessing e-wallet payment for " + customer.getUsername());
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
-        double totalPrice = calculateTotal();
+        double totalPrice = calculate_total_price();
 
         String enteredPin = "";
 
@@ -83,8 +89,8 @@ public class SelfCheckout {
 
         double new_transaction = customer.getTransaction() + 1.0;
         customer.setTransaction(new_transaction);
-        //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction()); //debugger
-
+        //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction());
+        // debugger
         //System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");  //debugger
         userCustomer.saveAllCustomersToCSV();
 
@@ -112,8 +118,8 @@ public class SelfCheckout {
 
         // Save receipt to CSV
         cashierProcess.save_receipt_to_csv(this.cart, totalPrice, totalPrice);
-
     }
+
 
     private void generate_personal_receipt(Customer customer, double totalPrice) {
         Scanner scanf = new Scanner(System.in);
@@ -124,6 +130,7 @@ public class SelfCheckout {
         scanf.nextLine(); //used for press any key to continue
 
     }
+
 
     public void save_personal_receipt_to_csv(Customer customer, List<Product> counter, double totalPrice, double payment) {
         if (counter.isEmpty()) {
