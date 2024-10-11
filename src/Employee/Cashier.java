@@ -228,6 +228,8 @@ public class Cashier {
 
         while (true) {
             //display counter
+            //dapat sa cashier modify menu ang mga choices lng ay increase quantity at decrease
+            //add discount code or voucher
             System.out.println("\n\tMODIFY MENU:");
             System.out.println("\tAdd more items (A)\tpwedeng add more quantity to the item nalang to");
             System.out.println("\tRemove Items (R)");
