@@ -88,6 +88,8 @@ public class CashierProcess extends OrderProcessor {
                         return;
                     } else {
                         System.out.println("\tInsufficient payment. Try again.");
+                        System.out.println("\t\tPress Enter key to continue.\n");
+                        scanf.nextLine(); //used for press any key to continue
                     }
                     break;
                 case "0":
