@@ -281,9 +281,14 @@ public class UserCustomer {
                 // Debug: Print customer information that will be saved
                 //System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
 
-                writer.write(customer.getUsername() + "," + customer.getPassword() + "," + customer.getPhoneNumber() + ","
-                        + customer.getPaymentMethod() + "," + customer.getBalance() + "," + customer.getPinCode()+ "," + customer.getTransaction());
-                writer.newLine();
+                writer.write(customer.getUsername() + "," +
+                                customer.getPassword() + "," +
+                                customer.getPhoneNumber() + "," +
+                                customer.getPaymentMethod() + "," +
+                                customer.getBalance() + "," +
+                                customer.getPinCode()+ "," +
+                                customer.getTransaction());
+                                writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
         } catch (IOException e) {
