@@ -215,7 +215,7 @@ public class UserCustomer {
             }
         } while (true);
         newCustomer.setPaymentMethod(paymentMethod);
-        System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using" + newCustomer.getPaymentMethod());
+        System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using " + newCustomer.getPaymentMethod());
 
         String pinCode;
         while (true) {
