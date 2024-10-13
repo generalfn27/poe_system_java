@@ -102,8 +102,9 @@ public class Cashier {
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
                     if (logout_confirmed) {
-                        return; // Exit the method if logout is confirmed
+                        UserType.user_type_menu();
                     }
+                    break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.println("\t\tPress Enter key to continue.\n");
@@ -277,6 +278,7 @@ public class Cashier {
                     // Confirmation before checkout
                     System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
                     String confirmInput = scanf.nextLine().trim();
+                    scanf.nextLine();
 
                     if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
                         System.out.println("\n\tProcessing checkout...");
@@ -294,6 +296,8 @@ public class Cashier {
 
                     } else {
                         System.out.println("\n\tCheckout cancelled.");
+                        System.out.println("\t\tPress Enter key to continue.\n");
+                        scanf.nextLine(); //used for press any key to continue
                     }
                     break;
             }
@@ -307,14 +311,13 @@ public class Cashier {
             System.out.println("\t[Y] for Yes  [N] for No: ");
 
             String exit_confirmation = scanf.next().trim();
+            scanf.nextLine();
 
             if (exit_confirmation.equalsIgnoreCase("Y")) {
                 UserType.user_type_menu();
                 return true;
             } else if (exit_confirmation.equalsIgnoreCase("N")) {
                 return false;
-            } else {
-                System.out.println("\tInvalid input. Please enter Y or N.\n");
             }
         }
     }
