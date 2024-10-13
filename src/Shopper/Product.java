@@ -44,7 +44,6 @@ public class Product {
     public String toString() {
         return String.format("Code: %-6s    Name: %-24s Price: %-5.2f    Stock: %2d", code, name, price, stock);
     }
+
 }
-
-
 
