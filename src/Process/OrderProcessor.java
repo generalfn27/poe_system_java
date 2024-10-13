@@ -173,6 +173,7 @@ public class OrderProcessor {
                     break;
                 case "R":
                 case "r":
+                    System.out.print("Enter 0 to Cancel remove");
                     System.out.print("Enter product code to remove: ");
                     String codeToRemove = scanf.nextLine();
                     remove_item(codeToRemove);  // Remove the item sa cart all quantity
@@ -325,7 +326,7 @@ public class OrderProcessor {
 
     public static void deduct_item_quantity(String product_code, int quantity) {
         for (Product product : cart) {
-            if (product.getCode().equals(product_code)) {
+            if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() - quantity;
                 if (new_quantity > 0) {
                     product.update_stock(-quantity);
@@ -345,7 +346,7 @@ public class OrderProcessor {
     public static void remove_item(String product_code) {
         Product to_remove = null;
         for (Product product : cart) {
-            if (product.getCode().equals(product_code)) {
+            if (product.getCode().equals(product_code.toUpperCase())) {
                 total_price-= product.getStock();
                 total_price -= product.getPrice() * product.getStock();
                 to_remove = product;
