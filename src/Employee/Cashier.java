@@ -283,12 +283,11 @@ public class Cashier {
                     if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
                         System.out.println("\n\tProcessing checkout...");
 
-                        System.out.print("\n\tPress [E] to checkout or press any key to shop again: ");
+                        System.out.print("\n\tPress [E] to cancel checkout or press any key to shop again: ");
                         char exit_choice = scanf.next().charAt(0);
 
                         if (exit_choice == 'E' || exit_choice == 'e') {
                             // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
-
                             return;
                         } else {
                             modify_counter_process();
