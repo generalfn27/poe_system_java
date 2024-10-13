@@ -38,21 +38,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\customers.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\dairy.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\felix_transaction_#1_10_10_2024.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
