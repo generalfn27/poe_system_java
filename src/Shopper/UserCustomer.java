@@ -463,7 +463,6 @@ public class UserCustomer {
                     break;
                 case "9":
                     add_funds(username);
-                    registered_user_customer_item_category(username, customer);
                     break;
                 case "10":
                     display_purchase_history_menu(customer);
@@ -510,25 +509,35 @@ public class UserCustomer {
 
     // Add funds to customer's account
     private void add_funds(String username) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanf = new Scanner(System.in);
         for (Customer customer : customers) {
             if (customer.getUsername().equals(username)) {
-                System.out.print("\tEnter amount to add: ");
-                float amount = scanner.nextFloat();
-                scanner.nextLine(); // consume the leftover newline
+                float amount = 0;
+                boolean validInput = false;
 
-                // Add the amount to the customer's balance
+                // Keep asking until a valid number is entered
+                while (!validInput) {
+                    try {
+                        System.out.print("\n\tEnter amount to add: ");
+                        amount = Float.parseFloat(scanf.nextLine());
+                        validInput = true; // Input is valid, exit the loop
+                    } catch (NumberFormatException e) {
+                        System.out.println("\tInvalid input. Please enter a valid number.");
+                    }
+                }
+
                 customer.setBalance(customer.getBalance() + amount);
-
-                // Save all customers back to the CSV after updating the balance
                 saveAllCustomersToCSV();
 
                 System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
-                return;
+                System.out.println("\t\tPress Enter key to continue.\n");
+                scanf.nextLine();
+                registered_user_customer_item_category(username, customer);
             }
         }
         System.out.println("\n\tUsername not found. Please try again.");
     }
+
 
     // Deduct funds from customer's account
     public void minus_funds(String username, Double amount) {
