@@ -238,11 +238,17 @@ public class UserCustomer {
             }
         }
 
-        // Initial funds
-        System.out.print("\n\tEnter initial amount to add to your account: ");
-        initialFunds = scanf.nextFloat();
-        scanf.nextLine(); // consume the leftover newline
-        newCustomer.setBalance(initialFunds);
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                System.out.print("\n\tEnter initial amount to add to your account: ");
+                initialFunds = Float.parseFloat(scanf.nextLine());
+                newCustomer.setBalance(initialFunds);
+                validInput = true; // Input is valid, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println("\tInvalid input. Please enter a valid number.");
+            }
+        }
 
         double transaction = 1;
         newCustomer.setTransaction(transaction);
