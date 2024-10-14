@@ -72,8 +72,19 @@ public class CashierProcess extends OrderProcessor {
 
             switch (choice) {
                 case "1":
-                    System.out.print("\n\tEnter rendered amount: ");
-                    double payment = scanf.nextDouble();
+                    double payment = 0;
+                    boolean validInput = false;
+
+                    // Keep asking until a valid number is entered
+                    while (!validInput) {
+                        try {
+                            System.out.print("\n\tEnter rendered amount: ");
+                            payment = Float.parseFloat(scanf.nextLine());
+                            validInput = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
 
                     if (payment >= calculate_total_price()) {
                         System.out.println("\tPayment accepted.");
