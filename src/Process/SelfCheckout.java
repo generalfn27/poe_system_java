@@ -76,6 +76,8 @@ public class SelfCheckout {
 
         if (customer.getBalance() < totalPrice) {
             System.out.println("\tInsufficient balance. Payment cancelled.");
+            System.out.println("\t\tPress Enter key to continue.\n");
+            scanf.nextLine();
             return;
         }
 
@@ -128,7 +130,6 @@ public class SelfCheckout {
 
         System.out.println("\tPress Enter key to continue.\n");
         scanf.nextLine(); //used for press any key to continue
-
     }
 
 
@@ -153,7 +154,6 @@ public class SelfCheckout {
                         product.getStock(),
                         product.getPrice());
             }
-
             writer.printf("%nTotal Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
 

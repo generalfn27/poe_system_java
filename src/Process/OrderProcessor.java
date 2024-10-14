@@ -376,6 +376,7 @@ public class OrderProcessor {
 
 
     public static void save_cart_to_csv() {
+        Scanner scanf = new Scanner(System.in);
         if (cart.isEmpty()) {
             System.out.println("Cart is empty. Nothing to save.");
             return;
@@ -411,8 +412,6 @@ public class OrderProcessor {
             System.out.println("\t�Thank you for ordering! Please remember your queue number and proceed to the cashier. �");
             System.out.println("\t����������������������������������������������������������������������������������������\n\n");
 
-            Scanner scanf = new Scanner(System.in);
-
             System.out.println("\nType and Enter any key to continue...");
             scanf.next(); // Read any input from the user
 
@@ -430,8 +429,7 @@ public class OrderProcessor {
         String formattedDate = dateFormat.format(new Date());
         String fileName = String.format("queue_number_%d_%s.csv", currentQueueNumber, formattedDate);
 
-        // Increment the queue number for the next file
-        currentQueueNumber++;
+        currentQueueNumber++; // Increment the queue number for the next file
         save_queue_number(); // Save the updated queue number
 
         return fileName;
