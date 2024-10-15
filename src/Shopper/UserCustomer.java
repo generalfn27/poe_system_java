@@ -65,10 +65,7 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         while (true) {
-            if (!OrderProcessor.cart.isEmpty()) {
-                OrderProcessor.display_cart();
-            }
-
+            if (!OrderProcessor.cart.isEmpty()) {   OrderProcessor.display_cart(); }
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|            Welcome Customer!               |");
             System.out.println("\t|         What do you want to browse?        |");
@@ -81,16 +78,17 @@ public class UserCustomer {
             System.out.println("\t|        [6] Frozen Foods                    |");
             System.out.println("\t|        [7] Body Care & Beauty Care         |");
             System.out.println("\t|        [8] Detergents & Soaps              |");
+            if (!OrderProcessor.cart.isEmpty()) {
+            System.out.println("\t|        [9] Modify Items in cart            |"); }
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
             System.out.print("\t|        Enter here: ");
-
             item_category = scanf.nextLine();
 
             // Variable to hold the products in the chosen category
-            List<Product> selected_products;
+            List<Product> selected_products = null;
 
             switch (item_category) {
                 case "0":
@@ -120,6 +118,12 @@ public class UserCustomer {
                 case "8":
                     selected_products = BrowseProduct.browse_detergents(); // Browse detergents
                     break;
+                case "9":
+                    if (!OrderProcessor.cart.isEmpty()) {
+                        OrderProcessor.modify_menu_process();
+                        break;
+                    }
+                    break;
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.println("\t\tPress Enter key to continue.\n");
@@ -132,7 +136,9 @@ public class UserCustomer {
                 order_processor.process_customer_order(selected_products);
                 OrderProcessor.modify_menu_process();
             } else {
-                System.out.println("No products available in this category.");
+                if (!item_category.equals("9")){ // para hindi to lumalabas dahil di naman list ang case 9
+                    System.out.println("No products available in this category.");
+                }
             }
         }
     }
@@ -414,9 +420,7 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         while (true) {
-            if (!OrderProcessor.cart.isEmpty()) {
-                OrderProcessor.display_cart();
-            }
+            if (!OrderProcessor.cart.isEmpty()) {   OrderProcessor.display_cart(); }
             System.out.println("\t----------------------------------------------");
             System.out.printf ("\t|          Welcome Customer! %-16s|\n", username);
             System.out.printf ("\t|        Your remaining balance: %-7.2f     |\n", customer.getBalance());
@@ -433,6 +437,8 @@ public class UserCustomer {
             System.out.println("\t|        [9] Add funds                       |");
             System.out.println("\t|        [10] View Purchase History          |");
             System.out.println("\t|        [11] Change Password                |");
+            if (!OrderProcessor.cart.isEmpty()) {
+            System.out.println("\t|        [12] Modify Items in cart            |"); }
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Log Out                         |");
             System.out.println("\t|                                            |");
@@ -479,6 +485,12 @@ public class UserCustomer {
                 case "11":
                     registered_customer_change_password(username, customer);
                     break;
+                case "12":
+                    if (!OrderProcessor.cart.isEmpty()) {
+                        OrderProcessor.modify_menu_process();
+                        break;
+                    }
+                    break;
                 case "0":
                     while (true) {
                         System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
@@ -510,7 +522,9 @@ public class UserCustomer {
                 order_processor.process_customer_order(selected_products);
                 order_processor.registered_user_modify_menu_process(customer.getUsername());
             } else {
-                System.out.println("\tNo products available in this category.");
+                if (!item_category.equals("12")){ // para hindi to lumalabas dahil di naman list ang case 9
+                    System.out.println("No products available in this category.");
+                }
             }
         }
     }
