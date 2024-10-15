@@ -89,7 +89,7 @@ public class OrderProcessor {
                 case 'a':
                 case 'A':
                     add_to_cart(selected_product, quantity);
-                    System.out.println("\tItem added to cart.");
+                    System.out.println("\n\tItem added to cart.");
                     break; // Exit the switch statement, but still in the loop
                 case 'c':
                 case 'C':
@@ -474,7 +474,7 @@ public class OrderProcessor {
                     product.update_stock(-quantity);
                     total_items -= quantity;
                     total_price -= product.getPrice() * quantity;
-                    System.out.printf("\tDeducted %d of %s from the cart.\n", quantity, product.getName());
+                    System.out.printf("\n\tDeducted %d of %s from the cart.\n", quantity, product.getName());
                 } else {
                     remove_item(product_code);
                 }
