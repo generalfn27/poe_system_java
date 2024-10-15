@@ -155,28 +155,27 @@ public class OrderProcessor {
         while (true) {
             display_cart();
             System.out.println("\n\tMODIFY MENU:");
-            System.out.println("\tAdd more items (A)\tpwedeng add more quantity to the item nalang to");
-            System.out.println("\tRemove Items (R)");
+            System.out.println("\tIncrease Quantity (I)");
             System.out.println("\tDeduct Quantity (D)");
+            System.out.println("\tRemove Items (R)");
             System.out.println("\tClear Cart (C)");
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tDisplay cart(V)");
-            System.out.println("\tGo Back (B)");
+            System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
-
             choice = scanf.nextLine();
 
+            //pwedeng isang case lang and ang nasa scanf ay naka toupper, kung alin efficient
             switch (choice) {
-                case "A":
-                case "a":
-                    //pwedeng add more quantity to the item nalang to
-                    break;
-                case "R":
-                case "r":
-                    System.out.print("Enter 0 to Cancel remove");
-                    System.out.print("Enter product code to remove: ");
-                    String codeToRemove = scanf.nextLine();
-                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                case "I":
+                case "i":
+                    System.out.print("Enter the product code to increase: ");
+                    String codeToIncrease = scanf.nextLine();
+                    System.out.print("Enter quantity to increase: ");
+                    int quantityToIncrease = scanf.nextInt();
+                    //if kunghindi number ay di gagana
+
+                    increase_item_quantity(codeToIncrease, quantityToIncrease);  // Deduct quantity
                     break;
                 case "D":
                 case "d":
@@ -185,6 +184,13 @@ public class OrderProcessor {
                     System.out.print("Enter quantity to deduct: ");
                     int quantityToDeduct = scanf.nextInt();
                     deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+                    break;
+                case "R":
+                case "r":
+                    System.out.print("Enter 0 to Cancel remove");
+                    System.out.print("Enter product code to remove: ");
+                    String codeToRemove = scanf.nextLine();
+                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "C":
                 case "c":
@@ -196,7 +202,7 @@ public class OrderProcessor {
                     break;
                 case "B":
                 case "b":
-                    return;
+                    return; //as far as i know kaya nagana ung return kasi return sa menu agad dahil dun sya last na callout
                 case "P":
                 case "p":
                     // Confirmation before checkout
@@ -206,20 +212,19 @@ public class OrderProcessor {
                     if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
                         System.out.println("\n\tProcessing checkout...");
 
-                        System.out.print("\n\tPress [E] to checkout or press any key to shop again: ");
-                        char exit_choice = scanf.next().charAt(0);
+                        System.out.print("\n\tPress [E] to checkout or press any key to return and shop again: ");
+                        String exit_choice = scanf.nextLine().trim().toUpperCase();
 
-                        if (exit_choice == 'E' || exit_choice == 'e') {
+                        if (exit_choice.equals("E")) {
                             // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
-                            save_cart_to_csv();
+                            save_cart_to_queue_csv();
                             reset_cart();
                             UserCustomer user_customer = new UserCustomer();
                             user_customer.user_customer_menu();
                             return;
                         } else {
-                            OrderProcessor.modify_menu_process();
+                            break;
                         }
-
                     } else {
                         System.out.println("\n\tCheckout cancelled.");
                     }
@@ -235,27 +240,26 @@ public class OrderProcessor {
 
         while (true) {
             display_cart();
-            System.out.println("\n\tAdd more items (A)"); //pwedeng add more quantity to the item nalang to
-            System.out.println("\tRemove Items (R)");
+            System.out.println("\n\tMODIFY MENU:");
+            System.out.println("\tIncrease Quantity (I)");
             System.out.println("\tDeduct Quantity (D)");
+            System.out.println("\tRemove Items (R)");
             System.out.println("\tClear Cart (C)");
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tDisplay cart(V)");
-            System.out.println("\tGo Back (B)");
+            System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
-
             choice = scanf.nextLine();
 
+            //pwedeng isang case lang and ang nasa scanf ay naka toupper, kung alin efficient
             switch (choice) {
-                case "A":
-                case "a":
-                    //pwedeng add more quantity to the item nalang to
-                    break;
-                case "R":
-                case "r":
-                    System.out.print("Enter product code to remove: ");
-                    String codeToRemove = scanf.nextLine();
-                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                case "I":
+                case "i":
+                    System.out.print("Enter the product code to increase: ");
+                    String codeToIncrease = scanf.nextLine();
+                    System.out.print("Enter quantity to increase: ");
+                    int quantityToIncrease = scanf.nextInt();
+                    increase_item_quantity(codeToIncrease, quantityToIncrease);  // Deduct quantity
                     break;
                 case "D":
                 case "d":
@@ -264,6 +268,13 @@ public class OrderProcessor {
                     System.out.print("Enter quantity to deduct: ");
                     int quantityToDeduct = scanf.nextInt();
                     deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+                    break;
+                case "R":
+                case "r":
+                    System.out.print("Enter 0 to Cancel remove");
+                    System.out.print("Enter product code to remove: ");
+                    String codeToRemove = scanf.nextLine();
+                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "C":
                 case "c":
@@ -283,6 +294,9 @@ public class OrderProcessor {
                     String confirmInput = scanf.nextLine().trim();
 
                     if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
+
+                        //while
+
                         System.out.println("\n\tProcessing checkout...");
                         System.out.println("\n\tChoose payment method:");
                         System.out.println("\t1. Cash (Queue Number)");
@@ -291,8 +305,7 @@ public class OrderProcessor {
                         String paymentChoice = scanf.nextLine().trim();
 
                         if (paymentChoice.equals("1")) {
-                            // Existing cash payment process
-                            save_cart_to_csv();
+                            save_cart_to_queue_csv();
                             reset_cart();
 
                             /*
@@ -323,6 +336,24 @@ public class OrderProcessor {
         }
     }
 
+
+    public static void increase_item_quantity(String product_code, int quantity) {
+        for (Product product : cart) {
+            if (product.getCode().equals(product_code.toUpperCase())) {
+                int new_quantity = product.getStock() + quantity;
+                if (new_quantity > 0) {
+                    product.update_stock(+quantity);
+                    total_items += quantity;
+                    total_price += product.getPrice() * quantity;
+                    System.out.printf("Increased %d of %s from the cart.\n", quantity, product.getName());
+                } else {
+                    remove_item(product_code);
+                }
+                return;
+            }
+        }
+        System.out.println("Product not found in the cart.");
+    }
 
     public static void deduct_item_quantity(String product_code, int quantity) {
         for (Product product : cart) {
@@ -375,7 +406,7 @@ public class OrderProcessor {
     }
 
 
-    public static void save_cart_to_csv() {
+    public static void save_cart_to_queue_csv() {
         Scanner scanf = new Scanner(System.in);
         if (cart.isEmpty()) {
             System.out.println("Cart is empty. Nothing to save.");
