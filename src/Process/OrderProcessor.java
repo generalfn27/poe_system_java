@@ -148,6 +148,8 @@ public class OrderProcessor {
     }
 
 
+    // both modify process menu ay pwede pang gawing method para mas malinis tignan
+    // for now ganito muna dahil di pa naman sure kung need sobrang neat & clean code
     public static void modify_menu_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
