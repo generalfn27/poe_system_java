@@ -55,7 +55,7 @@ public class BrowseProduct {
         //dito gumawa sya ng array form para iproseso ung laman ng csv
         List<Product> snacks = browse_snacks.load_products_from_CSV("snacks.csv");
 
-        browse_snacks.display_products(snacks); // Display the loaded products
+        browse_snacks.display_products(snacks);
         return snacks;
     }
 
@@ -78,17 +78,17 @@ public class BrowseProduct {
 
             switch (choice) {
                 case "0":
-                    return null;  // Return to the previous menu or caller
+                    return null;  // Return to the previous menu dahil wala syang binalik
                 case "1":
                     BrowseProduct browse_canned_fish = new BrowseProduct();
                     List<Product> canned_fish = browse_canned_fish.load_products_from_CSV("canned_fish.csv");
-                    browse_canned_fish.display_products(canned_fish); // Display the loaded products
-                    return canned_fish;  // Return the list of products to the caller
+                    browse_canned_fish.display_products(canned_fish);
+                    return canned_fish;
                 case "2":
                     BrowseProduct browse_canned_meat = new BrowseProduct();
                     List<Product> canned_meat = browse_canned_meat.load_products_from_CSV("canned_meat.csv"); // Correct CSV file
-                    browse_canned_meat.display_products(canned_meat); // Display the loaded products
-                    return canned_meat;  // Return the list of products to the caller
+                    browse_canned_meat.display_products(canned_meat);
+                    return canned_meat;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
                     System.out.println("\n\tAn error has occurred");
@@ -102,7 +102,7 @@ public class BrowseProduct {
     public static List<Product> browse_condiments() {
         BrowseProduct browse_condiments = new BrowseProduct();
         List<Product> condiments = browse_condiments.load_products_from_CSV("condiments.csv");
-        browse_condiments.display_products(condiments); // Display the loaded products
+        browse_condiments.display_products(condiments);
         return condiments;
     }
 
@@ -110,7 +110,7 @@ public class BrowseProduct {
     public static List<Product> browse_dairy() {
         BrowseProduct browse_dairy = new BrowseProduct();
         List<Product> dairy = browse_dairy.load_products_from_CSV("dairy.csv");
-        browse_dairy.display_products(dairy); // Display the loaded products
+        browse_dairy.display_products(dairy);
         return dairy;
     }
 
@@ -118,7 +118,7 @@ public class BrowseProduct {
     public static List<Product> browse_frozen_foods() {
         BrowseProduct browse_frozen_foods = new BrowseProduct();
         List<Product> dairy = browse_frozen_foods.load_products_from_CSV("frozen_foods.csv");
-        browse_frozen_foods.display_products(dairy); // Display the loaded products
+        browse_frozen_foods.display_products(dairy);
         return dairy;
     }
 
@@ -148,12 +148,12 @@ public class BrowseProduct {
                 case "1":
                     BrowseProduct browse_body_care = new BrowseProduct();
                     List<Product> body_care = browse_body_care.load_products_from_CSV("body_care.csv");
-                    browse_body_care.display_products(body_care); // Display the loaded products
+                    browse_body_care.display_products(body_care);
                     return body_care;
                 case "2":
                     BrowseProduct browse_beauty_care = new BrowseProduct();
                     List<Product> beauty_care = browse_beauty_care.load_products_from_CSV("beauty_care.csv");
-                    browse_beauty_care.display_products(beauty_care); // Display the loaded products
+                    browse_beauty_care.display_products(beauty_care);
                     return beauty_care;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
@@ -191,17 +191,17 @@ public class BrowseProduct {
                 case "1":
                     BrowseProduct browse_powder_detergent = new BrowseProduct();
                     List<Product> powder_detergent = browse_powder_detergent.load_products_from_CSV("powder_detergents.csv");
-                    browse_powder_detergent.display_products(powder_detergent); // Display the loaded products
+                    browse_powder_detergent.display_products(powder_detergent);
                     return powder_detergent;
                 case "2":
                     BrowseProduct browse_bar_soap = new BrowseProduct();
                     List<Product> bar_soap = browse_bar_soap.load_products_from_CSV("bar_soaps.csv");
-                    browse_bar_soap.display_products(bar_soap); // Display the loaded products
+                    browse_bar_soap.display_products(bar_soap);
                     return bar_soap;
                 case "3":
                     BrowseProduct browse_liquid_soap = new BrowseProduct();
                     List<Product> liquid_soap = browse_liquid_soap.load_products_from_CSV("liquid_soaps.csv");
-                    browse_liquid_soap.display_products(liquid_soap); // Display the loaded products
+                    browse_liquid_soap.display_products(liquid_soap);
                     return liquid_soap;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
