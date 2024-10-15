@@ -35,6 +35,7 @@ public class Product {
     public void update_stock(int quantityChange) {
         if (this.stock + quantityChange >= 0) {  // Ensure stock doesn't go negative
             this.stock += quantityChange;
+            //need ng update stock sa manager part para update product stock sa csv
         } else {
             System.out.println("Not enough stock available!");
         }
