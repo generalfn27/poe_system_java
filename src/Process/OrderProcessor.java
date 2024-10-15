@@ -169,9 +169,9 @@ public class OrderProcessor {
             switch (choice) {
                 case "I":
                 case "i":
-                    System.out.print("Enter the product code to increase: ");
+                    System.out.print("\tEnter the product code to increase: ");
                     String codeToIncrease = scanf.nextLine();
-                    System.out.print("Enter quantity to increase: ");
+                    System.out.print("\tEnter quantity to increase: ");
                     int quantityToIncrease = scanf.nextInt();
                     //if kunghindi number ay di gagana
 
@@ -179,22 +179,43 @@ public class OrderProcessor {
                     break;
                 case "D":
                 case "d":
-                    System.out.print("Enter product code to deduct: ");
+                    System.out.print("\tEnter product code to deduct: ");
                     String codeToDeduct = scanf.nextLine();
-                    System.out.print("Enter quantity to deduct: ");
+                    System.out.print("\tEnter quantity to deduct: ");
                     int quantityToDeduct = scanf.nextInt();
                     deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
                     break;
                 case "R":
                 case "r":
-                    System.out.print("Enter 0 to Cancel remove");
-                    System.out.print("Enter product code to remove: ");
+                    System.out.println("\tEnter 0 to Cancel item removal");
+                    System.out.print("\tEnter product code to remove: ");
                     String codeToRemove = scanf.nextLine();
+                    if (codeToRemove.equals("0")) { break; }
                     remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "C":
                 case "c":
-                    reset_cart();  // Reset the cart
+                    boolean valid_to_clear = false;
+                    while (!valid_to_clear){
+                        System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
+                        String confirm_clear = scanf.nextLine().trim();
+
+                        switch (confirm_clear) {
+                            case "y":
+                            case "Y":
+                                reset_cart();  // Reset the cart
+                                valid_to_clear = true;
+                                break;
+                            case "n":
+                            case "N":
+                                valid_to_clear = true;
+                                break;
+                            default:
+                                System.out.println("\n\tWrong input");
+                                System.out.println("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
+                        }
+                    }
                     break;
                 case "V":
                 case "v":
@@ -206,29 +227,44 @@ public class OrderProcessor {
                 case "P":
                 case "p":
                     // Confirmation before checkout
-                    System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                    String confirmInput = scanf.nextLine().trim();
+                    String confirmInput;
+                    boolean valid = false;
 
-                    if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
-                        System.out.println("\n\tProcessing checkout...");
+                    while (!valid) {
+                        System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                        confirmInput = scanf.nextLine().trim();
 
-                        System.out.print("\n\tPress [E] to checkout or press any key to return and shop again: ");
-                        String exit_choice = scanf.nextLine().trim().toUpperCase();
+                        switch (confirmInput) {
+                            case "y":
+                            case "Y":
+                                System.out.println("\n\tProcessing checkout...");
+                                System.out.print("\n\tPress and enter [E] to checkout");
+                                System.out.print("\n\t\t\tPress and enter any key to return and shop again: ");
+                                String exit_choice = scanf.nextLine().trim().toUpperCase();
 
-                        if (exit_choice.equals("E")) {
-                            // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
-                            save_cart_to_queue_csv();
-                            reset_cart();
-                            UserCustomer user_customer = new UserCustomer();
-                            user_customer.user_customer_menu();
-                            return;
-                        } else {
-                            break;
+                                if (exit_choice.equals("E")) {
+                                    save_cart_to_queue_csv();
+                                    reset_cart();
+                                    UserCustomer user_customer = new UserCustomer();
+                                    user_customer.user_customer_menu();
+                                    return;
+                                } else {
+                                    valid = true;
+                                }
+                                break;
+                            case "n":
+                            case "N":
+                                System.out.println("\n\tCheckout cancelled.");
+                                valid = true;
+                                break;
+                            default:
+                                System.out.println("\n\tWrong input");
+                                System.out.println("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
                         }
-                    } else {
-                        System.out.println("\n\tCheckout cancelled.");
                     }
                     break;
+                default:
             }
         }
     }
@@ -255,30 +291,51 @@ public class OrderProcessor {
             switch (choice) {
                 case "I":
                 case "i":
-                    System.out.print("Enter the product code to increase: ");
+                    System.out.print("\tEnter the product code to increase: ");
                     String codeToIncrease = scanf.nextLine();
-                    System.out.print("Enter quantity to increase: ");
+                    System.out.print("\tEnter quantity to increase: ");
                     int quantityToIncrease = scanf.nextInt();
                     increase_item_quantity(codeToIncrease, quantityToIncrease);  // Deduct quantity
                     break;
                 case "D":
                 case "d":
-                    System.out.print("Enter product code to deduct: ");
+                    System.out.print("\tEnter product code to deduct: ");
                     String codeToDeduct = scanf.nextLine();
-                    System.out.print("Enter quantity to deduct: ");
+                    System.out.print("\tEnter quantity to deduct: ");
                     int quantityToDeduct = scanf.nextInt();
                     deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
                     break;
                 case "R":
                 case "r":
-                    System.out.print("Enter 0 to Cancel remove");
-                    System.out.print("Enter product code to remove: ");
+                    System.out.println("\tEnter 0 to Cancel item removal");;
+                    System.out.print("\tEnter product code to remove: ");
                     String codeToRemove = scanf.nextLine();
+                    if (codeToRemove.equals("0")) { break; }
                     remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "C":
                 case "c":
-                    reset_cart();  // Reset the cart
+                    boolean valid_to_clear = false;
+                    while (!valid_to_clear){
+                        System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
+                        String confirm_clear = scanf.nextLine().trim();
+
+                        switch (confirm_clear) {
+                            case "y":
+                            case "Y":
+                                reset_cart();  // Reset the cart
+                                valid_to_clear = true;
+                                break;
+                            case "n":
+                            case "N":
+                                valid_to_clear = true;
+                                break;
+                            default:
+                                System.out.println("\n\tWrong input");
+                                System.out.println("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
+                        }
+                    }
                     break;
                 case "V":
                 case "v":
@@ -345,14 +402,14 @@ public class OrderProcessor {
                     product.update_stock(+quantity);
                     total_items += quantity;
                     total_price += product.getPrice() * quantity;
-                    System.out.printf("Increased %d of %s from the cart.\n", quantity, product.getName());
+                    System.out.printf("\tIncreased %d of %s from the cart.\n", quantity, product.getName());
                 } else {
                     remove_item(product_code);
                 }
                 return;
             }
         }
-        System.out.println("Product not found in the cart.");
+        System.out.println("\tProduct not found in the cart.");
     }
 
     public static void deduct_item_quantity(String product_code, int quantity) {
@@ -363,14 +420,14 @@ public class OrderProcessor {
                     product.update_stock(-quantity);
                     total_items -= quantity;
                     total_price -= product.getPrice() * quantity;
-                    System.out.printf("Deducted %d of %s from the cart.\n", quantity, product.getName());
+                    System.out.printf("\tDeducted %d of %s from the cart.\n", quantity, product.getName());
                 } else {
                     remove_item(product_code);
                 }
                 return;
             }
         }
-        System.out.println("Product not found in the cart.");
+        System.out.println("\tProduct not found in the cart.");
     }
 
 
@@ -386,9 +443,9 @@ public class OrderProcessor {
         }
         if (to_remove != null) {
             cart.remove(to_remove);
-            System.out.printf("Removed %s from the cart.\n", to_remove.getName());
+            System.out.printf("\tRemoved %s from the cart.\n", to_remove.getName());
         } else {
-            System.out.println("Product not found in the cart.");
+            System.out.println("\tProduct not found in the cart.");
         }
     }
 
@@ -396,7 +453,7 @@ public class OrderProcessor {
         cart.clear();
         total_items = 0;
         total_price = 0;
-        System.out.println("The cart has been reset.");
+        System.out.println("\tThe cart has been reset.");
     }
 
     public static void reset_cart_no_display() {
@@ -409,7 +466,7 @@ public class OrderProcessor {
     public static void save_cart_to_queue_csv() {
         Scanner scanf = new Scanner(System.in);
         if (cart.isEmpty()) {
-            System.out.println("Cart is empty. Nothing to save.");
+            System.out.println("\tCart is empty. Nothing to save.");
             return;
         }
 
