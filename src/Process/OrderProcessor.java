@@ -91,17 +91,14 @@ public class OrderProcessor {
                     add_to_cart(selected_product, quantity);
                     System.out.println("\tItem added to cart.");
                     break; // Exit the switch statement, but still in the loop
-
                 case 'c':
                 case 'C':
                     System.out.println("\tItem not added to cart.");
                     break; // Exit the switch statement, but still in the loop
-
                 default:
                     System.out.println("\tInvalid input. Please enter A or C only.");
                     continue; // Go back to the beginning of the loop if invalid input
             }
-
             // Exit the loop after valid input
             break;
         }
@@ -224,6 +221,7 @@ public class OrderProcessor {
                 case "C":
                 case "c":
                     boolean valid_to_clear = false;
+
                     while (!valid_to_clear){
                         System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
                         String confirm_clear = scanf.nextLine().trim();
@@ -255,14 +253,14 @@ public class OrderProcessor {
                 case "P":
                 case "p":
                     // Confirmation before checkout
-                    String confirmInput;
+                    String confirm_process_queue;
                     boolean valid = false;
 
                     while (!valid) {
                         System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                        confirmInput = scanf.nextLine().trim();
+                        confirm_process_queue = scanf.nextLine().trim();
 
-                        switch (confirmInput) {
+                        switch (confirm_process_queue) {
                             case "y":
                             case "Y":
                                 System.out.println("\n\tProcessing checkout...");
