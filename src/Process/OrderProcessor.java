@@ -171,7 +171,7 @@ public class OrderProcessor {
                     int quantityToIncrease;
                     boolean quantity_increase_valid_input = false;
 
-                    System.out.println("\tEnter 0 to Cancel item increase");
+                    System.out.println("\n\tEnter 0 to Cancel item increase");
                     System.out.print("\tEnter the product code to increase: ");
                     String codeToIncrease = scanf.nextLine();
 
