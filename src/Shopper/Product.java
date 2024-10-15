@@ -43,7 +43,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("Code: %-6s    Name: %-24s Price: %-5.2f    Stock: %2d", code, name, price, stock);
+        return String.format("Code: %-6s\tName: %-24s\tPrice: %-5.2f\tStock: %2d", code, name, price, stock);
     }
 
 }
