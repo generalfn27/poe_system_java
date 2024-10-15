@@ -169,21 +169,47 @@ public class OrderProcessor {
             switch (choice) {
                 case "I":
                 case "i":
+                    int quantityToIncrease;
+                    boolean quantity_increase_valid_input = false;
+
+                    System.out.println("\tEnter 0 to Cancel item increase");
                     System.out.print("\tEnter the product code to increase: ");
                     String codeToIncrease = scanf.nextLine();
-                    System.out.print("\tEnter quantity to increase: ");
-                    int quantityToIncrease = scanf.nextInt();
-                    //if kunghindi number ay di gagana
 
-                    increase_item_quantity(codeToIncrease, quantityToIncrease);  // Deduct quantity
+                    if (codeToIncrease.equals("0")) { break; }
+
+                    while (!quantity_increase_valid_input) {
+                        try {
+                            System.out.print("\tEnter quantity to increase: ");
+                            quantityToIncrease = Integer.parseInt(scanf.nextLine());
+                            increase_item_quantity(codeToIncrease, quantityToIncrease);
+                            quantity_increase_valid_input = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
                     break;
                 case "D":
                 case "d":
+                    int quantityToDeduct;
+                    boolean deduction_valid_input = false;
+
+                    System.out.println("\tEnter 0 to Cancel item deduction");
                     System.out.print("\tEnter product code to deduct: ");
                     String codeToDeduct = scanf.nextLine();
-                    System.out.print("\tEnter quantity to deduct: ");
-                    int quantityToDeduct = scanf.nextInt();
-                    deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+
+                    if (codeToDeduct.equals("0")) { break; }
+
+                    while (!deduction_valid_input) {
+                        try {
+                            System.out.print("\tEnter quantity to deduct: ");
+                            quantityToDeduct = Integer.parseInt(scanf.nextLine());
+                            deduct_item_quantity(codeToDeduct, quantityToDeduct);
+                            deduction_valid_input = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
                     break;
                 case "R":
                 case "r":
@@ -291,23 +317,51 @@ public class OrderProcessor {
             switch (choice) {
                 case "I":
                 case "i":
+                    int quantityToIncrease;
+                    boolean quantity_increase_valid_input = false;
+
+                    System.out.println("\tEnter 0 to Cancel item increase");
                     System.out.print("\tEnter the product code to increase: ");
                     String codeToIncrease = scanf.nextLine();
-                    System.out.print("\tEnter quantity to increase: ");
-                    int quantityToIncrease = scanf.nextInt();
-                    increase_item_quantity(codeToIncrease, quantityToIncrease);  // Deduct quantity
+
+                    if (codeToIncrease.equals("0")) { break; }
+
+                    while (!quantity_increase_valid_input) {
+                        try {
+                            System.out.print("\tEnter quantity to increase: ");
+                            quantityToIncrease = Integer.parseInt(scanf.nextLine());
+                            increase_item_quantity(codeToIncrease, quantityToIncrease);
+                            quantity_increase_valid_input = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
                     break;
                 case "D":
                 case "d":
+                    int quantityToDeduct;
+                    boolean deduction_valid_input = false;
+
+                    System.out.println("\tEnter 0 to Cancel item deduction");
                     System.out.print("\tEnter product code to deduct: ");
                     String codeToDeduct = scanf.nextLine();
-                    System.out.print("\tEnter quantity to deduct: ");
-                    int quantityToDeduct = scanf.nextInt();
-                    deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+
+                    if (codeToDeduct.equals("0")) { break; }
+
+                    while (!deduction_valid_input) {
+                        try {
+                            System.out.print("\tEnter quantity to deduct: ");
+                            quantityToDeduct = Integer.parseInt(scanf.nextLine());
+                            deduct_item_quantity(codeToDeduct, quantityToDeduct);
+                            deduction_valid_input = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
                     break;
                 case "R":
                 case "r":
-                    System.out.println("\tEnter 0 to Cancel item removal");;
+                    System.out.println("\tEnter 0 to Cancel item removal");
                     System.out.print("\tEnter product code to remove: ");
                     String codeToRemove = scanf.nextLine();
                     if (codeToRemove.equals("0")) { break; }
