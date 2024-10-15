@@ -22,8 +22,8 @@ public class UserCustomer {
 
         while (true) {
             System.out.println("\n\t----------------------------------------------");
-            System.out.println("\t|              Welcome Customer!             |");
-            System.out.println("\t|             Log in  |  Register            |");
+            System.out.println("\t|              Welcome Customer!                 |");
+            System.out.println("\t|             Log in  |  Register                |");
             System.out.println("\t|                                                |");
             System.out.println("\t|        [1] Login                               |");
             System.out.println("\t|        [2] Continue as Guest                   |");
@@ -36,16 +36,13 @@ public class UserCustomer {
 
             switch (choice) {
                 case "1":
-                    // Call the login function (assuming it exists)
                     customer_login();
                     break;
                 case "2":
-                    // Handle the guest case
                     Customer guest = new Customer("Guest"); // Guest with default name
                     guest_customer_item_category(guest); // Pass the guest customer to the item category function
                     break;
                 case "3":
-                    // Call the registration function (assuming it exists)
                     customerRegister();
                     break;
                 case "0":
@@ -60,7 +57,6 @@ public class UserCustomer {
     }
 
 
-    // Placeholder for the guest customer item category function
     public void guest_customer_item_category(Customer guest) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
@@ -69,10 +65,13 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         while (true) {
-            System.out.println("\n\nBrowsing as guest: " + guest.getUsername());
+            if (!OrderProcessor.cart.isEmpty()) {
+                OrderProcessor.display_cart();
+            }
+
             System.out.println("\n\t----------------------------------------------");
-            System.out.println("\t|              Welcome Customer!             |");
-            System.out.println("\t|             What do you want to browse?    |");
+            System.out.println("\t|            Welcome Customer!               |");
+            System.out.println("\t|         What do you want to browse?        |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Beverages                       |");
             System.out.println("\t|        [2] Snacks                          |");
@@ -415,6 +414,9 @@ public class UserCustomer {
         OrderProcessor order_processor = new OrderProcessor();
 
         while (true) {
+            if (!OrderProcessor.cart.isEmpty()) {
+                OrderProcessor.display_cart();
+            }
             System.out.println("\t----------------------------------------------");
             System.out.printf ("\t|          Welcome Customer! %-16s|\n", username);
             System.out.printf ("\t|        Your remaining balance: %-7.2f     |\n", customer.getBalance());
