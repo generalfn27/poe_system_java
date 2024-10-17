@@ -480,14 +480,14 @@ public class UserCustomer {
                     break;
                 case "10":
                     display_purchase_history_menu(customer);
-                    registered_user_customer_item_category(username, customer);
+                    //registered_user_customer_item_category(username, customer);
                     break;
                 case "11":
                     registered_customer_change_password(username, customer);
                     break;
                 case "12":
                     if (!OrderProcessor.cart.isEmpty()) {
-                        OrderProcessor.modify_menu_process();
+                        OrderProcessor.registered_user_modify_menu_process(customer);
                         break;
                     }
                     break;
@@ -520,9 +520,9 @@ public class UserCustomer {
             // After displaying products, process the order by asking for product code
             if (selected_products != null && !selected_products.isEmpty()) {
                 order_processor.process_customer_order(selected_products);
-                order_processor.registered_user_modify_menu_process(customer.getUsername());
+                OrderProcessor.registered_user_modify_menu_process(customer);
             } else {
-                if (!item_category.equals("12")){ // para hindi to lumalabas dahil di naman list ang case 9
+                if (!item_category.equals("12")){ // para hindi to lumalabas dahil di naman list ang case 12
                     System.out.println("No products available in this category.");
                 }
             }
@@ -554,7 +554,7 @@ public class UserCustomer {
                 System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
                 System.out.println("\t\tPress Enter key to continue.\n");
                 scanf.nextLine();
-                registered_user_customer_item_category(username, customer);
+                //registered_user_customer_item_category(username, customer);
             }
         }
         System.out.println("\n\tUsername not found. Please try again.");
