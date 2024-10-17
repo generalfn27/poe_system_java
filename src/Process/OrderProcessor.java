@@ -1,5 +1,6 @@
 package Process;
 
+import Shopper.Customer;
 import Shopper.Product;
 import Shopper.UserCustomer;
 
@@ -296,7 +297,7 @@ public class OrderProcessor {
     }
 
 
-    public void registered_user_modify_menu_process(String username) {
+    public static void registered_user_modify_menu_process(Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -411,7 +412,7 @@ public class OrderProcessor {
                         System.out.println("\n\tProcessing checkout...");
                         System.out.println("\n\tChoose payment method:");
                         System.out.println("\t1. Cash (Queue Number)");
-                        System.out.println("\t2. E-Wallet (Self-Checkout)");
+                        System.out.println("\t2. " + customer.getPaymentMethod() + " (Self-Checkout)");
                         System.out.print("\tEnter choice: ");
                         String paymentChoice = scanf.nextLine().trim();
 
@@ -432,7 +433,7 @@ public class OrderProcessor {
                             // New e-wallet self-checkout process
                             UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
                             SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
-                            selfCheckout.processSelfCheckout(username);
+                            selfCheckout.processSelfCheckout(customer.getUsername());
                             return;
                         } else {
                             System.out.println("\n\tAn error has occurred. Returning to menu.");
