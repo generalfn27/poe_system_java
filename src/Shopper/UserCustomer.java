@@ -157,6 +157,10 @@ public class UserCustomer {
         String confirmPassword = "";
         String confirmPin = "";
         float initialFunds;
+        String pinCode;
+        String phoneNumber;
+        String paymentMethod;
+        double transaction = 1;
 
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|        suggestion another scanf para                  |");
@@ -173,13 +177,12 @@ public class UserCustomer {
                     System.out.print("\n\tEnter Username: ");
                     username = scanf.nextLine();
                 }
-                if (customer.getUsername().equals(username)) {  not_exist = false; }
-                else if (customer.getUsername() != username) {  not_exist = true;  }
+                if (!customer.getUsername().equals(username)) {  not_exist = true; }
             }
         }
         newCustomer.setUsername(username);
 
-        // Password input
+        // Password input naka ibang method para sa future changes para mas madali mag asterisk
         String password = inputPassword(scanf, "\n\tEnter Password: ");
         newCustomer.setPassword(password);
 
@@ -190,27 +193,23 @@ public class UserCustomer {
             }
         }
 
-
-        String phoneNumber;
         while (true) {
             System.out.print("\n\tEnter Phone Number: ");
             phoneNumber = scanf.nextLine();
+
             //  Check if the entered Phone Number starts with "09" and is exactly 11 digits
             //  ^: This is a beginning-of-line anchor, which means that the pattern must match from the very start of the string.
             //  09: This simply matches the literal characters "09".
             //  \d: This matches any single digit character (0-9).
             //  {9}: This is a quantifier that specifies that the preceding element (\d) must occur exactly 9 times.
             //  $: This is an end-of-line anchor, which means that the pattern must match up to the very end of the string.
-            if (phoneNumber.matches("^09\\d{9}$")) {
-                break;
-            } else {
-                System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");
-            }
+
+            if (phoneNumber.matches("^09\\d{9}$")) {    break;  }
+            else { System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");   }
         }
         newCustomer.setPhoneNumber(phoneNumber);
 
-        String paymentMethod;
-        // Use a do-while loop for more efficient validation
+        // Use a do-while loop for more efficient validation para mag ulit ng display if mali
         do {
             System.out.print("\tIs the phone number #"+ newCustomer.getPhoneNumber()+" for GCash (G) or PayMaya (P)? ");
             String paymentChoice = scanf.nextLine().trim().toUpperCase();
@@ -224,20 +223,19 @@ public class UserCustomer {
                 System.out.println("\n\tInvalid choice. Please try again.");
             }
         } while (true);
+
         newCustomer.setPaymentMethod(paymentMethod);
         System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using " + newCustomer.getPaymentMethod());
 
-        String pinCode;
         while (true) {
             System.out.print("\n\tEnter a 4-digit PIN code: ");
             pinCode = scanf.nextLine();
 
             // Check if the entered PIN is exactly 4 digits
-            if (pinCode.matches("\\d{4}")) {
-                break;
-            } else {
-                System.out.println("\tInvalid PIN. Please enter a 4-digit number.");
-            }
+            // \\d dahil integer
+            // 4 ay ung bilang so dapat mag mmatch ung input na int
+            if (pinCode.matches("\\d{4}")) { break; }
+            else { System.out.println("\tInvalid PIN. Please enter a 4-digit number."); }
         }
         newCustomer.setPinCode(pinCode);
 
@@ -260,7 +258,6 @@ public class UserCustomer {
             }
         }
 
-        double transaction = 1;
         newCustomer.setTransaction(transaction);
 
         saveCustomerToFile(newCustomer);
