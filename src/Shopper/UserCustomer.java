@@ -164,12 +164,17 @@ public class UserCustomer {
         System.out.print("\n\tEnter Username: ");
         String username = scanf.nextLine();
 
-        // Check if the username already exists
-        for (Customer customer : customers) {
-            if (customer.getUsername().equals(username)) {
-                System.out.println("\n\tUsername already exists. Please choose a different username.");
-                System.out.print("\n\tEnter Username: ");
-                username = scanf.nextLine();
+        boolean not_exist = false;
+        while (!not_exist) {
+            // Check if the username already exists
+            for (Customer customer : customers) {
+                if (customer.getUsername().equals(username)) {
+                    System.out.println("\n\tUsername already exists. Please choose a different username.");
+                    System.out.print("\n\tEnter Username: ");
+                    username = scanf.nextLine();
+                }
+                if (customer.getUsername().equals(username)) {  not_exist = false; }
+                else if (customer.getUsername() != username) {  not_exist = true;  }
             }
         }
         newCustomer.setUsername(username);
