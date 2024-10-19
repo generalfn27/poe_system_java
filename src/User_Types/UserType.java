@@ -10,7 +10,7 @@ public class UserType {
         Scanner scanf = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\tPlease enter what user type you are:\n");
+            System.out.println("\n\tPlease enter what user type you are:\n");
             System.out.println("\t[1] Customer");
             System.out.println("\t[2] Cashier");
             System.out.println("\t[3] Manager");
@@ -22,18 +22,19 @@ public class UserType {
 
             switch (user_type_choice) {
                 case "1":
-                    System.out.println("\tYou selected Customer.");
+                    System.out.println("\n\tYou selected Customer.");
                     UserCustomer user_customer = new UserCustomer();
                     user_customer.user_customer_menu();
                     break;
                 case "2":
-                    System.out.println("\tYou selected Cashier.");
+                    System.out.println("\n\tYou selected Cashier.");
                     Cashier cashier = new Cashier();
                     cashier.user_cashier();
                     break;
                 case "3":
-                    System.out.println("\tYou selected Manager.");
-                    // Call out manager class function
+                    System.out.println("\n\tYou selected Manager.");
+                    Manager manager = new Manager();
+                    manager.user_manager();
                     break;
                 case "0":
                     while (true) {
