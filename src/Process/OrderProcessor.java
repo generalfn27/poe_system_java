@@ -401,24 +401,37 @@ public class OrderProcessor {
                     return;
                 case "P":
                 case "p":
-                    // Confirmation before checkout
-                    System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                    String confirmInput = scanf.nextLine().trim();
+                    while (true) {
+                        // Confirmation before checkout
+                        System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                        String confirmInput = scanf.nextLine();
 
-                    if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
+                        if (confirmInput.equalsIgnoreCase("y")) {
+                            System.out.println("\n\tProcessing checkout...");
+                            System.out.println("\n\tChoose payment method:");
+                            System.out.println("\t1. Cash (Queue at Cashier)");
+                            System.out.println("\t2. " + customer.getPaymentMethod() + " (Self-Checkout)");
+                            System.out.println("\t0. Cancel");
+                            System.out.print("\tEnter choice: ");
+                            String paymentChoice = scanf.nextLine().trim();
 
-                        //while
-
-                        System.out.println("\n\tProcessing checkout...");
-                        System.out.println("\n\tChoose payment method:");
-                        System.out.println("\t1. Cash (Queue Number)");
-                        System.out.println("\t2. " + customer.getPaymentMethod() + " (Self-Checkout)");
-                        System.out.print("\tEnter choice: ");
-                        String paymentChoice = scanf.nextLine().trim();
-
-                        if (paymentChoice.equals("1")) {
-                            save_cart_to_queue_csv();
-                            reset_cart();
+                            if (!paymentChoice.equals("1")) {
+                                if (paymentChoice.equals("2")) {
+                                    // New e-wallet self-checkout process
+                                    UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
+                                    SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
+                                    selfCheckout.processSelfCheckout(customer.getUsername());
+                                } else if (paymentChoice.equals("0")){
+                                    break; //para ang balik nya ay sa modify menu parin
+                                } else {
+                                    System.out.println("\n\tAn error has occurred.");
+                                    System.out.println("\t\tPress Enter key to continue.\n");
+                                    scanf.nextLine(); //used for press any key to continue
+                                }
+                            } else {
+                                //eto ung choice 1
+                                save_cart_to_queue_csv();
+                                reset_cart();
 
                             /*
                             dapat hindi muna auto logout
@@ -426,22 +439,15 @@ public class OrderProcessor {
                             at may confirmations din
                             */
 
-                            UserCustomer user_customer = new UserCustomer();
-                            user_customer.user_customer_menu();
-                            return;
-                        } else if (paymentChoice.equals("2")) {
-                            // New e-wallet self-checkout process
-                            UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
-                            SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
-                            selfCheckout.processSelfCheckout(customer.getUsername());
-                            return;
+                                UserCustomer user_customer = new UserCustomer();
+                                user_customer.user_customer_menu();
+                            }
                         } else {
-                            System.out.println("\n\tAn error has occurred. Returning to menu.");
+                            System.out.println("\n\tCheckout cancelled.");
                             System.out.println("\t\tPress Enter key to continue.\n");
                             scanf.nextLine(); //used for press any key to continue
+                            break;
                         }
-                    } else {
-                        System.out.println("\n\tCheckout cancelled.");
                     }
                     break;
             }
