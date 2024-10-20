@@ -1,7 +1,14 @@
 package Employee;
 
+import Shopper.Customer;
 import User_Types.UserType;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
@@ -88,12 +95,12 @@ public class Manager {
             System.out.println("\t|          Manager Dashboard          |");
             System.out.println("\t|                                     |");
             System.out.println("\t=======================================\n");
-            System.out.println("\t[1] Cashier Mode");
+            System.out.println("\t[1] Voucher code / Promotions");
             System.out.println("\t[2] Sales report"); //display total sales at recent total transactions
-            System.out.println("\t[2] Receipt History"); //same sa personal account
-            System.out.println("\t[2] Inventory"); //refill stocks
-            System.out.println("\t[2] Employees"); //sino mga employees at handle ng account nila change pass/delete acc
-            System.out.println("\t[2] Customer Account"); //account retrieval at delete account
+            System.out.println("\t[3] Purchase/Transaction History"); //same sa personal account
+            System.out.println("\t[4] Inventory Report"); //refill stocks
+            System.out.println("\t[5] HR Management"); //sino mga employees at handle ng account nila change pass/delete acc
+            System.out.println("\t[6] Customer Account Management"); //account retrieval at delete account
             System.out.println("\t[0] Exit");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -105,6 +112,15 @@ public class Manager {
                     break;
 
                 case "2":
+                    // Call method to modify counter items (under development)
+                    break;
+                case "3":
+                    display_purchase_history_menu();
+                    break;
+                case "4":
+                    // Call method to modify counter items (under development)
+                    break;
+                case "5":
                     // Call method to modify counter items (under development)
                     break;
 
@@ -125,6 +141,104 @@ public class Manager {
     }
 
 
+    private void display_purchase_history_menu() {
+        Scanner scanf = new Scanner(System.in);
+        File directory = new File(".");
+        File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("receipt_number"));
+        List<String> csvFiles = new ArrayList<>();
+
+        System.out.println("\t=======================================");
+        System.out.println("\t|                                     |");
+        System.out.println("\t|         Transaction History         |");
+        System.out.println("\t|                                     |");
+        System.out.println("\t=======================================");
+        System.out.println("\n\tCSV Files to Open:");
+
+        if (files != null) {
+            for (File file : files) {
+                csvFiles.add(file.getName());
+                System.out.println("\t[" + (csvFiles.size()) + "] " + file.getName());
+            }
+        }
+
+        if (!csvFiles.isEmpty()) {
+            System.out.println("\t[0] Go back");
+
+            while (true) {
+                System.out.print("\n\tEnter the number of the file to open: ");
+                try {
+                    String input = scanf.nextLine().trim();
+                    int choice = Integer.parseInt(input);
+
+                    if (choice >= 0 && choice <= csvFiles.size()) {
+                        if (choice == 0) {
+                            System.out.println("\tReturning to previous menu...");
+                            return;
+                        }
+
+                        String selectedFile = csvFiles.get(choice - 1);
+                        System.out.println("\tYou selected: " + selectedFile);
+                        read_transaction_history_from_csv(selectedFile);
+                        System.out.println("\tPress Enter key to continue.\n");
+                        scanf.nextLine();
+                        display_purchase_history_menu();
+                        break;
+                    } else {
+                        System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid input! Please enter a valid number.");
+                }
+            }
+        } else {
+            System.out.println("\tNo CSV files found.");
+            System.out.println("\tPress Enter key to continue.\n");
+            scanf.nextLine();
+            System.out.println("\tReturning to previous menu.");
+        }
+    }
+
+
+    public void read_transaction_history_from_csv(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+
+            System.out.println("\n\t=== Purchase History ===\n");
+            // Read and print the first header line
+            if ((line = reader.readLine()) != null) {
+                String[] headers1 = line.split(",");
+                System.out.print("\t");
+                for (String header : headers1) {
+                    System.out.print(header + "\t\t");
+                }
+                System.out.println();
+            }
+
+            // Read and print the second header line
+            if ((line = reader.readLine()) != null) {
+                String[] headers2 = line.split(",");
+                for (String header : headers2) {
+                    System.out.print("\t" + header + "\t\t");
+                }
+                System.out.println();
+                System.out.println("\t" + "-".repeat(80));  // Print a separator line
+            }
+
+            // Read and print all data lines
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                for (String column : columns) {
+                    System.out.print("\t" + column + "\t");
+                }
+                System.out.println();
+            }
+
+            System.out.println("\n\tEnd of purchase history\n");
+
+        } catch (IOException e) {
+            System.out.println("\tError reading CSV file: " + e.getMessage());
+        }
+    }
 
 
 }
