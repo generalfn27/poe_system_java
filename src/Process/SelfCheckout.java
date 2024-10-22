@@ -44,8 +44,18 @@ public class SelfCheckout {
         for (Product product : this.cart) {
             System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
         }
-        System.out.println("\t-----------------------------");
-        System.out.printf("\tTotal: %.2f\n", calculate_total_price());
+        System.out.println("\t---------------------------------");
+        System.out.printf("\n\tTotal Items: %d\n", calculate_total_items());
+        System.out.printf("\tTotal Price: %.2f\n", calculate_total_price());
+    }
+
+
+    int calculate_total_items() {
+        int total = 0;
+        for (Product product : cart) {
+            total += product.getStock();
+        }
+        return total;
     }
 
 
@@ -113,6 +123,7 @@ public class SelfCheckout {
         }
 
         System.out.println("\n\t-----------------------------");
+        System.out.printf("\tTotal Items: %d\n", calculate_total_items());
         System.out.printf("\tTotal Amount: %.2f\n", totalPrice);
         System.out.printf("\tNew Balance: %.2f\n", customer.getBalance());
         System.out.println("\t-----------------------------");
@@ -154,7 +165,8 @@ public class SelfCheckout {
                         product.getStock(),
                         product.getPrice());
             }
-            writer.printf("%nTotal Price: ,%.2f%n", totalPrice);
+            writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
+            writer.printf("Total Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
 
             // Calculate and write change if needed

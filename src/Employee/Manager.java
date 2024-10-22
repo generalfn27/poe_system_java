@@ -110,7 +110,6 @@ public class Manager {
                 case "1":
 
                     break;
-
                 case "2":
                     // Call method to modify counter items (under development)
                     break;
@@ -123,7 +122,6 @@ public class Manager {
                 case "5":
                     // Call method to modify counter items (under development)
                     break;
-
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
                     if (logout_confirmed) {
@@ -221,7 +219,7 @@ public class Manager {
                     System.out.print("\t" + header + "\t\t");
                 }
                 System.out.println();
-                System.out.println("\t" + "-".repeat(80));  // Print a separator line
+                System.out.println("\t" + "-".repeat(60));  // Print a separator line
             }
 
             // Read and print all data lines
@@ -239,6 +237,8 @@ public class Manager {
             System.out.println("\tError reading CSV file: " + e.getMessage());
         }
     }
+
+
 
 
 }

@@ -190,7 +190,8 @@ public class CashierProcess extends OrderProcessor {
                         product.getPrice());
             }
 
-            writer.printf("%nTotal Price: ,%.2f%n", totalPrice);
+            writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
+            writer.printf("Total Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
 
             // Calculate and write change if needed
