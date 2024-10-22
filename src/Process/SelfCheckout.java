@@ -60,7 +60,7 @@ public class SelfCheckout {
 
     private void processEWalletPayment(Customer customer) {
         Scanner scanf = new Scanner(System.in);
-        System.out.println("\tProcessing e-wallet payment for " + customer.getUsername());
+        System.out.println("\n\tProcessing e-wallet payment for " + customer.getUsername());
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
         double totalPrice = calculate_total_price();
 

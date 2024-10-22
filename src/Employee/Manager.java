@@ -173,7 +173,7 @@ public class Manager {
                     if (choice >= 0 && choice <= csvFiles.size()) {
                         if (choice == 0) {
                             System.out.println("\tReturning to previous menu...");
-                            return;
+                            manager_dashboard();
                         }
 
                         String selectedFile = csvFiles.get(choice - 1);
