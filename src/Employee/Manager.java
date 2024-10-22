@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
-
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
 
     public void user_manager() {

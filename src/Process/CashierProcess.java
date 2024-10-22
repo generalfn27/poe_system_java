@@ -3,10 +3,7 @@ package Process;
 import Shopper.Product;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.*;
 
 public class CashierProcess extends OrderProcessor {
@@ -91,10 +88,10 @@ public class CashierProcess extends OrderProcessor {
                         if (payment > calculate_total_price()) {
                             System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
                         }
-                        // Print receipt after successful payment
-                        print_receipt(counter, payment);
 
-                        // Reset the counter and go back to queue selection
+                        // Update stock levels after successful payment
+                        update_all_stocks();
+                        print_receipt(counter, payment);
                         counter.clear();
                         return;
                     } else {
@@ -258,5 +255,94 @@ public class CashierProcess extends OrderProcessor {
             currentQueueOrderFile = null; // Reset the file name after deletion attempt
         }
     }
+
+
+    //stock update after checkout
+    public void update_product_stock(String csvFileName, String productCode, int quantityToDeduct) {
+        List<String> lines = new ArrayList<>();
+        boolean updated = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName))) {
+            String headerLine = reader.readLine();
+            lines.add(headerLine); // Preserve the header / ung mga title sa taas ibabalik sa pwesto pagkabasa
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values[0].equals(productCode)) {
+                    // Found the product, update its stock
+                    int currentStock = Integer.parseInt(values[3]);
+                    int newStock = currentStock - quantityToDeduct;
+                    if (newStock < 0) newStock = 0; // Prevent negative stock
+                    values[3] = String.valueOf(newStock);
+                    updated = true;
+                }
+                lines.add(String.join(",", values));
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading CSV file: " + e.getMessage());
+            return;
+        }
+
+        if (!updated) {
+            System.out.println("Product not found: " + productCode);
+            return;
+        }
+
+        // Write the updated content back to the file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFileName))) {
+            for (String line : lines) {
+                writer.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to CSV file: " + e.getMessage());
+        }
+    }
+
+
+    private void mapProductsToFiles(Map<String, String> productFileMap, String csvFileName) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName))) {
+            reader.readLine(); // Skip header
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                productFileMap.put(values[0], csvFileName);
+            }
+        }
+    }
+
+
+    public void update_all_stocks() {
+        Map<String, String> productFileMap = new HashMap<>();
+
+        // Map product codes to their respective CSV files
+        try {
+            mapProductsToFiles(productFileMap, "beverages.csv");
+            mapProductsToFiles(productFileMap, "snacks.csv");
+            mapProductsToFiles(productFileMap, "canned_fish.csv");
+            mapProductsToFiles(productFileMap, "canned_meat.csv");
+            mapProductsToFiles(productFileMap, "condiment.csv");
+            mapProductsToFiles(productFileMap, "dairy.csv");
+            mapProductsToFiles(productFileMap, "frozen_foods.csv");
+            mapProductsToFiles(productFileMap, "body_care.csv");
+            mapProductsToFiles(productFileMap, "beauty_care.csv");
+            mapProductsToFiles(productFileMap, "powder_detergent.csv");
+            mapProductsToFiles(productFileMap, "bar_soaps.csv");
+            mapProductsToFiles(productFileMap, "liquid_soaps.csv");
+        } catch (IOException e) {
+            System.out.println("Error mapping products to files: " + e.getMessage());
+            return;
+        }
+
+        // Update stock for each product in the counter
+        for (Product product : counter) {
+            String csvFile = productFileMap.get(product.getCode());
+            if (csvFile != null) {
+                update_product_stock(csvFile, product.getCode(), product.getStock());
+            }
+        }
+    }
+
+
 
 }
