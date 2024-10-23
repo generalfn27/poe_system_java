@@ -31,3 +31,4 @@ bin/
 /customers.csv
 /current_receipt_number.txt
 /current_queue_number.txt
+/sales_report.csv
