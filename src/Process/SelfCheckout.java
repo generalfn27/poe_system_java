@@ -96,6 +96,9 @@ public class SelfCheckout {
 
         System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
 
+        // Update report sales with current transaction details
+        cashierProcess.update_sales_report(calculate_total_items(), calculate_total_price());
+
         // Update stock levels after successful payment
         cashierProcess.update_all_stocks();
 
