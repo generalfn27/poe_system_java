@@ -45,20 +45,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\felix_transaction_#1_22_10_2024.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\felix_transaction_#2_22_10_2024.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\frozen_foods.csv">
           <value>
             <Attribute>
@@ -67,6 +53,20 @@
           </value>
         </entry>
         <entry key="\liquid_soaps.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\receipt_number_1_22_10_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\receipt_number_2_23_10_2024.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

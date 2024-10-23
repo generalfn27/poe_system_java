@@ -257,92 +257,66 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    //stock update after checkout
-    public void update_product_stock(String csvFileName, String productCode, int quantityToDeduct) {
-        List<String> lines = new ArrayList<>();
-        boolean updated = false;
+    // Helper method to find and update product stock across multiple CSV files
+    private boolean update_product_stock_in_files(String productCode, int quantityToDeduct) {
+        String[] csvFiles = {
+                "beverages.csv", "snacks.csv", "canned_fish.csv", "canned_meat.csv",
+                "condiments.csv", "dairy.csv", "frozen_foods.csv", "body_care.csv",
+                "beauty_care.csv", "powder_detergent.csv", "bar_soaps.csv", "liquid_soaps.csv"
+        };
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName))) {
-            String headerLine = reader.readLine();
-            lines.add(headerLine); // Preserve the header / ung mga title sa taas ibabalik sa pwesto pagkabasa
+        // Iterate through all CSV files and update stock where the product is found
+        for (String csvFile : csvFiles) {
+            try {
+                List<String> lines = new ArrayList<>();
+                boolean productFound = false;
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values[0].equals(productCode)) {
-                    // Found the product, update its stock
-                    int currentStock = Integer.parseInt(values[3]);
-                    int newStock = currentStock - quantityToDeduct;
-                    if (newStock < 0) newStock = 0; // Prevent negative stock
-                    values[3] = String.valueOf(newStock);
-                    updated = true;
+                try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+                    String headerLine = reader.readLine();
+                    lines.add(headerLine); // Preserve the header
+
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] values = line.split(",");
+                        if (values[0].equals(productCode)) {
+                            // Found the product, update its stock
+                            int currentStock = Integer.parseInt(values[3]);
+                            int newStock = currentStock - quantityToDeduct;
+                            newStock = Math.max(newStock, 0); // Prevent negative stock
+                            values[3] = String.valueOf(newStock);
+                            productFound = true;
+                        }
+                        lines.add(String.join(",", values));
+                    }
                 }
-                lines.add(String.join(",", values));
+
+                if (productFound) {
+                    // Write updated content back to the file
+                    try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
+                        for (String line : lines) {
+                            writer.println(line);
+                        }
+                    }
+                    return true; // Product found and updated, stop checking other files
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading/writing CSV file: " + csvFile + " - " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Error reading CSV file: " + e.getMessage());
-            return;
         }
 
-        if (!updated) {
-            System.out.println("Product not found: " + productCode);
-            return;
-        }
-
-        // Write the updated content back to the file
-        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFileName))) {
-            for (String line : lines) {
-                writer.println(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Error writing to CSV file: " + e.getMessage());
-        }
+        // Product was not found in any file
+        return false;
     }
 
-
-    private void mapProductsToFiles(Map<String, String> productFileMap, String csvFileName) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName))) {
-            reader.readLine(); // Skip header
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-                productFileMap.put(values[0], csvFileName);
-            }
-        }
-    }
-
-
+    // Update stock for all products in the counter array
     public void update_all_stocks() {
-        Map<String, String> productFileMap = new HashMap<>();
-
-        // Map product codes to their respective CSV files
-        try {
-            mapProductsToFiles(productFileMap, "beverages.csv");
-            mapProductsToFiles(productFileMap, "snacks.csv");
-            mapProductsToFiles(productFileMap, "canned_fish.csv");
-            mapProductsToFiles(productFileMap, "canned_meat.csv");
-            mapProductsToFiles(productFileMap, "condiment.csv");
-            mapProductsToFiles(productFileMap, "dairy.csv");
-            mapProductsToFiles(productFileMap, "frozen_foods.csv");
-            mapProductsToFiles(productFileMap, "body_care.csv");
-            mapProductsToFiles(productFileMap, "beauty_care.csv");
-            mapProductsToFiles(productFileMap, "powder_detergent.csv");
-            mapProductsToFiles(productFileMap, "bar_soaps.csv");
-            mapProductsToFiles(productFileMap, "liquid_soaps.csv");
-        } catch (IOException e) {
-            System.out.println("Error mapping products to files: " + e.getMessage());
-            return;
-        }
-
-        // Update stock for each product in the counter
         for (Product product : counter) {
-            String csvFile = productFileMap.get(product.getCode());
-            if (csvFile != null) {
-                update_product_stock(csvFile, product.getCode(), product.getStock());
+            boolean updated = update_product_stock_in_files(product.getCode(), product.getStock());
+            if (!updated) {
+                System.out.println("Product not found: " + product.getCode());
             }
         }
     }
-
 
 
 }
