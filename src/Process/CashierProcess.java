@@ -89,11 +89,15 @@ public class CashierProcess extends OrderProcessor {
                             System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
                         }
 
+                        // Update report sales with current transaction details
+                        update_sales_report(calculate_total_items(), calculate_total_price());
+
                         // Update stock levels after successful payment
                         update_all_stocks();
                         print_receipt(counter, payment);
+
                         counter.clear();
-                        return;
+                        return; //dito dapat ang balik nito ay cashier dashboard
                     } else {
                         System.out.println("\tInsufficient payment. Try again.");
                         System.out.println("\t\tPress Enter key to continue.\n");
@@ -317,6 +321,55 @@ public class CashierProcess extends OrderProcessor {
             }
         }
     }
+
+    // Method to initialize the sales report by reading from a file
+    public void initialize_sales_report() {
+        File file = new File("sales_report.csv");
+        if (!file.exists()) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                writer.println("Total Items,Total Sales");  // Header
+                writer.println("0,0.00");  // Initial values
+            } catch (IOException e) {
+                System.out.println("Error initializing sales report: " + e.getMessage());
+            }
+        }
+    }
+
+    // Method to update sales report with new transactions
+    public void update_sales_report(int newItems, double newSales) {
+        String filename = "sales_report.csv";
+        int currentItems = 0;
+        double currentSales = 0.0;
+
+        // Try to read existing values
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            reader.readLine(); // Skip header
+            String line = reader.readLine();
+            if (line != null) {
+                String[] values = line.split(",");
+                if (values.length == 2) {
+                    currentItems = Integer.parseInt(values[0].trim());
+                    currentSales = Double.parseDouble(values[1].trim());
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("\tError reading the sales report, reinitializing...");
+            initialize_sales_report();
+        }
+
+        currentItems += newItems;
+        currentSales += newSales;
+
+        // Write back updated values to the file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            writer.println("Total Items,Total Sales");  // Header
+            writer.printf("%d,%.2f%n", currentItems, currentSales);  // Data
+            //debugger System.out.printf("\tSales report updated: Total Items = %d, Total Sales = %.2f\n", currentItems, currentSales);
+        } catch (IOException e) {
+            System.out.println("\tError updating the sales report: " + e.getMessage());
+        }
+    }
+
 
 
 }
