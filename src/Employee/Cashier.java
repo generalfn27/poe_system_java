@@ -307,7 +307,7 @@ public class Cashier {
     private boolean handle_logout(Scanner scanf) {
         while (true) {
             System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
-            System.out.println("\t[Y] for Yes  [N] for No: ");
+            System.out.print("\t[Y] for Yes  [N] for No: ");
 
             String exit_confirmation = scanf.next().trim();
             scanf.nextLine();
