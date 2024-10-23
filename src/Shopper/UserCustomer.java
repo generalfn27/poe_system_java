@@ -170,14 +170,16 @@ public class UserCustomer {
 
         boolean not_exist = false;
         while (!not_exist) {
+            not_exist = true;  // assume username doesn't exist until proven otherwise
             // Check if the username already exists
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username)) {
                     System.out.println("\n\tUsername already exists. Please choose a different username.");
                     System.out.print("\n\tEnter Username: ");
                     username = scanf.nextLine();
+                    not_exist = false;  // username exists, so set flag to false
+                    break;  // break out of the loop to recheck the new username
                 }
-                if (!customer.getUsername().equals(username)) {  not_exist = true; }
             }
         }
         newCustomer.setUsername(username);
@@ -496,7 +498,7 @@ public class UserCustomer {
                 case "0":
                     while (true) {
                         System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
-                        System.out.println("\t[Y] for Yes  [N] for No: ");
+                        System.out.print("\t[Y] for Yes  [N] for No: ");
                         String exit_confirmation = scanf.nextLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
