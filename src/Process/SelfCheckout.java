@@ -24,7 +24,7 @@ public class SelfCheckout {
     }
 
     public void processSelfCheckout(String username) {
-        Customer customer = userCustomer.getCustomerByUsername(username);
+        Customer customer = userCustomer.get_customer_by_username(username);
         if (customer == null) {
             System.out.println("\tCustomer not found. Aborting self-checkout.");
             return;
@@ -35,11 +35,11 @@ public class SelfCheckout {
             return;
         }
 
-        displayCart();
-        processEWalletPayment(customer);
+        display_cart();
+        process_e_wallet_payment(customer);
     }
 
-    private void displayCart() {
+    private void display_cart() {
         System.out.println("\n\tYour Cart:");
         for (Product product : this.cart) {
             System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
@@ -68,13 +68,14 @@ public class SelfCheckout {
     }
 
 
-    private void processEWalletPayment(Customer customer) {
+    private void process_e_wallet_payment(Customer customer) {
         Scanner scanf = new Scanner(System.in);
+        double totalPrice = calculate_total_price();
+        String enteredPin = "";
+        double new_transaction;
+
         System.out.println("\n\tProcessing e-wallet payment for " + customer.getUsername());
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
-        double totalPrice = calculate_total_price();
-
-        String enteredPin = "";
 
         while (!enteredPin.equals(customer.getPinCode())) {
             System.out.print("\n\tEnter your PIN: ");
@@ -102,10 +103,11 @@ public class SelfCheckout {
         // Update stock levels after successful payment
         cashierProcess.update_all_stocks();
 
-        generateReceipt(customer, totalPrice);
-        generate_personal_receipt(customer,totalPrice);
+        generate_receipt(customer, totalPrice);
+        generate_personal_receipt(customer,totalPrice); //para sa mas madaling viewing ng nabili
 
-        double new_transaction = customer.getTransaction() + 1.0;
+        new_transaction = customer.getTransaction() + 1.0;
+
         customer.setTransaction(new_transaction);
         //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction());
         // debugger
@@ -117,7 +119,7 @@ public class SelfCheckout {
     }
 
 
-    private void generateReceipt(Customer customer, double totalPrice) {
+    private void generate_receipt(Customer customer, double totalPrice) {
         System.out.println("\n\t----- E-WALLET RECEIPT -----");
         System.out.println("\tCustomer: " + customer.getUsername());
         System.out.println("\tPayment Method: " + customer.getPaymentMethod());
@@ -157,6 +159,7 @@ public class SelfCheckout {
         }
 
         String fileName = generate_receipt_file_name(customer);
+
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header
             writer.println("Username,Payment method,Balance");
@@ -171,6 +174,7 @@ public class SelfCheckout {
                         product.getStock(),
                         product.getPrice());
             }
+
             writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
             writer.printf("Total Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
@@ -181,7 +185,7 @@ public class SelfCheckout {
             }
             System.out.println("\n\tReceipt successfully saved to " + fileName + "\n\n");
         } catch (IOException e) {
-            System.out.println("Error saving the receipt: " + e.getMessage());
+            System.out.println("\tError saving the receipt: " + e.getMessage());
         }
     }
 

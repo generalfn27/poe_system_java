@@ -13,7 +13,7 @@ public class UserCustomer {
 
     public UserCustomer() {
         // Load customers from CSV file when the program starts
-        loadCustomersFromCSV();
+        load_customers_from_CSV();
     }
 
     public void user_customer_menu() {
@@ -215,7 +215,7 @@ public class UserCustomer {
             //  {9}: This is a quantifier that specifies that the preceding element (\d) must occur exactly 9 times.
             //  $: This is an end-of-line anchor, which means that the pattern must match up to the very end of the string.
 
-            if (phoneNumber.matches("^09\\d{9}$")) {    break;  }
+            if (phoneNumber.matches("^09\\d{9}$")) { break; }
             else { System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");   }
         }
         newCustomer.setPhoneNumber(phoneNumber);
@@ -234,8 +234,8 @@ public class UserCustomer {
                 System.out.println("\n\tInvalid choice. Please try again.");
             }
         } while (true);
-
         newCustomer.setPaymentMethod(paymentMethod);
+
         System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using " + newCustomer.getPaymentMethod());
 
         while (true) {
@@ -268,10 +268,9 @@ public class UserCustomer {
                 System.out.println("\tInvalid input. Please enter a valid number.");
             }
         }
-
         newCustomer.setTransaction(transaction);
 
-        saveCustomerToFile(newCustomer);
+        save_customer_to_file(newCustomer);
 
         // Add the customer to the in-memory list
         customers.add(newCustomer);
@@ -321,7 +320,7 @@ public class UserCustomer {
     }
 
 
-    private void saveCustomerToFile(Customer customer) {
+    private void save_customer_to_file(Customer customer) {
         File file = new File("customers.csv");
 
         // Check if the file exists before opening the writer
@@ -349,7 +348,7 @@ public class UserCustomer {
 
 
     // Load all customers from the CSV file
-    private void loadCustomersFromCSV() {
+    private void load_customers_from_CSV() {
         // CSV file name
         String CUSTOMER_CSV_FILE = "customers.csv";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CUSTOMER_CSV_FILE))) {
@@ -382,18 +381,18 @@ public class UserCustomer {
 
     private void customer_login() {
         Scanner scanf = new Scanner(System.in);
-        int attemptCount = 0;
-        boolean loginSuccessful = false;
+        int attempt_count = 0;
+        boolean login_successful = false;
         final int MAX_ATTEMPTS = 3;
 
         // Load customers from the CSV if not already loaded
         if (customers.isEmpty()) {
-            loadCustomersFromCSV();
+            load_customers_from_CSV();
         }
 
         // Loop until login is successful or maximum attempts reached
         // Maximum number of login attempts
-        while (attemptCount < MAX_ATTEMPTS) {
+        while (attempt_count < MAX_ATTEMPTS) {
             System.out.println("\n\t===================================");
             System.out.println("\t|                                 |");
             System.out.println("\t|          Shopper Login          |");
@@ -409,19 +408,19 @@ public class UserCustomer {
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.\n");
-                    loginSuccessful = true;
+                    login_successful = true;
                     registered_user_customer_item_category(customer.getUsername(), customer);
                     break;
                 }
             }
 
-            if (loginSuccessful) { break; }
+            if (login_successful) { break; }
             else {
-                attemptCount++;
-                System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
+                attempt_count++;
+                System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
             }
         }
-        if (!loginSuccessful) { System.out.println("\n\tMaximum login attempts reached. Please try again later."); }
+        if (!login_successful) { System.out.println("\n\tMaximum login attempts reached. Please try again later."); }
     }
 
     // Placeholder method for registered customer actions after login
@@ -536,6 +535,7 @@ public class UserCustomer {
                 OrderProcessor.registered_user_modify_menu_process(customer);
             } else {
                 if (!item_category.equals("12")){ // para hindi to lumalabas dahil di naman list ang case 12
+                    //dapat pag 12 11 10 9
                     System.out.println("No products available in this category.");
                 }
             }
@@ -593,7 +593,7 @@ public class UserCustomer {
     }
 
 
-    public Customer getCustomerByUsername(String username) {
+    public Customer get_customer_by_username(String username) {
         for (Customer customer : customers) {
             if (customer.getUsername().equals(username)) {
                 return customer;

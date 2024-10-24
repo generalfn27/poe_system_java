@@ -330,7 +330,7 @@ public class CashierProcess extends OrderProcessor {
                 writer.println("Total Items,Total Sales");  // Header
                 writer.println("0,0.00");  // Initial values
             } catch (IOException e) {
-                System.out.println("Error initializing sales report: " + e.getMessage());
+                System.out.println("Error initializing sales report not yet exist: " + e.getMessage());
             }
         }
     }
