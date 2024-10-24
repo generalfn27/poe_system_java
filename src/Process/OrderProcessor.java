@@ -32,8 +32,13 @@ public class OrderProcessor {
         Product selected_product;
 
         do {
-            System.out.print("\n\tEnter product code: ");
+            System.out.println("\n\tEnter /// to Cancel product selection.");
+            System.out.print("\tEnter product code: ");
             product_code = scanf.nextLine().toUpperCase();
+
+            if (product_code.equals("///")){
+                return;
+            }
 
             //find product code kung nag eexist
             selected_product = find_product_code(product_code, products);
@@ -41,15 +46,11 @@ public class OrderProcessor {
             if (selected_product == null) {
                 System.out.println("\tInvalid product code. Try again.");
                 System.out.println("\tPress Enter to continue...");
-                scanf.nextLine(); // Wait for user input
+                scanf.nextLine();
             }
-
-            //gagawan ng option para mag go back kung wala mapili
-            //example enter 000 if you want to cancel/go back
 
         } while (selected_product == null);
 
-        //display ung detalye ng product na pinili
         display_product_details(selected_product);
 
         //quantity check at error handling din kung kulang or sobra order ng kupal
@@ -57,9 +58,9 @@ public class OrderProcessor {
         do {
             System.out.print("\tEnter quantity: ");
 
-            // Check if input is an integer
             if (scanf.hasNextInt()) {
                 quantity = scanf.nextInt();
+                scanf.nextLine();
 
                 // Validate quantity range (1 to stock)
                 if (quantity > 0 && quantity <= selected_product.getStock()) {
@@ -76,33 +77,31 @@ public class OrderProcessor {
             }
         } while (!valid_input);
 
-        System.out.printf("\tPrice: %.2f\n", selected_product.getPrice() * quantity);
+        System.out.printf("\n\tPrice: %.2f\n", selected_product.getPrice() * quantity);
 
         //tatanong kung sigurado ba ung kupal pag may pangbili sya
-        char choice;
+        String add_item_confirmation;
 
         while (true) {
             System.out.print("\tAdd to cart (A) or cancel (C)? ");
-            choice = scanf.next().charAt(0);
+            add_item_confirmation = scanf.nextLine().trim();
 
-            switch (choice){
-                case 'a':
-                case 'A':
+            switch (add_item_confirmation){
+                case "a":
+                case "A":
                     add_to_cart(selected_product, quantity);
                     System.out.println("\n\tItem added to cart.");
                     break; // Exit the switch statement, but still in the loop
-                case 'c':
-                case 'C':
+                case "c":
+                case "C":
                     System.out.println("\tItem not added to cart.");
                     break; // Exit the switch statement, but still in the loop
                 default:
                     System.out.println("\tInvalid input. Please enter A or C only.");
                     continue; // Go back to the beginning of the loop if invalid input
             }
-            // Exit the loop after valid input
-            break;
+            break; // Exit the loop after valid input
         }
-
     }
 
 
@@ -116,12 +115,12 @@ public class OrderProcessor {
 
 
     private void display_product_details(Product product) {
-        System.out.printf("\tProduct: %-22s\tPrice: %6.2f\tStock: %4d\n",
-                product.getName(), product.getPrice(), product.getStock());}
-
+        System.out.printf("\n\tProduct: %-22s\tPrice: %6.2f\tStock: %4d\n",
+                product.getName(), product.getPrice(), product.getStock());
+    }
 
     public void add_to_cart(Product product, int quantity) {
-        //babawasan ung stock at dagdagan ung asa cart pero need pa ayusin kasi baka d mag update ung csv
+        //babawasan ung stock at dagdagan ung asa cart
         product.update_stock(-quantity);  // Adjust stock in the Product class
         total_items += quantity;
         total_price += product.getPrice() * quantity;
@@ -291,6 +290,9 @@ public class OrderProcessor {
                     }
                     break;
                 default:
+                    System.out.println("\tInvalid choice.");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
@@ -584,7 +586,7 @@ public class OrderProcessor {
         return String.format("queue_number_%02d_%s.csv", currentQueueNumber, formattedDate);
     }
 
-
+    //ai suggestion
     private static String generate_order_id() {
         // This is a simple implementation. You might want to use a more robust system
         return "ORD" + System.currentTimeMillis();
