@@ -103,6 +103,7 @@ public class Cashier {
                     boolean logout_confirmed = handle_logout(scanf);
                     if (logout_confirmed) {
                         UserType.user_type_menu();
+                        return;
                     }
                     break;
                 default:
@@ -212,6 +213,7 @@ public class Cashier {
                     break;
                 case "0":
                     selecting_queue_list_to_process();
+                    return;
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.println("\t\tPress Enter key to continue.\n");

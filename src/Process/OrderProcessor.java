@@ -436,7 +436,7 @@ public class OrderProcessor {
                             /*
                             dapat hindi muna auto logout
                             so may notif sa dashboard na proceed sya sa cashier or may option na logout and cashier
-                            at may confirmations din
+                            at confirmations din
                             */
 
                                 UserCustomer user_customer = new UserCustomer();
@@ -482,8 +482,9 @@ public class OrderProcessor {
                     total_items -= quantity;
                     total_price -= product.getPrice() * quantity;
                     System.out.printf("\n\tDeducted %d of %s from the cart.\n", quantity, product.getName());
-                } else {
-                    remove_item(product_code);
+                } else if (new_quantity < 0) {
+                    //remove_item(product_code);
+                    System.out.println("\n\tThe quantity you want to remove exceeds the item count you have.");
                 }
                 return;
             }
@@ -498,6 +499,7 @@ public class OrderProcessor {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 total_price-= product.getStock();
                 total_price -= product.getPrice() * product.getStock();
+                total_items -= product.getStock();
                 to_remove = product;
                 break;
             }
