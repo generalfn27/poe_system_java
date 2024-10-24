@@ -39,8 +39,7 @@ public class UserCustomer {
                     customer_login();
                     break;
                 case "2":
-                    Customer guest = new Customer("Guest"); // Guest with default name
-                    guest_customer_item_category(guest); // Pass the guest customer to the item category function
+                    guest_customer_item_category(); // Pass the guest customer to the item category function
                     break;
                 case "3":
                     customerRegister();
@@ -57,7 +56,7 @@ public class UserCustomer {
     }
 
 
-    public void guest_customer_item_category(Customer guest) {
+    public void guest_customer_item_category() {
         Scanner scanf = new Scanner(System.in);
         String item_category;
 
@@ -92,8 +91,18 @@ public class UserCustomer {
 
             switch (item_category) {
                 case "0":
-                    user_customer_menu();
-                    return;  // Return to main menu
+                    if (!OrderProcessor.cart.isEmpty()) {
+                        boolean cancel = true;
+                        while (cancel) {
+                            System.out.print("\n\tIf you go back, the cart will get empty. Do you still want to go back? (Y/N): ");
+                            String go_back = scanf.nextLine().trim().toUpperCase();
+
+                            if (go_back.equals("Y")) { user_customer_menu(); } // Return to main menu
+                            else if (go_back.equals("N")) { cancel = false; }
+                        }
+                    }
+                    if (OrderProcessor.cart.isEmpty()) { return; }
+                    break;
                 case "1":
                     selected_products = BrowseProduct.browse_beverages(); // Browse beverages
                     break;
