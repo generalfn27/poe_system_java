@@ -16,8 +16,7 @@ public class OrderProcessor {
     public static List<Product> cart;
     private static int total_items;
     public static double total_price;
-    private static int currentQueueNumber = 1;
-    private static final String QUEUE_NUMBER_FILE = "current_queue_number.txt";
+    private static int currentQueueNumber;
 
     public OrderProcessor() {
         cart = new ArrayList<>();
@@ -555,22 +554,22 @@ public class OrderProcessor {
             }
 
             System.out.println("\t����������������������������������������������������������������������������������������");
-            System.out.println("\t�                                                                                      �\n");
-            System.out.printf ("\t�                            Your queue number is: %d                                  �\n", currentQueueNumber - 1);
-            System.out.println("\t�                           Cart saved to " + fileName);
+            System.out.println("\t�                                                                                      �");
+            System.out.printf ("\t�                                 Your queue number is: %02d                             �\n", currentQueueNumber);
+            System.out.println("\t�                       Cart saved to " + fileName + "                   �");
             System.out.println("\t�                                                                                      �");
             System.out.println("\t�                                                                                      �");
             System.out.println("\t�Thank you for ordering! Please remember your queue number and proceed to the cashier. �");
             System.out.println("\t����������������������������������������������������������������������������������������\n\n");
 
-            System.out.println("\nType and Enter any key to continue...");
-            scanf.next(); // Read any input from the user
+            System.out.print("\n\tPress Enter key to continue...");
+            scanf.nextLine();
 
             // Save the updated queue number
             save_queue_number();
 
         } catch (IOException e) {
-            System.out.println("An error occurred while saving the cart: " + e.getMessage());
+            System.out.println("\tAn error occurred while saving the cart: " + e.getMessage());
         }
     }
 
@@ -578,12 +577,11 @@ public class OrderProcessor {
     private static String generate_queue_file_name() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
         String formattedDate = dateFormat.format(new Date());
-        String fileName = String.format("queue_number_%d_%s.csv", currentQueueNumber, formattedDate);
 
         currentQueueNumber++; // Increment the queue number for the next file
         save_queue_number(); // Save the updated queue number
 
-        return fileName;
+        return String.format("queue_number_%02d_%s.csv", currentQueueNumber, formattedDate);
     }
 
 
@@ -594,23 +592,23 @@ public class OrderProcessor {
 
     // Method to initialize the queue number by reading from a file
     public static void initialize_queue_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(QUEUE_NUMBER_FILE))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("current_queue_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentQueueNumber = Integer.parseInt(line);
             }
         } catch (IOException | NumberFormatException e) {
-            // If file doesn't exist or is invalid, start from 1
-            currentQueueNumber = 1;
+            // If file doesn't exist or is invalid, start from 0
+            currentQueueNumber = 0;
         }
     }
 
     // Method to save the current queue number to a file
     private static void save_queue_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(QUEUE_NUMBER_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("current_queue_number.txt"))) {
             writer.println(currentQueueNumber);
         } catch (IOException e) {
-            System.out.println("Error saving queue number: " + e.getMessage());
+            System.out.println("\tError saving queue number: " + e.getMessage());
         }
     }
 
