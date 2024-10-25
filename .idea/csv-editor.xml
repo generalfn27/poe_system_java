@@ -59,13 +59,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\sales_report.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\snacks.csv">
           <value>
             <Attribute>
