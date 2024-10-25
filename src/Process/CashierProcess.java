@@ -9,7 +9,6 @@ import java.io.*;
 public class CashierProcess extends OrderProcessor {
     private final List<Product> counter;
     private static int currentReceiptNumber = 1;
-    private static final String RECEIPT_NUMBER_FILE = "current_receipt_number.txt";
     private String currentQueueOrderFile; // New field to store the current queue order file name para nasa track kung ano d-delete
 
     public CashierProcess() {
@@ -57,7 +56,6 @@ public class CashierProcess extends OrderProcessor {
     public void process_payment() {
         Scanner scanf = new Scanner(System.in);
         display_counter();
-        // Add logic for accepting payment, calculating change, etc.
 
         while (true) {
             System.out.printf("\n\tTotal Amount need Pay: %.2f\n", calculate_total_price());
@@ -124,7 +122,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    int calculate_total_items() {
+    private int calculate_total_items() {
         int total = 0;
         for (Product product : counter) {
             total += product.getStock();
@@ -132,7 +130,7 @@ public class CashierProcess extends OrderProcessor {
         return total;
     }
 
-    double calculate_total_price() {
+    private double calculate_total_price() {
         double total = 0;
         for (Product product : counter) {
             total += product.getPrice() * product.getStock();
@@ -222,7 +220,7 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to initialize the resibo number by reading from a file
     public static void initialize_receipt_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(RECEIPT_NUMBER_FILE))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("current_receipt_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentReceiptNumber = Integer.parseInt(line);
@@ -236,7 +234,7 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to save the current resibo number to a file
     private static void save_receipt_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(RECEIPT_NUMBER_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("current_receipt_number.txt"))) {
             writer.println(currentReceiptNumber);
         } catch (IOException e) {
             System.out.println("Error saving queue number: " + e.getMessage());
