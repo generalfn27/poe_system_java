@@ -146,7 +146,7 @@ public class OrderProcessor {
 
     // both modify process menu ay pwede pang gawing method para mas malinis tignan
     // for now ganito muna dahil di pa naman sure kung need sobrang neat & clean code
-    public static void modify_menu_process() {
+    public void modify_menu_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -298,7 +298,7 @@ public class OrderProcessor {
     }
 
 
-    public static void registered_user_modify_menu_process(Customer customer) {
+    public void registered_user_modify_menu_process(Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -456,7 +456,7 @@ public class OrderProcessor {
     }
 
 
-    public static void increase_item_quantity(String product_code, int quantity) {
+    public void increase_item_quantity(String product_code, int quantity) {
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() + quantity;
@@ -474,7 +474,7 @@ public class OrderProcessor {
         System.out.println("\tProduct not found in the cart.");
     }
 
-    public static void deduct_item_quantity(String product_code, int quantity) {
+    public void deduct_item_quantity(String product_code, int quantity) {
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() - quantity;
@@ -494,7 +494,7 @@ public class OrderProcessor {
     }
 
 
-    public static void remove_item(String product_code) {
+    public void remove_item(String product_code) {
         Product to_remove = null;
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {

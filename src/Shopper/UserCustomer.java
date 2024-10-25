@@ -129,7 +129,7 @@ public class UserCustomer {
                     break;
                 case "9":
                     if (!OrderProcessor.cart.isEmpty()) {
-                        OrderProcessor.modify_menu_process();
+                        order_processor.modify_menu_process();
                         break;
                     }
                     break;
@@ -143,7 +143,7 @@ public class UserCustomer {
             if (selected_products != null && !selected_products.isEmpty()) {
                 // After displaying products, process the order by asking for product code
                 order_processor.process_customer_order(selected_products);
-                OrderProcessor.modify_menu_process();
+                order_processor.modify_menu_process();
             } else {
                 if (!item_category.equals("9")){ // para hindi to lumalabas dahil di naman list ang case 9
                     System.out.println("No products available in this category.");
@@ -499,7 +499,7 @@ public class UserCustomer {
                     break;
                 case "12":
                     if (!OrderProcessor.cart.isEmpty()) {
-                        OrderProcessor.registered_user_modify_menu_process(customer);
+                        order_processor.registered_user_modify_menu_process(customer);
                         break;
                     }
                     break;
@@ -532,7 +532,7 @@ public class UserCustomer {
             // After displaying products, process the order by asking for product code
             if (selected_products != null && !selected_products.isEmpty()) {
                 order_processor.process_customer_order(selected_products);
-                OrderProcessor.registered_user_modify_menu_process(customer);
+                order_processor.registered_user_modify_menu_process(customer);
             } else {
                 if (!item_category.equals("12")){ // para hindi to lumalabas dahil di naman list ang case 12
                     //dapat pag 12 11 10 9
