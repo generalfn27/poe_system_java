@@ -182,9 +182,6 @@ public class Cashier {
         String choice;
 
         while (true) {
-            // Loop until the cashier chooses to exit
-            // Reset the counter, total items, and total price
-            // Select the queue list to process
             System.out.println("\t=======================================");
             System.out.println("\t|                                     |");
             System.out.println("\t|          Cashier Dashboard          |");
@@ -204,7 +201,7 @@ public class Cashier {
                     cashier_process.process_payment();
                     break;
                 case "2":
-                    // Call method to modify counter items (under development)
+                    modify_counter_process();
                     break;
                 case "3":
                     cashier_process.display_counter();
@@ -224,53 +221,79 @@ public class Cashier {
     }
 
 
-
-    //edit
-    public static void modify_counter_process() {
+    public void modify_counter_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
         while (true) {
-            //display counter
-            //dapat sa cashier modify menu ang mga choices lng ay increase quantity at decrease
-            //add discount code or voucher
-            System.out.println("\n\tMODIFY MENU:");
-            System.out.println("\tAdd more items (A)\tpwedeng add more quantity to the item nalang to");
-            System.out.println("\tRemove Items (R)");
+            cashier_process.display_counter();
+            System.out.println("\n\tMODIFY MENU: not updating kasi cart ang nasa for each hindi counter");
+            System.out.println("\tIncrease Quantity (I)");
             System.out.println("\tDeduct Quantity (D)");
+            System.out.println("\tRemove Items (R)");
             System.out.println("\tClear Cart (C)");
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tDisplay cart(V)");
-            System.out.println("\tGo Back (B)");
+            System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
             choice = scanf.nextLine();
 
             switch (choice) {
-                case "A":
-                case "a":
-                    //pwedeng add more quantity to the item nalang to
-                    break;
-                case "R":
-                case "r":
-                    System.out.print("Enter product code to remove: ");
-                    String codeToRemove = scanf.nextLine();
-                    //remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                case "I":
+                case "i":
+                    int quantityToIncrease;
+                    boolean quantity_increase_valid_input = false;
+
+                    System.out.println("\n\tEnter 0 to Cancel item increase");
+                    System.out.print("\tEnter the product code to increase: ");
+                    String codeToIncrease = scanf.nextLine();
+
+                    if (codeToIncrease.equals("0")) { break; }
+
+                    while (!quantity_increase_valid_input) {
+                        try {
+                            System.out.print("\tEnter quantity to increase: ");
+                            quantityToIncrease = Integer.parseInt(scanf.nextLine());
+                            cashier_process.increase_item_quantity(codeToIncrease, quantityToIncrease);
+                            quantity_increase_valid_input = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
                     break;
                 case "D":
                 case "d":
-                    System.out.print("Enter product code to deduct: ");
+                    int quantityToDeduct;
+                    boolean deduction_valid_input = false;
+
+                    System.out.println("\tEnter 0 to Cancel item deduction");
+                    System.out.print("\tEnter product code to deduct: ");
                     String codeToDeduct = scanf.nextLine();
-                    System.out.print("Enter quantity to deduct: ");
-                    int quantityToDeduct = scanf.nextInt();
-                    //deduct_item_quantity(codeToDeduct, quantityToDeduct);  // Deduct quantity
+
+                    if (codeToDeduct.equals("0")) { break; }
+
+                    while (!deduction_valid_input) {
+                        try {
+                            System.out.print("\tEnter quantity to deduct: ");
+                            quantityToDeduct = Integer.parseInt(scanf.nextLine());
+                            cashier_process.deduct_item_quantity(codeToDeduct, quantityToDeduct);
+                            deduction_valid_input = true; // Input is valid, exit the loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("\tInvalid input. Please enter a valid number.");
+                        }
+                    }
                     break;
-                case "C":
-                case "c":
-                      // Reset the counter
+                case "R":
+                case "r":
+                    System.out.println("\tEnter 0 to Cancel item removal");
+                    System.out.print("\tEnter product code to remove: ");
+                    String codeToRemove = scanf.nextLine();
+                    if (codeToRemove.equals("0")) { break; }
+                    cashier_process.remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "V":
                 case "v":
-                    //display cart
+                    cashier_process.display_counter();
                     break;
                 case "B":
                 case "b":
