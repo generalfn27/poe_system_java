@@ -71,6 +71,23 @@ public class Cashier {
         return inputUsername.equals(username) && inputPassword.equals(password);
     }
 
+    private boolean handle_logout(Scanner scanf) {
+        while (true) {
+            System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
+            System.out.print("\t[Y] for Yes  [N] for No: ");
+
+            String exit_confirmation = scanf.next().trim();
+            scanf.nextLine();
+
+            if (exit_confirmation.equalsIgnoreCase("Y")) {
+                UserType.user_type_menu();
+                return true;
+            } else if (exit_confirmation.equalsIgnoreCase("N")) {
+                return false;
+            }
+        }
+    }
+
 
     //next development dapat pinapasa na username sa parameter as welcome sa employee
     private void cashier_dashboard() {
@@ -148,11 +165,11 @@ public class Cashier {
                     if (choice >= 0 && choice <= csvFiles.size()) {
                         if (choice == 0) {
                             System.out.println("\tReturning to previous menu...");
-                            return;
+                            cashier_dashboard();
                         }
 
                         String selectedFile = csvFiles.get(choice - 1);
-                        System.out.println("\tYou selected: " + selectedFile);
+                        System.out.println("\n\n\tYou selected: " + selectedFile);
                         cashier_process.read_order_from_csv(selectedFile);
                         cashier_process.transfer_cart_to_counter();
                         cashier_process_choice();
@@ -198,7 +215,9 @@ public class Cashier {
 
             switch (choice) {
                 case "1":
-                    cashier_process.process_payment();
+                    if (cashier_process.process_payment()) {
+                        cashier_dashboard();
+                    }
                     break;
                 case "2":
                     modify_counter_process();
@@ -215,12 +234,11 @@ public class Cashier {
                     System.out.println("\n\tAn error has occurred");
                     System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
-                    break;
             }
         }
     }
 
-
+    // ung mga changes here hanggang sa arraylist lang so pag nag back ka hindi mag rreflect un sa csv
     public void modify_counter_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
@@ -231,10 +249,9 @@ public class Cashier {
             System.out.println("\tIncrease Quantity (I)");
             System.out.println("\tDeduct Quantity (D)");
             System.out.println("\tRemove Items (R)");
-            System.out.println("\tClear Cart (C)");
-            System.out.println("\tProceed to checkout (P)");
+            System.out.println("\tProceed to Pay (P)");
             System.out.println("\tDisplay cart(V)");
-            System.out.println("\tGo Back to Categories (B)");
+            System.out.println("\tGo Back to Dashboard (B)");
             System.out.print("\n\tEnter choice: ");
             choice = scanf.nextLine();
 
@@ -254,7 +271,7 @@ public class Cashier {
                         try {
                             System.out.print("\tEnter quantity to increase: ");
                             quantityToIncrease = Integer.parseInt(scanf.nextLine());
-                            cashier_process.increase_item_quantity(codeToIncrease, quantityToIncrease);
+                            cashier_process.increase_item_quantity_counter(codeToIncrease, quantityToIncrease);
                             quantity_increase_valid_input = true; // Input is valid, exit the loop
                         } catch (NumberFormatException e) {
                             System.out.println("\tInvalid input. Please enter a valid number.");
@@ -276,7 +293,7 @@ public class Cashier {
                         try {
                             System.out.print("\tEnter quantity to deduct: ");
                             quantityToDeduct = Integer.parseInt(scanf.nextLine());
-                            cashier_process.deduct_item_quantity(codeToDeduct, quantityToDeduct);
+                            cashier_process.deduct_item_quantity_counter(codeToDeduct, quantityToDeduct);
                             deduction_valid_input = true; // Input is valid, exit the loop
                         } catch (NumberFormatException e) {
                             System.out.println("\tInvalid input. Please enter a valid number.");
@@ -289,62 +306,35 @@ public class Cashier {
                     System.out.print("\tEnter product code to remove: ");
                     String codeToRemove = scanf.nextLine();
                     if (codeToRemove.equals("0")) { break; }
-                    cashier_process.remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                    cashier_process.remove_item_counter(codeToRemove);  // Remove the item sa cart all quantity
                     break;
                 case "V":
                 case "v":
+                    System.out.println("\t\tPress Enter key to continue.\n");
                     cashier_process.display_counter();
+                    scanf.nextLine();
+                    break;
+                case "P":
+                case "p":
+                    if (cashier_process.process_payment()) {
+                        cashier_dashboard(); // Return to dashboard after payment if true
+                    }
                     break;
                 case "B":
                 case "b":
+                    cashier_process_choice();
                     return;
-                case "P":
-                case "p":
-                    // Confirmation before checkout
-                    System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                    String confirmInput = scanf.nextLine().trim();
-                    scanf.nextLine();
-
-                    if (!confirmInput.isEmpty() && (confirmInput.charAt(0) == 'Y' || confirmInput.charAt(0) == 'y')) {
-                        System.out.println("\n\tProcessing checkout...");
-
-                        System.out.print("\n\tPress [E] to cancel checkout or press any key to shop again: ");
-                        char exit_choice = scanf.next().charAt(0);
-
-                        if (exit_choice == 'E' || exit_choice == 'e') {
-                            // Checkout logic here or queue card muna tapos ang algorithm ay queue syempre
-                            return;
-                        } else {
-                            modify_counter_process();
-                        }
-
-                    } else {
-                        System.out.println("\n\tCheckout cancelled.");
-                        System.out.println("\t\tPress Enter key to continue.\n");
-                        scanf.nextLine(); //used for press any key to continue
-                    }
-                    break;
+                default:
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
 
 
-    private boolean handle_logout(Scanner scanf) {
-        while (true) {
-            System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
-            System.out.print("\t[Y] for Yes  [N] for No: ");
 
-            String exit_confirmation = scanf.next().trim();
-            scanf.nextLine();
 
-            if (exit_confirmation.equalsIgnoreCase("Y")) {
-                UserType.user_type_menu();
-                return true;
-            } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                return false;
-            }
-        }
-    }
 
 
 
