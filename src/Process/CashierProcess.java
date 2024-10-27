@@ -53,7 +53,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    public void process_payment() {
+    public boolean process_payment() {
         Scanner scanf = new Scanner(System.in);
         display_counter();
 
@@ -95,7 +95,7 @@ public class CashierProcess extends OrderProcessor {
                         print_receipt(counter, payment);
 
                         counter.clear();
-                        return; //dito dapat ang balik nito ay cashier dashboard
+                        return true; // Return true to indicate successful payment para balik dashboard
                     } else {
                         System.out.println("\tInsufficient payment. Try again.");
                         System.out.println("\t\tPress Enter key to continue.\n");
@@ -103,11 +103,9 @@ public class CashierProcess extends OrderProcessor {
                     }
                     break;
                 case "0":
-                    //di ko sure kung reset ba or go back nalang sa last function bukas ko na alamin
-                    return;
+                    return false;
             }
         }
-
     }
 
 
@@ -158,7 +156,7 @@ public class CashierProcess extends OrderProcessor {
             System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
         }
         System.out.println("\t------------------------------------------");
-        System.out.print("\tPress any key to Save & Exit: ");
+        System.out.print("\tPress Enter key to Save & Exit: ");
         scanf.nextLine(); //used for press any key to continue
 
         save_receipt_to_csv(counter, calculate_total_price(), payment);
@@ -368,6 +366,61 @@ public class CashierProcess extends OrderProcessor {
         }
     }
 
+    public void increase_item_quantity_counter(String product_code, int quantity) {
+        for (Product product : counter) {
+            if (product.getCode().equals(product_code.toUpperCase())) {
+                int new_quantity = product.getStock() + quantity;
+                if (new_quantity > 0) {
+                    product.update_stock(+quantity);
+                    total_items += quantity;
+                    total_price += product.getPrice() * quantity;
+                    System.out.printf("\tIncreased %d of %s from the cart.\n", quantity, product.getName());
+                } else {
+                    remove_item(product_code);
+                }
+                return;
+            }
+        }
+        System.out.println("\tProduct not found in the cart.");
+    }
+
+    public void deduct_item_quantity_counter(String product_code, int quantity) {
+        for (Product product : counter) {
+            if (product.getCode().equals(product_code.toUpperCase())) {
+                int new_quantity = product.getStock() - quantity;
+                if (new_quantity > 0) {
+                    product.update_stock(-quantity);
+                    total_items -= quantity;
+                    total_price -= product.getPrice() * quantity;
+                    System.out.printf("\n\tDeducted %d of %s from the cart.\n", quantity, product.getName());
+                } else if (new_quantity < 0) {
+                    //remove_item(product_code);
+                    System.out.println("\n\tThe quantity you want to remove exceeds the item count you have.");
+                }
+                return;
+            }
+        }
+        System.out.println("\tProduct not found in the cart.");
+    }
+
+    public void remove_item_counter(String product_code) {
+        Product to_remove = null;
+        for (Product product : counter) {
+            if (product.getCode().equals(product_code.toUpperCase())) {
+                total_price-= product.getStock();
+                total_price -= product.getPrice() * product.getStock();
+                total_items -= product.getStock();
+                to_remove = product;
+                break;
+            }
+        }
+        if (to_remove != null) {
+            cart.remove(to_remove);
+            System.out.printf("\tRemoved %s from the cart.\n", to_remove.getName());
+        } else {
+            System.out.println("\tProduct not found in the cart.");
+        }
+    }
 
 
 }
