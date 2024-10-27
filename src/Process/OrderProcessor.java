@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class OrderProcessor {
     public static List<Product> cart;
-    private static int total_items;
+    public static int total_items;
     public static double total_price;
     private static int currentQueueNumber;
 
