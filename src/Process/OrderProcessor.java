@@ -426,30 +426,67 @@ public class OrderProcessor {
 
                 switch (payment_choice) {
                     case "0":
-                        System.out.println("\n\tCheckout cancelled.");
-                        System.out.println("\t\tPress Enter key to continue.\n");
-                        scanf.nextLine(); //used for press any key to continue
-                        return;
+                        while (true) {
+                            System.out.print("\n\n\tAre you sure you want to cancel checkout? (Y/N): ");
+                            String cancellation_confirmation = scanf.nextLine();
+
+                            if (cancellation_confirmation.equalsIgnoreCase("Y")) {
+                                System.out.println("\n\tCheckout cancelled.");
+                                System.out.print("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
+                                return;
+                            } else if (cancellation_confirmation.equalsIgnoreCase("N")) {
+                                break;
+                            } else {
+                                System.out.println("\n\tAn error has occurred.");
+                                System.out.print("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
+                            }
+                        }
+                        break;
                     case "1":
-                        save_cart_to_queue_csv();
-                        reset_cart();
-                        UserCustomer user_customer = new UserCustomer();
-                        user_customer.registered_user_customer_item_category(customer.getUsername(), customer);
+                        while (true) {
+                            System.out.print("\n\n\tAre you sure you want to queue? (Y/N): ");
+                            String queue_confirmation = scanf.nextLine();
+
+                            if (queue_confirmation.equalsIgnoreCase("Y")) {
+                                save_cart_to_queue_csv();
+                                reset_cart();
+                                UserCustomer user_customer = new UserCustomer();
+                                user_customer.registered_user_customer_item_category(customer.getUsername(), customer);
+                            } else if (queue_confirmation.equalsIgnoreCase("N")) {
+                                break;
+                            } else {
+                                System.out.println("\n\tAn error has occurred.");
+                                System.out.print("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
+                            }
+                        }
                         break;
                     case "2":
-                        // New e-wallet self-checkout process
-                        UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
-                        SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
-                        selfCheckout.processSelfCheckout(customer.getUsername());
+                        while (true) {
+                            System.out.print("\n\n\tAre you sure you want to self checkout? (Y/N): ");
+                            String self_checkout_confirmation = scanf.nextLine();
+
+                            if (self_checkout_confirmation.equalsIgnoreCase("Y")) {
+                                // New e-wallet self-checkout process
+                                UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
+                                SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
+                                selfCheckout.processSelfCheckout(customer.getUsername());
+                            } else if (self_checkout_confirmation.equalsIgnoreCase("N")) {
+                                break;
+                            } else {
+                                System.out.println("\n\tAn error has occurred.");
+                                System.out.print("\t\tPress Enter key to continue.\n");
+                                scanf.nextLine(); //used for press any key to continue
+                            }
+                        }
                         break;
                     default:
                         System.out.println("\n\tAn error has occurred.");
-                        System.out.println("\t\tPress Enter key to continue.\n");
+                        System.out.print("\t\tPress Enter key to continue.\n");
                         scanf.nextLine(); //used for press any key to continue
-                        break;
-
                 }
-
             }
         }
     }
