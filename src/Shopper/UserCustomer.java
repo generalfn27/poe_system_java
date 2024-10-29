@@ -701,7 +701,7 @@ public class UserCustomer {
         }
     }
 
-    private void registered_customer_change_password(String username, Customer customer) {
+    public void registered_customer_change_password(String username, Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String new_password;
         String confirm_password = "";
