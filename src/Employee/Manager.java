@@ -1,6 +1,5 @@
 package Employee;
 
-import Shopper.Customer;
 import User_Types.UserType;
 
 import java.io.BufferedReader;
@@ -107,19 +106,20 @@ public class Manager {
 
             switch (choice) {
                 case "1":
-
+                    //di pa nagagawa
                     break;
                 case "2":
-                    // Call method to modify counter items (under development)
+                    //revise ung save files dapat may date ang resibo at sa total sales dun din mapupunta mga items na benta, listahan
                     break;
                 case "3":
+                    //refactor ng resibo dagdag date and time pati sa mismong csv
                     display_purchase_history_menu();
                     break;
                 case "4":
-                    // Call method to modify counter items (under development)
+                    //nababawasan na pero need madagdagan na at pwede mag dagdag mismo ng new items
                     break;
                 case "5":
-                    // Call method to modify counter items (under development)
+                    //dito gagawa ng account para sa cashier
                     break;
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
@@ -236,6 +236,8 @@ public class Manager {
             System.out.println("\tError reading CSV file: " + e.getMessage());
         }
     }
+
+
 
 
 
