@@ -50,6 +50,7 @@ public class Cashier {
         cashier_login();
     }
 
+    // mag iiba na tong login kasi gagawin ng empleyado
     private void cashier_login() {
         Scanner scanf = new Scanner(System.in);
         int attempt_count = 0; // Count failed login attempts
