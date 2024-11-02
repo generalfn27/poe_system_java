@@ -17,6 +17,10 @@ public class Cashier {
     private String employee_id;
     private String employee_name;
     private String password;
+    private String address;
+    private int phone_number;
+    private String hired_date;
+    private int total_transaction_processed;
 
     public String getEmployee_id() {
         return employee_id;
@@ -40,6 +44,15 @@ public class Cashier {
 
     public void setPassword (String password) {
         this.password = password;
+    }
+
+    public String getAddress() {
+        return address 
+    }
+
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 
@@ -137,7 +150,7 @@ public class Cashier {
         String name = "";
         String pinCode;
         String phoneNumber;
-        String paymentMethod;
+        String address;
         double transaction = 1;
 
         //set sa save nitong csv dapat ung hired date nila
@@ -163,6 +176,7 @@ public class Cashier {
             }
         }
         new_cashier.setEmployee_name(name);;
+
 
 
 
