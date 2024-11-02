@@ -42,7 +42,7 @@ public class UserCustomer {
                     guest_customer_item_category(); // Pass the guest customer to the item category function
                     break;
                 case "3":
-                    customerRegister();
+                    customer_register();
                     break;
                 case "0":
                     UserType.user_type_menu();
@@ -154,7 +154,7 @@ public class UserCustomer {
 
 
     // Customer registration function
-    private void customerRegister() {
+    private void customer_register() {
         Scanner scanf = new Scanner(System.in);
         final int MAX_CUSTOMERS = 100;
         if (customers.size() >= MAX_CUSTOMERS) {
