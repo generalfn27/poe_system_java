@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Cashier {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
     private final CashierProcess cashier_process; // Class-level instance variable for CashierProcess
-    private final List<Cashier> cashiers = new ArrayList<>();
+    public final List<Cashier> cashiers = new ArrayList<>();
     private String employee_id;
     private String employee_name;
     private String password;
@@ -47,13 +47,38 @@ public class Cashier {
     }
 
     public String getAddress() {
-        return address 
+        return address;
     }
 
 
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public int getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(int phone_number) {
+        this.phone_number = phone_number;
+    }
+
+    public String getHired_date(){
+        return hired_date;
+    }
+
+    public void setHired_date(String hired_date) {
+        this.hired_date = hired_date;
+    }
+
+    public int getTotal_transaction_processed() {
+        return total_transaction_processed;
+    }
+
+    public void setTotal_transaction_processed(int total_transaction_processed) {
+        this.total_transaction_processed = total_transaction_processed;
+    }
+
 
 
     public Cashier() {
@@ -175,7 +200,7 @@ public class Cashier {
                 }
             }
         }
-        new_cashier.setEmployee_name(name);;
+        new_cashier.setEmployee_name(name);
 
 
 
