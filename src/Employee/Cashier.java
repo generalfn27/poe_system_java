@@ -202,7 +202,8 @@ public class Cashier {
         }
         new_cashier.setEmployee_name(name);
 
-
+//comment lang muna ang busy di ko pa magawa
+        /*add lang sa pagbabago sa mga register at need matuloy at papalitan ung nasa login kagaya sa customer na registered*/
 
 
     }
