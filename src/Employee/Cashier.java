@@ -5,6 +5,8 @@ import User_Types.UserType;
 import Process.CashierProcess;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -165,7 +167,7 @@ public class Cashier {
         String cashier_name;
         String confirmPassword = "";
         String phoneNumber;
-        double transaction = 0;
+        int transaction = 0;
 
         //set sa save nitong csv dapat ung hired date nila
 
@@ -223,12 +225,19 @@ public class Cashier {
 
         new_cashier.setHired_date(formattedDate);
 
-        //comment lang muna ang busy di ko pa magawa
-        /*add lang sa pagbabago sa mga register at need matuloy at papalitan ung nasa login kagaya sa customer na registered*/
+        new_cashier.setTotal_transaction_processed(transaction);
 
+        //wala pang employee id saving
+
+        save_cashier_to_csv(new_cashier);
+
+        cashiers.add(new_cashier);
+
+        System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_name() +".\n\t\t\tPress Enter key to start exploring!\n");
+        scanf.nextLine(); //used for press any key to continue
+        // para pause muna sa bawat pagkakamli para isipin muna sa susunod tama
 
     }
-
 
     // Helper method to input hidden password pero dapat magiging ****
     //shortcut sa pag fill ups thanks sa AI
@@ -237,7 +246,31 @@ public class Cashier {
         return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
     }
 
+    private void save_cashier_to_csv(Cashier cashier) {
+        File file = new File("cashier_employees.csv");
 
+        // Check if the file exists before opening the writer
+        boolean fileExists = file.exists();
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            // Write header only if the file doesn't exist (i.e., it's a new file)
+            if (!fileExists) {
+                writer.write("Employee_id,Employee_name,password,phone_number,hired_date,total_transaction_processed\n");
+            }
+            //Write cashier employee data
+            writer.append(cashier.getEmployee_id()).append(",");
+            writer.append(cashier.getEmployee_name()).append(",");
+            writer.append(cashier.getPassword()).append(",");
+            writer.append(cashier.getPhone_number()).append(",");
+            writer.append(cashier.getHired_date()).append(",");
+            writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append("\n");
+
+        } catch (IOException e) {
+            // Handle exceptions gracefully
+            System.err.println("Error writing new cashier employee data to file: " + e.getMessage());
+        }
+
+    }
 
 
 
