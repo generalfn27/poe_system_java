@@ -1,6 +1,5 @@
 package Employee;
 
-import Shopper.Customer;
 import User_Types.UserType;
 import Process.CashierProcess;
 
@@ -20,7 +19,9 @@ public class Cashier {
     public final List<Cashier> cashiers = new ArrayList<>();
 
     private String employee_id;
-    private String employee_name;
+    private String employee_user_name;
+    private String employee_first_name;
+    private String employee_last_name;
     private String password;
     private String phone_number;
     private String hired_date;
@@ -34,12 +35,28 @@ public class Cashier {
         this.employee_id = employee_id;
     }
 
-    public String getEmployee_name() {
-        return employee_name;
+    public String getEmployee_user_name() {
+        return employee_user_name;
     }
 
-    public void setEmployee_name(String employee_name) {
-        this.employee_name = employee_name;
+    public void setEmployee_user_name(String employee_user_name) {
+        this.employee_user_name = employee_user_name;
+    }
+
+    public String getEmployee_first_name() {
+        return employee_first_name;
+    }
+
+    public void setEmployee_first_name(String employee_first_name) {
+        this.employee_first_name = employee_first_name;
+    }
+
+    public String getEmployee_last_name() {
+        return employee_last_name;
+    }
+
+    public void setEmployee_last_name(String employee_last_name) {
+        this.employee_last_name = employee_last_name;
     }
 
     public String getPassword() {
@@ -182,8 +199,8 @@ public class Cashier {
             not_exist = true;  // assume username doesn't exist until proven otherwise
             // Check if the username already exists
             for (Cashier cashier : cashiers) {
-                if (cashier.getEmployee_name().equals(cashier_name)) {
-                    System.out.println("\n\tUsername already exists. Please choose a different username.");
+                if (cashier.getEmployee_user_name().equals(cashier_name)) {
+                    System.out.println("\n\tCashier already exists. Please choose a different username.");
                     System.out.print("\n\tEnter cashier_name: ");
                     cashier_name = scanf.nextLine();
                     not_exist = false;  // username exists, so set flag to false
@@ -191,7 +208,7 @@ public class Cashier {
                 }
             }
         }
-        new_cashier.setEmployee_name(cashier_name);
+        new_cashier.setEmployee_user_name(cashier_name);
 
         // Password input naka ibang method para sa future changes para mas madali mag asterisk
         String password = input_password(scanf, "\n\tEnter Password: ");
@@ -233,7 +250,7 @@ public class Cashier {
 
         cashiers.add(new_cashier);
 
-        System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_name() +".\n\t\t\tPress Enter key to start exploring!\n");
+        System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_user_name() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
         // para pause muna sa bawat pagkakamli para isipin muna sa susunod tama
 
@@ -259,7 +276,7 @@ public class Cashier {
             }
             //Write cashier employee data
             writer.append(cashier.getEmployee_id()).append(",");
-            writer.append(cashier.getEmployee_name()).append(",");
+            writer.append(cashier.getEmployee_user_name()).append(",");
             writer.append(cashier.getPassword()).append(",");
             writer.append(cashier.getPhone_number()).append(",");
             writer.append(cashier.getHired_date()).append(",");
