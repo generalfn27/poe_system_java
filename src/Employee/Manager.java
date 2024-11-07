@@ -119,7 +119,7 @@ public class Manager {
                     //nababawasan na pero need madagdagan na at pwede mag dagdag mismo ng new items
                     break;
                 case "5":
-                    //dito gagawa ng account para sa cashier
+                    hr_management_menu();
                     break;
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
@@ -132,7 +132,6 @@ public class Manager {
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
-                    break;
             }
         }
     }
@@ -237,7 +236,42 @@ public class Manager {
         }
     }
 
+    public void hr_management_menu() {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
 
+        while (true) {
+            System.out.println("\t=======================================");
+            System.out.println("\t|                                     |");
+            System.out.println("\t|          HR Management Menu          |");
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
+            System.out.println("\t[1] Register New Employee");
+            System.out.println("\t[2] View Employee List");
+            System.out.println("\t[3] Search Employee");
+            System.out.println("\t[4] Update Employee Information");
+            System.out.println("\t[5] Delete Employee");
+            System.out.println("\t[6] Reset Employee Password");
+            System.out.println("\t[0] Return to Main Menu");
+
+            System.out.print("\n\n\tEnter Here: ");
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "0":
+                    manager_dashboard();
+                    break;
+                case "1":
+                    break;
+                default:
+                    System.out.println("\n\tInvalid input. Try again...");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
+            }
+
+        }
+
+    }
 
 
 
