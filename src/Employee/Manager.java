@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
+//LOGIN MAX ATTEMPT
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
 
     public void user_manager() {
         manager_login();
     }
-
+//GAWAN NG TXT OR CSV FILE PARA HINDI HARD CODED ANG CREDENTIALS AT KUNG WALA PANG CREDENTIALS,SA UNANG OPEN NG PROGRAM DUN DAPAT MAG ASK ANO NAME AT PASS, ALSO NAME NARIN NG STORE
     private void manager_login() {
         Scanner scanf = new Scanner(System.in);
         int attempt_count = 0; // Count failed login attempts
