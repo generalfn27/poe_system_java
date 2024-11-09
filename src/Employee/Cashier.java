@@ -189,7 +189,7 @@ public class Cashier {
         //set sa save nitong csv dapat ung hired date nila
 
         System.out.println("\n\t----------------------------------------------");
-        System.out.println("\t|        suggestion another scanf para                  |");
+        System.out.println("\t|        New Cashier Employee Registration                |");
         System.out.println("\t|            sa agreement consent sa data etc.            |");
         System.out.print("\n\tEnter cashier_name: ");
         cashier_name = scanf.nextLine();
