@@ -261,7 +261,7 @@ public class Manager {
             switch (choice) {
                 case "0":
                     manager_dashboard();
-                    break;
+                    return;
                 case "1":
                     break;
                 default:
