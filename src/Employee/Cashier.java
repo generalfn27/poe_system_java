@@ -313,11 +313,9 @@ public class Cashier {
                 case "1":
                     selecting_queue_list_to_process();
                     break;
-
                 case "2":
                     // Call method to modify counter items (under development)
                     break;
-
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
                     if (logout_confirmed) {
