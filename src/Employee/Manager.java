@@ -240,6 +240,7 @@ public class Manager {
     public void hr_management_menu() {
         Scanner scanf = new Scanner(System.in);
         String choice;
+        Cashier cashier = new Cashier();
 
         while (true) {
             System.out.println("\t=======================================");
@@ -263,6 +264,7 @@ public class Manager {
                     manager_dashboard();
                     return;
                 case "1":
+                    cashier.create_new_cashier_employee();
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
