@@ -210,7 +210,7 @@ public class Cashier {
 
 
         //need ng set ng first at last name ng cashier katamad
-
+        //wala pang getter at setter for first at last name tapos baka may suffix pa
 
 
         // Password input naka ibang method para sa future changes para mas madali mag asterisk
