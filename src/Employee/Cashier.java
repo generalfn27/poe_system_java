@@ -95,61 +95,62 @@ public class Cashier {
     public Cashier() {
         this.cashier_process = new CashierProcess(); // Assign to the class-level variable
         initialize_id_number();
+        load_cashiers_from_CSV();
     }
 
     public void user_cashier() {
         cashier_login();
     }
 
-    // mag iiba na tong login kasi gagawin ng empleyado
+
     private void cashier_login() {
         Scanner scanf = new Scanner(System.in);
-        int attempt_count = 0; // Count failed login attempts
-        boolean valid = false; // Indicate if login is valid
+        int attempt_count = 0;
+        boolean login_successful = false;
 
-        while (!valid) {
-            System.out.println("\t===================================");
+        // Load cashiers from the CSV if not already loaded
+        if (cashiers.isEmpty()) {
+            load_cashiers_from_CSV();
+
+            //kung empty uli after file reading edi mag return sya sa menu
+            if (cashiers.isEmpty()) {
+                UserType.user_type_menu();
+            }
+        }
+
+        while (attempt_count <= MAX_ATTEMPTS) {
+            System.out.println("\n\t===================================");
             System.out.println("\t|                                 |");
             System.out.println("\t|          Cashier Login          |");
             System.out.println("\t|                                 |");
             System.out.println("\t===================================");
-            System.out.println("\tEnter Credentials\n");
+            System.out.print("\n\tEnter Username: ");
+            String username = scanf.nextLine();
 
-            System.out.print("\tEnter username: ");
-            String inputUsername = scanf.nextLine();
+            System.out.print("\tEnter Password: ");
+            String password = scanf.nextLine();
 
-            System.out.print("\tEnter password: ");
-            String inputPassword = scanf.nextLine(); // Capture password input directly without hiding
-
-            // Validate login
-            if (validate_cashier_login(inputUsername, inputPassword)) {
-                valid = true; // Set flag to exit loop
-                System.out.println("\tLogin successful!");
-                cashier_dashboard();
-            } else {
-                attempt_count++;
-                System.out.println("\tInvalid login attempt #" + attempt_count + " for user: " + inputUsername);
-
-                if (attempt_count >= MAX_ATTEMPTS) {
-                    System.out.println("\tMaximum attempts reached.");
-                    System.out.println("\t\tPress Enter key to continue.\n");
-                    scanf.nextLine(); //used for press any key to continue
-                    break;
+            for (Cashier cashier : cashiers) {
+                if (cashier.getEmployee_username().equals(username) && cashier.getPassword().equals(password)) {
+                    System.out.println("\n\tLogin successful.");
+                    login_successful = true;
                 }
             }
+
+            if (login_successful) { break; }
+            else {
+                attempt_count++;
+                System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
+            }
         }
+
+        if (!login_successful) {
+            System.out.println("\n\tMaximum login attempts reached. Please try again later.");
+            UserType.user_type_menu();
+        }
+
     }
 
-
-    private boolean validate_cashier_login(String inputUsername, String inputPassword) {
-        //madaming changes pa dito if gagawa ng multiple accounts for cashier employees
-
-        // Default username
-        String username = "admin";
-        // Default password
-        String password = "password";
-        return inputUsername.equals(username) && inputPassword.equals(password);
-    }
 
     private boolean handle_logout(Scanner scanf) {
         while (true) {
@@ -310,8 +311,6 @@ public class Cashier {
 
         }
 
-
-
         System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
         // para pause muna sa bawat pagkakamali para isipin muna sa susunod tama
@@ -357,7 +356,8 @@ public class Cashier {
         try (FileWriter writer = new FileWriter(file, true)) {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
-                writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname,password,phone_number,hired_date,total_transaction_processed\n");
+                writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname," +
+                        "password,phone_number,hired_date,total_transaction_processed\n");
             }
             //Write cashier employee data
             writer.append(String.valueOf(cashier.getEmployee_id())).append(",");
@@ -374,6 +374,38 @@ public class Cashier {
             System.err.println("Error writing new cashier employee data to file: " + e.getMessage());
         }
 
+    }
+
+
+    private void load_cashiers_from_CSV() {
+        String CASHIER_CSV_FILE = "cashier_employees.csv";
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CASHIER_CSV_FILE))) {
+            String line;
+            // Skip the field name / header line
+            bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] data = line.split(",");
+                // Expected fields: Employee_id,Employee_username,Employee_first_name,
+                // Employee_surname,password,phone_number,hired_date,total_transaction_processed
+                if (data.length == 8) {
+                    Cashier cashier = new Cashier();
+                    cashier.setEmployee_id(Integer.parseInt(data[0]));
+                    cashier.setEmployee_username(data[1]);
+                    cashier.setEmployee_first_name(data[2]);
+                    cashier.setEmployee_surname(data[3]);
+                    cashier.setPassword(data[4]);
+                    cashier.setPhone_number(data[5]);
+                    cashier.setHired_date(data[6]);
+                    cashier.setTotal_transaction_processed(Integer.parseInt(data[7]));
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("\n\tCSV file not found. No cashier loaded.");
+        } catch (IOException e) {
+            System.out.println("\n\tError loading cashier from file: " + e.getMessage());
+        }
     }
 
 
