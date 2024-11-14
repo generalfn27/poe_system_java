@@ -18,9 +18,9 @@ public class Cashier {
     private static int currentIDNumber;
 
     private int employee_id;
-    private String employee_user_name;
+    private String employee_username;
     private String employee_first_name;
-    private String employee_last_name;
+    private String employee_surname;
     private String password;
     private String phone_number;
     private String hired_date;
@@ -34,12 +34,12 @@ public class Cashier {
         this.employee_id = employee_id;
     }
 
-    public String getEmployee_user_name() {
-        return employee_user_name;
+    public String getEmployee_username() {
+        return employee_username;
     }
 
-    public void setEmployee_user_name(String employee_user_name) {
-        this.employee_user_name = employee_user_name;
+    public void setEmployee_username(String employee_user_name) {
+        this.employee_username = employee_user_name;
     }
 
     public String getEmployee_first_name() {
@@ -50,12 +50,12 @@ public class Cashier {
         this.employee_first_name = employee_first_name;
     }
 
-    public String getEmployee_last_name() {
-        return employee_last_name;
+    public String getEmployee_surname() {
+        return employee_surname;
     }
 
-    public void setEmployee_last_name(String employee_last_name) {
-        this.employee_last_name = employee_last_name;
+    public void setEmployee_surname(String employee_surname) {
+        this.employee_surname = employee_surname;
     }
 
     public String getPassword() {
@@ -177,11 +177,13 @@ public class Cashier {
             return;
         }
 
-        Cashier new_cashier = new Cashier();
-
         initialize_id_number();
 
-        String cashier_name;
+        Cashier new_cashier = new Cashier();
+
+        String cashier_username;
+        String cashier_first_name;
+        String cashier_surname;
         String confirmPassword = "";
         String phoneNumber;
         int transaction = 0;
@@ -189,29 +191,54 @@ public class Cashier {
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|        New Cashier Employee Registration                |");
         System.out.println("\t|            sa agreement consent sa data etc.            |");
-        System.out.print("\n\tEnter cashier_name: ");
-        cashier_name = scanf.nextLine();
+        System.out.print("\n\tEnter cashier user name: ");
+        cashier_username = scanf.nextLine();
 
         boolean cashier_username_not_exist = false;
         while (!cashier_username_not_exist) {
             cashier_username_not_exist = true;  // assume username doesn't exist until proven otherwise
             // Check if the username already exists
             for (Cashier cashier : cashiers) {
-                if (cashier.getEmployee_user_name().equals(cashier_name)) {
+                if (cashier.getEmployee_username().equals(cashier_username)) {
                     System.out.println("\n\tCashier already exists. Please choose a different username.");
                     System.out.print("\n\tEnter cashier_name: ");
-                    cashier_name = scanf.nextLine();
+                    cashier_username = scanf.nextLine();
                     cashier_username_not_exist = false;  // username exists, so set flag to false
                     break;  // break out of the loop to recheck the new username
                 }
             }
         }
-        new_cashier.setEmployee_user_name(cashier_name);
+        new_cashier.setEmployee_username(cashier_username);
 
 
-        //need ng set ng first at last name ng cashier katamad
-        //wala pang getter at setter for first at last name tapos baka may suffix pa
+        while (true) {
+            System.out.println("\n\tEnter cashier first name: ");
+            cashier_first_name = scanf.nextLine();
 
+            if (cashier_first_name.matches("^[a-zA-Z\\\\s]*$")){ break; }
+            else {
+                System.out.println("\n\tInvalid first name. Please enter your name without using numbers or symbols/signs.");
+                System.out.println("\n\t\tPress enter to Continue");
+                scanf.nextLine();
+            }
+        }
+        new_cashier.setEmployee_first_name(cashier_first_name);
+
+        while (true) {
+            System.out.println("\n\tEnter cashier surname: ");
+            cashier_surname = scanf.nextLine();
+
+            if (cashier_surname.matches("^[a-zA-Z\\\\s]*$")){ break; }
+            else {
+                System.out.println("\n\tInvalid first name. Please enter your name without using numbers or symbols/signs.");
+                System.out.println("\n\t\tPress enter to Continue");
+                scanf.nextLine();
+            }
+        }
+        new_cashier.setEmployee_surname(cashier_surname);
+
+        System.out.println("\n\tWelcome " + new_cashier.getEmployee_first_name() + " "
+        + new_cashier.getEmployee_surname() + "\n");
 
         // Password input naka ibang method para sa future changes para mas madali mag asterisk
         String password = input_password(scanf, "\n\tEnter Password: ");
@@ -251,14 +278,43 @@ public class Cashier {
         save_id_number();
         new_cashier.setEmployee_id(currentIDNumber);
 
-        save_cashier_to_csv(new_cashier);
+        System.out.println("\tID number#: " + new_cashier.getEmployee_id());
+        System.out.println("\tUsername: " + new_cashier.getEmployee_username());
 
-        cashiers.add(new_cashier);
+        String detail_confirmation;
+        while (true) {
 
-        System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_user_name() +".\n\t\t\tPress Enter key to start exploring!\n");
+            System.out.println("\n\tCheck your information.");
+            System.out.println("\n\tEnter Y if you are sure.");
+            System.out.println("\n\tEnter N if you are not sure and return to HR Manager Dashboard.");
+            System.out.print("\n\tEnter choice: ");
+            detail_confirmation = scanf.nextLine();
+
+            // update dapat to may confirmation kung sure ba sya sa sagot nya
+            if (detail_confirmation.equalsIgnoreCase("y")){
+                save_cashier_to_csv(new_cashier);
+                cashiers.add(new_cashier);
+                break;
+            } else if (detail_confirmation.equalsIgnoreCase("n")) {
+                System.out.println("\n\tReturning to HR Management Menu");
+                System.out.println("\n\t\tPress enter to Continue");
+                scanf.nextLine();
+                //dapat ang balik nito ay sa hr management dashboard
+                return;
+            } else {
+                System.out.println("\n\tInvalid Input");
+                System.out.println("\n\t\tPress enter to Continue");
+                scanf.nextLine();
+            }
+
+
+        }
+
+
+
+        System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
-        // para pause muna sa bawat pagkakamli para isipin muna sa susunod tama
-
+        // para pause muna sa bawat pagkakamali para isipin muna sa susunod tama
     }
 
     // Helper method to input hidden password pero dapat magiging ****
@@ -301,11 +357,13 @@ public class Cashier {
         try (FileWriter writer = new FileWriter(file, true)) {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
-                writer.write("Employee_id,Employee_name,password,phone_number,hired_date,total_transaction_processed\n");
+                writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname,password,phone_number,hired_date,total_transaction_processed\n");
             }
             //Write cashier employee data
             writer.append(String.valueOf(cashier.getEmployee_id())).append(",");
-            writer.append(cashier.getEmployee_user_name()).append(",");
+            writer.append(cashier.getEmployee_username()).append(",");
+            writer.append(cashier.getEmployee_first_name()).append(",");
+            writer.append(cashier.getEmployee_surname()).append(",");
             writer.append(cashier.getPassword()).append(",");
             writer.append(cashier.getPhone_number()).append(",");
             writer.append(cashier.getHired_date()).append(",");
@@ -467,7 +525,7 @@ public class Cashier {
         }
     }
 
-    // ung mga changes here hanggang sa arraylist lang so pag nag back ka hindi mag rreflect un sa csv
+    // ung mga changes here hanggang sa arraylist lang so pag nag back ka hindi mag reflect un sa csv
     public void modify_counter_process() {
         Scanner scanf = new Scanner(System.in);
         String choice;
