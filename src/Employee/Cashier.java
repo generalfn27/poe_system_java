@@ -398,6 +398,7 @@ public class Cashier {
                     cashier.setPhone_number(data[5]);
                     cashier.setHired_date(data[6]);
                     cashier.setTotal_transaction_processed(Integer.parseInt(data[7]));
+                    cashiers.add(cashier);
                 }
             }
 
