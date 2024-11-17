@@ -153,6 +153,7 @@ public class Cashier {
                 if (cashier.getEmployee_username().equals(username) && cashier.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.");
                     login_successful = true;
+                    cashier_dashboard();
                 }
             }
 
