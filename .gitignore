@@ -32,3 +32,5 @@ bin/
 /current_receipt_number.txt
 /current_queue_number.txt
 /sales_report.csv
+/current_id_number.txt
+/cashier_employees.csv
