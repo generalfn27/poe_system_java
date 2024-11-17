@@ -58,6 +58,10 @@ public class Cashier {
         this.employee_surname = employee_surname;
     }
 
+    public String getEmployee_full_name() {
+        return employee_first_name + " " + employee_surname;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -92,8 +96,23 @@ public class Cashier {
     }
 
 
+    // Add a private constructor for creating Cashier objects from CSV
+    private Cashier(int id, String username, String firstName, String surname,
+                    String password, String phone, String hireDate, int transactions) {
+        this.employee_id = id;
+        this.employee_username = username;
+        this.employee_first_name = firstName;
+        this.employee_surname = surname;
+        this.password = password;
+        this.phone_number = phone;
+        this.hired_date = hireDate;
+        this.total_transaction_processed = transactions;
+        this.cashier_process = null; // Not needed for data objects
+    }
+
+    // Main constructor for new Cashier instances
     public Cashier() {
-        this.cashier_process = new CashierProcess(); // Assign to the class-level variable
+        this.cashier_process = new CashierProcess();
         initialize_id_number();
         load_cashiers_from_CSV();
     }
@@ -192,8 +211,15 @@ public class Cashier {
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|        New Cashier Employee Registration                |");
         System.out.println("\t|            sa agreement consent sa data etc.            |");
-        System.out.print("\n\tEnter cashier user name: ");
+        System.out.print("\n\tEnter cashier user name (0 to cancel): ");
         cashier_username = scanf.nextLine();
+
+        if (cashier_username.equals("0")) {
+            System.out.println("\n\tRegistration Canceled.");
+            System.out.print("\n\t\tPress Enter to continue...");
+            scanf.nextLine();
+            return;
+        }
 
         boolean cashier_username_not_exist = false;
         while (!cashier_username_not_exist) {
@@ -239,7 +265,7 @@ public class Cashier {
         new_cashier.setEmployee_surname(cashier_surname);
 
         System.out.println("\n\tWelcome " + new_cashier.getEmployee_first_name() + " "
-        + new_cashier.getEmployee_surname() + "\n");
+        + new_cashier.getEmployee_surname());
 
         // Password input naka ibang method para sa future changes para mas madali mag asterisk
         String password = input_password(scanf, "\n\tEnter Password: ");
@@ -282,8 +308,10 @@ public class Cashier {
 
         String detail_confirmation;
         while (true) {
-            System.out.println("\n\n\tID number#: " + new_cashier.getEmployee_id());
-            System.out.println("\tUsername: " + new_cashier.getEmployee_username());
+            System.out.println("\tID: " + new_cashier.getEmployee_id());
+            System.out.println("\tName: " + new_cashier.getEmployee_full_name());
+            System.out.println("\tPhone Number: " + new_cashier.getPhone_number());
+            System.out.println("\tHired Date: " + new_cashier.getHired_date());
 
             System.out.println("\n\tCheck your information.");
             System.out.println("\n\tEnter Y if you are sure.");
@@ -293,7 +321,7 @@ public class Cashier {
 
             // update dapat to may confirmation kung sure ba sya sa sagot nya
             if (detail_confirmation.equalsIgnoreCase("y")){
-                save_cashier_to_csv(new_cashier);
+                save_new_cashier_employee_to_csv(new_cashier);
                 cashiers.add(new_cashier);
                 break;
             } else if (detail_confirmation.equalsIgnoreCase("n")) {
@@ -311,7 +339,7 @@ public class Cashier {
 
         }
 
-        System.out.println("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() +".\n\t\t\tPress Enter key to start exploring!\n");
+        System.out.print("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
         // para pause muna sa bawat pagkakamali para isipin muna sa susunod tama
     }
@@ -347,10 +375,9 @@ public class Cashier {
     }
 
 
-    private void save_cashier_to_csv(Cashier cashier) {
+    private void save_new_cashier_employee_to_csv(Cashier cashier) {
         File file = new File("cashier_employees.csv");
 
-        // Check if the file exists before opening the writer
         boolean fileExists = file.exists();
 
         try (FileWriter writer = new FileWriter(file, true)) {
@@ -370,38 +397,37 @@ public class Cashier {
             writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append("\n");
 
         } catch (IOException e) {
-            // Handle exceptions gracefully
             System.err.println("Error writing new cashier employee data to file: " + e.getMessage());
         }
 
     }
 
+    public void load_cashiers_from_CSV() {
+        // Clear existing list before loading
+        cashiers.clear();
 
-    private void load_cashiers_from_CSV() {
         String CASHIER_CSV_FILE = "cashier_employees.csv";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CASHIER_CSV_FILE))) {
             String line;
-            // Skip the field name / header line
-            bufferedReader.readLine();
+            bufferedReader.readLine(); // Skip header
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                // Expected fields: Employee_id,Employee_username,Employee_first_name,
-                // Employee_surname,password,phone_number,hired_date,total_transaction_processed
                 if (data.length == 8) {
-                    Cashier cashier = new Cashier();
-                    cashier.setEmployee_id(Integer.parseInt(data[0]));
-                    cashier.setEmployee_username(data[1]);
-                    cashier.setEmployee_first_name(data[2]);
-                    cashier.setEmployee_surname(data[3]);
-                    cashier.setPassword(data[4]);
-                    cashier.setPhone_number(data[5]);
-                    cashier.setHired_date(data[6]);
-                    cashier.setTotal_transaction_processed(Integer.parseInt(data[7]));
+                    // Use the private constructor to create Cashier objects
+                    Cashier cashier = new Cashier(
+                            Integer.parseInt(data[0]),  // id
+                            data[1],                    // username
+                            data[2],                    // firstName
+                            data[3],                    // surname
+                            data[4],                    // password
+                            data[5],                    // phone
+                            data[6],                    // hireDate
+                            Integer.parseInt(data[7])   // transactions
+                    );
                     cashiers.add(cashier);
                 }
             }
-
         } catch (FileNotFoundException e) {
             System.out.println("\n\tCSV file not found. No cashier loaded.");
         } catch (IOException e) {
@@ -653,7 +679,196 @@ public class Cashier {
     }
 
 
+    public void view_employee_list() {
+        Scanner scanf = new Scanner(System.in);
+        load_cashiers_from_CSV();
 
+        if (cashiers.isEmpty()) {
+            System.out.println("\n\tNo employees found in the system.");
+            System.out.println("\n\tPress Enter to continue...");
+            scanf.nextLine();
+            return;
+        }
+
+        System.out.println("\n\t=================================================");
+        System.out.println("\t|              Employee List                      |");
+        System.out.println("\t=================================================");
+        System.out.printf("\t%-5s %-15s %-20s %-15s %-12s %-24s%n",
+                "ID", "Username", "Full Name", "Phone", "Hire Date", "Total Transaction Processed");
+        System.out.println("\t-------------------------------------------------");
+
+        for (Cashier cashier : cashiers) {
+            System.out.printf("\t%-5d %-15s %-20s %-15s %-12s %16d%n",
+                    cashier.getEmployee_id(),
+                    cashier.getEmployee_username(),
+                    cashier.getEmployee_full_name(),
+                    cashier.getPhone_number(),
+                    cashier.getHired_date(),
+                    cashier.getTotal_transaction_processed());
+        }
+
+        System.out.print("\n\tPress Enter to continue...");
+        scanf.nextLine();
+    }
+
+    public void delete_employee() {
+        Scanner scanf = new Scanner(System.in);
+
+        view_employee_list();
+
+        if (cashiers.isEmpty()) {
+            return;
+        }
+
+        while (true) {
+            System.out.print("\n\tEnter employee ID to delete (0 to cancel): ");
+            try {
+                int employeeId = Integer.parseInt(scanf.nextLine());
+
+                if (employeeId == 0) {
+                    System.out.println("\n\tDeletion cancelled.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
+                    return;
+                }
+
+                Cashier employeeToDelete = null;
+                for (Cashier cashier : cashiers) {
+                    if (cashier.getEmployee_id() == employeeId) {
+                        employeeToDelete = cashier;
+                        break;
+                    }
+                }
+
+                if (employeeToDelete == null) {
+                    System.out.println("\n\tEmployee ID not found. Please try again.");
+                    continue;
+                }
+
+                while (true) {
+                    System.out.println("\n\tAre you sure you want to delete employee:");
+                    System.out.println("\tID: " + employeeToDelete.getEmployee_id());
+                    System.out.println("\tName: " + employeeToDelete.getEmployee_full_name());
+                    System.out.println("\tPhone Number: " + employeeToDelete.getPhone_number());
+                    System.out.println("\tHired Date: " + employeeToDelete.getHired_date());
+                    System.out.println("\tTotal Transaction Processed: " + employeeToDelete.getTotal_transaction_processed());
+                    System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
+
+                    String confirmation = scanf.nextLine();
+                    if (confirmation.equalsIgnoreCase("Y")) {
+                        cashiers.remove(employeeToDelete);
+                        save_all_cashiers_to_csv(); // Save updated list to CSV
+                        System.out.println("\n\tEmployee successfully deleted.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                        return;
+                    } else if (confirmation.equalsIgnoreCase("N")) {
+                        System.out.println("\n\tDeletion cancelled.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                        return;
+                    } else {
+                        System.out.println("\n\tInvalid Input");
+                        System.out.print("\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
+            }
+        }
+    }
+
+    public void reset_employee_password() {
+        Scanner scanf = new Scanner(System.in);
+
+        // Show current employees first
+        view_employee_list();
+
+        if (cashiers.isEmpty()) {
+            return;
+        }
+
+        while (true) {
+            System.out.print("\n\tEnter employee ID to reset password (0 to cancel): ");
+            try {
+                int employeeId = Integer.parseInt(scanf.nextLine());
+
+                if (employeeId == 0) {
+                    System.out.println("\n\tPassword reset cancelled.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
+                    return;
+                }
+
+                // Find the employee
+                Cashier employeeToReset = null;
+                for (Cashier cashier : cashiers) {
+                    if (cashier.getEmployee_id() == employeeId) {
+                        employeeToReset = cashier;
+                        break;
+                    }
+                }
+
+                if (employeeToReset == null) {
+                    System.out.println("\n\tEmployee ID not found. Please try again.");
+                    continue;
+                }
+
+                // Confirm reset
+                System.out.println("\n\tResetting password for employee:");
+                System.out.println("\tID: " + employeeToReset.getEmployee_id());
+                System.out.println("\tName: " + employeeToReset.getEmployee_full_name());
+
+                // Get new password
+                String newPassword;
+                String confirmPassword;
+                do {
+                    newPassword = input_password(scanf, "\n\tEnter new password: ");
+                    confirmPassword = input_password(scanf, "\tConfirm new password: ");
+
+                    if (!newPassword.equals(confirmPassword)) {
+                        System.out.println("\n\tPasswords do not match. Please try again.");
+                    }
+                } while (!newPassword.equals(confirmPassword));
+
+                // Update password
+                employeeToReset.setPassword(newPassword);
+                save_all_cashiers_to_csv(); // Save updated list to CSV
+
+                System.out.println("\n\tPassword successfully reset.");
+                System.out.println("\n\tPress Enter to continue...");
+                scanf.nextLine();
+                return;
+
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
+            }
+        }
+    }
+
+    // Helper method to save all cashiers to CSV after modifications
+    private void save_all_cashiers_to_csv() {
+        try (FileWriter writer = new FileWriter("cashier_employees.csv")) {
+
+            writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname," +
+                    "password,phone_number,hired_date,total_transaction_processed\n");
+
+            for (Cashier cashier : cashiers) {
+                writer.append(String.valueOf(cashier.getEmployee_id())).append(",");
+                writer.append(cashier.getEmployee_username()).append(",");
+                writer.append(cashier.getEmployee_first_name()).append(",");
+                writer.append(cashier.getEmployee_surname()).append(",");
+                writer.append(cashier.getPassword()).append(",");
+                writer.append(cashier.getPhone_number()).append(",");
+                writer.append(cashier.getHired_date()).append(",");
+                writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append("\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving cashier employees data to file: " + e.getMessage());
+        }
+    }
 
 
 

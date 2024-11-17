@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\cashier_employees.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\condiments.csv">
           <value>
             <Attribute>
@@ -53,6 +60,13 @@
           </value>
         </entry>
         <entry key="\liquid_soaps.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\sales_report.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

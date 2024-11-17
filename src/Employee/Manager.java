@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
-//LOGIN MAX ATTEMPT
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
 
     public void user_manager() {
@@ -24,7 +23,7 @@ public class Manager {
         boolean valid = false; // Indicate if login is valid
 
         while (!valid) {
-            System.out.println("\t===================================");
+            System.out.println("\n\n\t===================================");
             System.out.println("\t|                                 |");
             System.out.println("\t|          Manager Login          |");
             System.out.println("\t|                                 |");
@@ -89,7 +88,7 @@ public class Manager {
         String choice;
 
         while (true) {
-            System.out.println("\t=======================================");
+            System.out.println("\n\n\t=======================================");
             System.out.println("\t|                                     |");
             System.out.println("\t|          Manager Dashboard          |");
             System.out.println("\t|                                     |");
@@ -144,7 +143,7 @@ public class Manager {
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("receipt_number"));
         List<String> csvFiles = new ArrayList<>();
 
-        System.out.println("\t=======================================");
+        System.out.println("\n\n\t=======================================");
         System.out.println("\t|                                     |");
         System.out.println("\t|         Transaction History         |");
         System.out.println("\t|                                     |");
@@ -174,9 +173,9 @@ public class Manager {
                         }
 
                         String selectedFile = csvFiles.get(choice - 1);
-                        System.out.println("\tYou selected: " + selectedFile);
+                        System.out.println("\n\n\tYou selected: " + selectedFile);
                         read_transaction_history_from_csv(selectedFile);
-                        System.out.println("\tPress Enter key to continue.\n");
+                        System.out.print("\tPress Enter key to continue.\n");
                         scanf.nextLine();
                         display_purchase_history_menu();
                         break;
@@ -243,17 +242,15 @@ public class Manager {
         Cashier cashier = new Cashier();
 
         while (true) {
-            System.out.println("\t=======================================");
+            System.out.println("\n\n\t=======================================");
             System.out.println("\t|                                     |");
-            System.out.println("\t|          HR Management Menu          |");
+            System.out.println("\t|          HR Management Menu         |");
             System.out.println("\t|                                     |");
             System.out.println("\t=======================================\n");
             System.out.println("\t[1] Register New Employee");
             System.out.println("\t[2] View Employee List");
-            System.out.println("\t[3] Search Employee");
-            System.out.println("\t[4] Update Employee Information");
-            System.out.println("\t[5] Delete Employee");
-            System.out.println("\t[6] Reset Employee Password");
+            System.out.println("\t[3] Delete Employee");
+            System.out.println("\t[4] Reset Employee Password");
             System.out.println("\t[0] Return to Main Menu");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -266,6 +263,15 @@ public class Manager {
                 case "1":
                     cashier.create_new_cashier_employee();
                     break;
+                case "2":
+                    cashier.view_employee_list();
+                    break;
+                case "3":
+                    cashier.delete_employee();
+                    break;
+                case "4":
+                    cashier.reset_employee_password();
+                    break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.println("\t\tPress Enter key to continue.\n");
@@ -275,6 +281,9 @@ public class Manager {
         }
 
     }
+
+
+
 
 
 
