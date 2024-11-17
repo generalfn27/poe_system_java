@@ -213,7 +213,7 @@ public class Cashier {
 
 
         while (true) {
-            System.out.println("\n\tEnter cashier first name: ");
+            System.out.print("\n\tEnter cashier first name: ");
             cashier_first_name = scanf.nextLine();
 
             if (cashier_first_name.matches("^[a-zA-Z\\\\s]*$")){ break; }
@@ -226,13 +226,13 @@ public class Cashier {
         new_cashier.setEmployee_first_name(cashier_first_name);
 
         while (true) {
-            System.out.println("\n\tEnter cashier surname: ");
+            System.out.print("\n\tEnter cashier surname: ");
             cashier_surname = scanf.nextLine();
 
             if (cashier_surname.matches("^[a-zA-Z\\\\s]*$")){ break; }
             else {
                 System.out.println("\n\tInvalid first name. Please enter your name without using numbers or symbols/signs.");
-                System.out.println("\n\t\tPress enter to Continue");
+                System.out.print("\n\t\tPress enter to Continue");
                 scanf.nextLine();
             }
         }
@@ -279,11 +279,11 @@ public class Cashier {
         save_id_number();
         new_cashier.setEmployee_id(currentIDNumber);
 
-        System.out.println("\tID number#: " + new_cashier.getEmployee_id());
-        System.out.println("\tUsername: " + new_cashier.getEmployee_username());
 
         String detail_confirmation;
         while (true) {
+            System.out.println("\n\n\tID number#: " + new_cashier.getEmployee_id());
+            System.out.println("\tUsername: " + new_cashier.getEmployee_username());
 
             System.out.println("\n\tCheck your information.");
             System.out.println("\n\tEnter Y if you are sure.");
