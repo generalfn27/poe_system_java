@@ -27,6 +27,10 @@ public class Product {
         return price;
     }
 
+    public void setPrice(double newPrice) {
+        this.price = newPrice;
+    }
+
     public int getStock() {
         return stock;
     }
@@ -45,6 +49,7 @@ public class Product {
     public String toString() {
         return String.format("Code: %-6s\tName: %-24s\tPrice: %-5.2f\tStock: %2d", code, name, price, stock);
     }
+
 
 }
 
