@@ -1,17 +1,17 @@
 package Employee;
 
+import Shopper.Product;
 import User_Types.UserType;
+import Process.BrowseProduct;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
+    private String currentCategoryFile;
 
     public void user_manager() {
         manager_login();
@@ -68,7 +68,7 @@ public class Manager {
     private boolean handle_logout(Scanner scanf) {
         while (true) {
             System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
-            System.out.println("\t[Y] for Yes  [N] for No: ");
+            System.out.print("\t[Y] for Yes  [N] for No: ");
 
             String exit_confirmation = scanf.next().trim();
             scanf.nextLine();
@@ -88,12 +88,12 @@ public class Manager {
         String choice;
 
         while (true) {
-            System.out.println("\n\n\t=======================================");
-            System.out.println("\t|                                     |");
-            System.out.println("\t|          Manager Dashboard          |");
-            System.out.println("\t|                                     |");
-            System.out.println("\t=======================================\n");
-            System.out.println("\t[1] Voucher code / Promotions");
+            System.out.println("\n\t=======================================");
+            System.out.println  ("\t|                                     |");
+            System.out.println  ("\t|          Manager Dashboard          |");
+            System.out.println  ("\t|                                     |");
+            System.out.println  ("\t=======================================\n");
+            System.out.println  ("\t[1] Voucher code / Promotions");
             System.out.println("\t[2] Sales report"); //display total sales at recent total transactions
             System.out.println("\t[3] Purchase/Transaction History"); //same sa personal account
             System.out.println("\t[4] Inventory Report"); //refill stocks
@@ -117,6 +117,7 @@ public class Manager {
                     break;
                 case "4":
                     //nababawasan na pero need madagdagan na at pwede mag dagdag mismo ng new items
+                    inventory_management();
                     break;
                 case "5":
                     hr_management_menu();
@@ -188,7 +189,7 @@ public class Manager {
             }
         } else {
             System.out.println("\tNo CSV files found.");
-            System.out.println("\tPress Enter key to continue.\n");
+            System.out.print("\tPress Enter key to continue.\n");
             scanf.nextLine();
             System.out.println("\tReturning to previous menu.");
         }
@@ -236,6 +237,344 @@ public class Manager {
         }
     }
 
+
+    public void inventory_management() {
+        Scanner scanf = new Scanner(System.in);
+        String item_category;
+
+        while (true) {
+            System.out.println("\n\t----------------------------------------------");
+            System.out.println("\t|             INVENTORY MANAGEMENT           |");
+            System.out.println("\t|         Select item category to check?     |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|        [1] Beverages                       |");
+            System.out.println("\t|        [2] Snacks                          |");
+            System.out.println("\t|        [3] Canned Goods                    |");
+            System.out.println("\t|        [4] Condiments                      |");
+            System.out.println("\t|        [5] Dairy                           |");
+            System.out.println("\t|        [6] Frozen Foods                    |");
+            System.out.println("\t|        [7] Body Care & Beauty Care         |");
+            System.out.println("\t|        [8] Detergents & Soaps              |");
+            System.out.println("\t|        [0] Go Back                         |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t----------------------------------------------");
+            System.out.print("\t|        Enter here: ");
+
+            item_category = scanf.nextLine();
+
+            // Variable to hold the products in the chosen category
+            List<Product> selected_products = null;
+
+            switch (item_category) {
+                case "0":
+                    manager_dashboard();
+                    return;
+                case "1":
+                    selected_products = BrowseProduct.browse_beverages();
+                    currentCategoryFile = "beverages.csv"; // Set the category file
+                    break;
+                case "2":
+                    selected_products = BrowseProduct.browse_snacks();
+                    currentCategoryFile = "snacks.csv"; // Set the category file
+                    break;
+                case "3":
+                    selected_products = BrowseProduct.browse_canned_goods();
+                    currentCategoryFile = "canned_goods.csv"; // Set the category file
+                    break;
+                case "4":
+                    selected_products = BrowseProduct.browse_condiments();
+                    currentCategoryFile = "condiments.csv"; // Set the category file
+                    break;
+                case "5":
+                    selected_products = BrowseProduct.browse_dairy();
+                    currentCategoryFile = "dairy.csv"; // Set the category file
+                    break;
+                case "6":
+                    selected_products = BrowseProduct.browse_frozen_foods();
+                    currentCategoryFile = "frozen_foods.csv"; // Set the category file
+                    break;
+                case "7":
+                    selected_products = BrowseProduct.browse_self_care_items();
+                    currentCategoryFile = "self_care_items.csv"; // Set the category file
+                    break;
+                case "8":
+                    selected_products = BrowseProduct.browse_detergents();
+                    currentCategoryFile = "detergents.csv"; // Set the category file
+                    break;
+                default:
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); //used for press any key to continue
+            }
+
+            if (selected_products != null && !selected_products.isEmpty()) {
+                System.out.print("\n\t\tPress Enter key to continue.");
+                scanf.nextLine(); //used for press any key to continue
+                inventory_item_options(selected_products);
+
+            } else { System.out.println("\n\tNo products available in this category.");  }
+
+        }
+
+    }
+
+
+    public void inventory_item_options(List<Product> products) {
+        Scanner scanf = new Scanner(System.in);
+        String inventory_option_choice;
+
+        while (true) {
+            System.out.println("\n\t----------------------------------------------");
+            System.out.println("\t|             INVENTORY MANAGEMENT           |");
+            System.out.println("\t|         Select options to do               |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|        [1] Add new item                    |");
+            System.out.println("\t|        [2] Remove Product                  |");
+            System.out.println("\t|        [3] Restock                         |");
+            System.out.println("\t|        [4] Update Price                    |");
+            System.out.println("\t|                                            |");
+            System.out.println("\t|        [0] Go Back                         |");
+            System.out.println("\t----------------------------------------------");
+            System.out.print("\t|        Enter here: ");
+            inventory_option_choice = scanf.nextLine();
+
+            switch (inventory_option_choice) {
+                case "0":
+                    inventory_management();
+                    return;
+                case "1":
+                    add_new_item(products);
+                    break;
+                case "2":
+                    remove_product(products);
+                    break;
+                case "3":
+                    restock_product(products);
+                    break;
+                case "4":
+                    update_product_price(products);
+                    break;
+                default:
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
+            }
+        }
+    }
+
+    private void add_new_item(List<Product> products) {
+        Scanner scanf = new Scanner(System.in);
+        System.out.println("\n\t=== Add New Item ===");
+
+        System.out.print("\tEnter product code: ");
+        String code = scanf.nextLine().toUpperCase();
+
+        // Check if product code already exists
+        if (products.stream().anyMatch(p -> p.getCode().equals(code))) {
+            System.out.println("\n\tProduct code already exists!");
+            System.out.print("\t\tPress Enter key to continue.");
+            scanf.nextLine();
+            return;
+        }
+
+        System.out.print("\tEnter product name: ");
+        String name = scanf.nextLine();
+
+        double price;
+        while (true) {
+            try {
+                System.out.print("\tEnter product price: ");
+                price = Double.parseDouble(scanf.nextLine());
+                if (price <= 0) {
+                    System.out.println("\tPrice must be greater than 0!");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("\tInvalid price format. Please enter a valid number.");
+            }
+        }
+
+        int stock;
+        while (true) {
+            try {
+                System.out.print("\tEnter initial stock: ");
+                stock = Integer.parseInt(scanf.nextLine());
+                if (stock < 0) {
+                    System.out.println("\tStock cannot be negative!");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("\tInvalid stock format. Please enter a valid number.");
+            }
+        }
+
+        // Add to list and update CSV
+        Product newProduct = new Product(code, name, price, stock);
+        products.add(newProduct);
+        update_product_csv_file(products);
+
+        System.out.println("\tProduct added successfully!");
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
+    }
+
+
+    private void remove_product(List<Product> products) {
+        Scanner scanf = new Scanner(System.in);
+        System.out.println("\n\t=== Remove Product ===");
+
+        System.out.print("\tEnter product code to remove: ");
+        String code = scanf.nextLine().toUpperCase();
+
+        Product productToRemove = null;
+        for (Product product : products) {
+            if (product.getCode().equals(code)) {
+                productToRemove = product;
+                break;
+            }
+        }
+
+        if (productToRemove != null) {
+            System.out.println("\tProduct found: " + productToRemove.getName());
+            System.out.print("\tAre you sure you want to remove this product? (Y/N): ");
+            String confirm = scanf.nextLine();
+
+            if (confirm.equalsIgnoreCase("Y")) {
+                products.remove(productToRemove);
+                update_product_csv_file(products);
+                System.out.println("\tProduct removed successfully!");
+            } else {
+                System.out.println("\tProduct removal cancelled.");
+            }
+        } else {
+            System.out.println("\tProduct not found!");
+        }
+
+        System.out.println("\t\tPress Enter key to continue.\n");
+        scanf.nextLine();
+    }
+
+
+    private void restock_product(List<Product> products) {
+        Scanner scanf = new Scanner(System.in);
+        System.out.println("\n\t=== Restock Product ===");
+
+        System.out.print("\tEnter product code to restock: ");
+        String code = scanf.nextLine().toUpperCase();
+
+        Product productToRestock = null;
+        for (Product product : products) {
+            if (product.getCode().equals(code)) {
+                productToRestock = product;
+                break;
+            }
+        }
+
+        if (productToRestock != null) {
+            System.out.println("\tCurrent stock for " + productToRestock.getName() + ": " + productToRestock.getStock());
+
+            int additionalStock;
+            while (true) {
+                try {
+                    System.out.print("\tEnter additional stock quantity: ");
+                    additionalStock = Integer.parseInt(scanf.nextLine());
+                    if (additionalStock <= 0) {
+                        System.out.println("\tPlease enter a positive number!");
+                        continue;
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid input. Please enter a valid number.");
+                }
+            }
+
+            productToRestock.update_stock(additionalStock);
+            update_product_csv_file(products);
+            System.out.println("\n\tStock updated successfully!");
+        } else {
+            System.out.println("\n\tProduct not found!");
+        }
+
+        System.out.print("\t\tPress Enter key to continue...");
+        scanf.nextLine();
+    }
+
+
+    private void update_product_price(List<Product> products) {
+        Scanner scanf = new Scanner(System.in);
+
+        System.out.println("\n\t=== Update Product Price ===");
+        System.out.print("\tEnter product code to update: ");
+        String code = scanf.nextLine().toUpperCase();
+
+        Product productToUpdate = null;
+        for (Product product : products) {
+            if (product.getCode().equals(code)) {
+                productToUpdate = product;
+                break;
+            }
+        }
+
+        if (productToUpdate != null) {
+            System.out.println("\tCurrent price for " + productToUpdate.getName() + ": " + productToUpdate.getPrice());
+
+            double newPrice;
+            while (true) {
+                try {
+                    System.out.print("\tEnter new price: ");
+                    newPrice = Double.parseDouble(scanf.nextLine());
+                    if (newPrice <= 0) {
+                        System.out.println("\tPrice must be greater than 0!");
+                        continue;
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid price format. Please enter a valid number.");
+                }
+            }
+
+            productToUpdate.setPrice(newPrice);
+            update_product_csv_file(products);
+            System.out.println("\tPrice updated successfully!");
+        } else {
+            System.out.println("\tProduct not found!");
+        }
+
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
+    }
+
+
+    private void update_product_csv_file(List<Product> products) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(get_current_category_file()))) {
+            // Write header
+            writer.println("Code,Name,Price,Stock");
+
+            // Write product data
+            for (Product product : products) {
+                writer.printf("%s,%s,%.2f,%d%n",
+                        product.getCode(),
+                        product.getName(),
+                        product.getPrice(),
+                        product.getStock());
+            }
+        } catch (IOException e) {
+            System.out.println("\tError updating CSV file: " + e.getMessage());
+        }
+    }
+
+
+    private String get_current_category_file() {
+        if (currentCategoryFile == null || currentCategoryFile.isEmpty()) {
+            System.out.println("\tNo category selected. Defaulting to a generic file.");
+            return "products.csv"; // A fallback generic file
+        }
+        return currentCategoryFile;
+    }
+
+
     public void hr_management_menu() {
         Scanner scanf = new Scanner(System.in);
         String choice;
@@ -251,7 +590,7 @@ public class Manager {
             System.out.println("\t[2] View Employee List");
             System.out.println("\t[3] Delete Employee");
             System.out.println("\t[4] Reset Employee Password");
-            System.out.println("\t[0] Return to Main Menu");
+            System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
             choice = scanf.nextLine();
