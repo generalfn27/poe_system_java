@@ -39,7 +39,7 @@ public class UserCustomer {
                     customer_login();
                     break;
                 case "2":
-                    guest_customer_item_category(); // Pass the guest customer to the item category function
+                    guest_customer_item_category();
                     break;
                 case "3":
                     customer_register();
@@ -423,7 +423,7 @@ public class UserCustomer {
         if (!login_successful) { System.out.println("\n\tMaximum login attempts reached. Please try again later."); }
     }
 
-    // Placeholder method for registered customer actions after login
+
     public void registered_user_customer_item_category(String username, Customer customer) {
         Scanner scanf = new Scanner(System.in);
         String item_category;
@@ -606,7 +606,8 @@ public class UserCustomer {
     private void display_purchase_history_menu(Customer customer) {
         Scanner scanf = new Scanner(System.in);
         File directory = new File(".");
-        File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith(customer.getUsername()));
+        FilenameFilter filter = (dir, name) -> name.startsWith("receipt_number_") && name.endsWith("Customer_" + customer.getUsername() + ".csv");
+        File[] files = directory.listFiles(filter);
         List<String> csvFiles = new ArrayList<>();
 
         System.out.println("\t=======================================");
