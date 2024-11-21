@@ -1,5 +1,7 @@
 package Process;
 
+import Employee.Cashier;
+import Shopper.Customer;
 import Shopper.Product;
 
 import java.text.SimpleDateFormat;
@@ -53,7 +55,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    public boolean process_payment() {
+    public boolean process_payment(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
         display_counter();
 
@@ -92,7 +94,7 @@ public class CashierProcess extends OrderProcessor {
 
                         // Update stock levels after successful payment
                         update_all_stocks();
-                        print_receipt(counter, payment);
+                        print_receipt(counter, payment, cashier);
 
                         counter.clear();
                         return true; // Return true to indicate successful payment para balik dashboard
@@ -138,10 +140,12 @@ public class CashierProcess extends OrderProcessor {
 
 
     // Method to print the receipt
-    private void print_receipt(List<Product> counter, double payment) {
+    private void print_receipt(List<Product> counter, double payment, Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
         System.out.println("\n\n\t----- RECEIPT -----");
-        System.out.println("\tCODE\t\tProduct Name\t Quantity  Price");
+        System.out.println("\tCashier Name," + cashier.getEmployee_full_name());
+        System.out.println("\tDate," + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        System.out.println("\n\tCODE\t\tProduct Name\t Quantity  Price");
 
         for (Product product : counter) {
             System.out.printf("\t%-8s \t%-24s \t\t\t  x%d  \t%5.2f\n",
@@ -159,26 +163,26 @@ public class CashierProcess extends OrderProcessor {
         System.out.print("\tPress Enter key to Save & Exit: ");
         scanf.nextLine(); //used for press any key to continue
 
-        save_receipt_to_csv(counter, calculate_total_price(), payment);
+        cashier_save_receipt_to_csv(counter, calculate_total_price(), payment, cashier);
         System.out.println("\t\tPress Enter key to continue.\n");
         scanf.nextLine(); //used for press any key to continue
         counter.clear();
     }
 
 
-    // Dummy method for saving the receipt to a CSV file
-    public void save_receipt_to_csv(List<Product> counter, double totalPrice, double payment) {
+    private void cashier_save_receipt_to_csv(List<Product> counter, double totalPrice, double payment, Cashier cashier) {
         if (counter.isEmpty()) {
             System.out.println("No items in the counter. Nothing to save.");
             return;
         }
 
-        String fileName = generate_receipt_file_name();
+        String fileName = cashier_generate_receipt_file_name(cashier);
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            // Write header
+            // Write header with cashier information
+            writer.println("Cashier Name," + cashier.getEmployee_full_name());
+            writer.println("Date," + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
             writer.println("Code,Name,Quantity,Price");
 
-            // Write each product's details
             for (Product product : counter) {
                 writer.printf("%s,%s,%d,%.2f%n",
                         product.getCode(),
@@ -191,7 +195,6 @@ public class CashierProcess extends OrderProcessor {
             writer.printf("Total Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
 
-            // Calculate and write change if needed
             if (payment > totalPrice) {
                 writer.printf("Change: ,%.2f%n", payment - totalPrice);
             }
@@ -203,13 +206,61 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    private static String generate_receipt_file_name() {
+    public void self_checkout_save_receipt_to_csv(List<Product> counter, double totalPrice, double payment, Customer customer) {
+        if (counter.isEmpty()) {
+            System.out.println("No items in the counter. Nothing to save.");
+            return;
+        }
+
+        String fileName = self_checkout_generate_receipt_file_name(customer);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            // Write header with customer information
+            writer.println("Username,Payment method,Balance");
+            writer.println(customer.getUsername() + "," + customer.getPaymentMethod() + "," +customer.getBalance());
+            writer.println("Date," + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+            writer.println("Code,Name,Quantity,Price");
+
+            for (Product product : counter) {
+                writer.printf("%s,%s,%d,%.2f%n",
+                        product.getCode(),
+                        product.getName(),
+                        product.getStock(),
+                        product.getPrice());
+            }
+
+            writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
+            writer.printf("Total Price: ,%.2f%n", totalPrice);
+            writer.printf("Payment: ,%.2f%n", payment);
+
+            if (payment > totalPrice) {
+                writer.printf("Change: ,%.2f%n", payment - totalPrice);
+            }
+            System.out.println("\n\tReceipt successfully saved to " + fileName + "\n\n");
+            delete_queue_order_file();
+        } catch (IOException e) {
+            System.out.println("Error saving the receipt: " + e.getMessage());
+        }
+    }
+
+
+    private String cashier_generate_receipt_file_name(Cashier cashier) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
         String formattedDate = dateFormat.format(new Date());
-        String fileName = String.format("receipt_number_%d_%s.csv", currentReceiptNumber, formattedDate);
+        String fileName = String.format("receipt_number_%d_%s_Cashier_%s.csv", currentReceiptNumber, formattedDate, cashier.getEmployee_username());
 
-        // Increment the queue number for the next file
-        currentReceiptNumber++;
+        currentReceiptNumber++; // Increment the queue number for the next file
+        save_receipt_number(); // Save the updated queue number
+
+        return fileName;
+    }
+
+
+    private String self_checkout_generate_receipt_file_name(Customer customer) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
+        String formattedDate = dateFormat.format(new Date());
+        String fileName = String.format("receipt_number_%d_%s_Customer_%s.csv", currentReceiptNumber, formattedDate, customer.getUsername());
+
+        currentReceiptNumber++; // Increment the queue number for the next file
         save_receipt_number(); // Save the updated queue number
 
         return fileName;
@@ -230,7 +281,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    // Method to save the current resibo number to a file
+    // Method to save the current receipt number to a file
     private static void save_receipt_number() {
         try (PrintWriter writer = new PrintWriter(new FileWriter("current_receipt_number.txt"))) {
             writer.println(currentReceiptNumber);
@@ -331,7 +382,7 @@ public class CashierProcess extends OrderProcessor {
         }
     }
 
-    // Method to update sales report with new transactions
+
     public void update_sales_report(int newItems, double newSales) {
         String filename = "sales_report.csv";
         int currentItems = 0;
@@ -366,6 +417,7 @@ public class CashierProcess extends OrderProcessor {
         }
     }
 
+
     public void increase_item_quantity_counter(String product_code, int quantity) {
         for (Product product : counter) {
             if (product.getCode().equals(product_code.toUpperCase())) {
@@ -383,6 +435,7 @@ public class CashierProcess extends OrderProcessor {
         }
         System.out.println("\tProduct not found in the cart.");
     }
+
 
     public void deduct_item_quantity_counter(String product_code, int quantity) {
         for (Product product : counter) {
@@ -402,6 +455,7 @@ public class CashierProcess extends OrderProcessor {
         }
         System.out.println("\tProduct not found in the cart.");
     }
+
 
     public void remove_item_counter(String product_code) {
         Product to_remove = null;
