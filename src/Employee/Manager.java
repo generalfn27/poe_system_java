@@ -178,11 +178,13 @@ public class Manager {
                         read_transaction_history_from_csv(selectedFile);
                         System.out.print("\tPress Enter key to continue.\n");
                         scanf.nextLine();
-                        display_purchase_history_menu();
                         break;
                     } else {
                         System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
+                        System.out.println("\t\tPress Enter key to continue.\n");
+                        scanf.nextLine(); //used for press any key to continue
                     }
+                    display_purchase_history_menu();
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input! Please enter a valid number.");
                 }
@@ -196,7 +198,7 @@ public class Manager {
     }
 
 
-    public void read_transaction_history_from_csv(String filename) {
+    public static void read_transaction_history_from_csv(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
 
@@ -609,7 +611,7 @@ public class Manager {
                     cashier.delete_employee();
                     break;
                 case "4":
-                    cashier.reset_employee_password();
+                    cashier.manager_reset_employee_password();
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
