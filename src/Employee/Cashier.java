@@ -309,6 +309,7 @@ public class Cashier {
 
         String detail_confirmation;
         while (true) {
+            //change tong display na to
             System.out.println("\tID: " + new_cashier.getEmployee_id());
             System.out.println("\tName: " + new_cashier.getEmployee_full_name());
             System.out.println("\tPhone Number: " + new_cashier.getPhone_number());
