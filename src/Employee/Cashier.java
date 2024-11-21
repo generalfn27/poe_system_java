@@ -153,7 +153,7 @@ public class Cashier {
                 if (cashier.getEmployee_username().equals(username) && cashier.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.");
                     login_successful = true;
-                    cashier_dashboard();
+                    cashier_dashboard(cashier);
                 }
             }
 
@@ -439,29 +439,30 @@ public class Cashier {
 
 
     //next development dapat pinapasa na username sa parameter as welcome sa employee
-    private void cashier_dashboard() {
+    private void cashier_dashboard(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
         while (true) {
-            System.out.println("\t=======================================");
-            System.out.println("\t|                                     |");
-            System.out.println("\t|          Cashier Dashboard          |");
-            System.out.println("\t|                                     |");
-            System.out.println("\t=======================================\n");
-            System.out.println("\t[1] Process Queue Orders");
-            System.out.println("\t[2] hindi pa alam ano dapat talaga dito");
-            System.out.println("\t[0] Exit");
-
-            System.out.print("\n\n\tEnter Here: ");
+            System.out.println("\t================================================");
+            System.out.println("\t|                                               |");
+            System.out.println("\t|                  Cashier Dashboard            |");
+            System.out.printf ("\t|          Welcome ! %-27s|\n", cashier.getEmployee_full_name());
+            System.out.println("\t|                                               |");
+            System.out.println("\t|      [1] Process Queue Orders                 |");
+            System.out.println("\t|      [2] Employee Account Option              |");
+            System.out.println("\t|      [0] Exit                                 |");
+            System.out.println("\t|                                               |");
+            System.out.println("\t================================================\n");
+            System.out.print("\n\tEnter Here: ");
             choice = scanf.nextLine();
 
             switch (choice) {
                 case "1":
-                    selecting_queue_list_to_process();
+                    selecting_queue_list_to_process(cashier);
                     break;
                 case "2":
-                    // Call method to modify counter items (under development)
+                    cashier_account_menu_profile(cashier);
                     break;
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
@@ -480,7 +481,7 @@ public class Cashier {
     }
 
 
-    public void selecting_queue_list_to_process() {
+    public void selecting_queue_list_to_process(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
         File directory = new File(".");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
@@ -512,14 +513,14 @@ public class Cashier {
                     if (choice >= 0 && choice <= csvFiles.size()) {
                         if (choice == 0) {
                             System.out.println("\tReturning to previous menu...");
-                            cashier_dashboard();
+                            cashier_dashboard(cashier);
                         }
 
                         String selectedFile = csvFiles.get(choice - 1);
                         System.out.println("\n\n\tYou selected: " + selectedFile);
                         cashier_process.read_order_from_csv(selectedFile);
                         cashier_process.transfer_cart_to_counter();
-                        cashier_process_choice();
+                        cashier_process_choice(cashier);
                         break;
                     } else {
                         System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
@@ -535,12 +536,12 @@ public class Cashier {
             scanf.nextLine(); //used for press any key to continue
 
             System.out.println("\tReturning to Cashier Dashboard.");
-            cashier_dashboard();
+            cashier_dashboard(cashier);
         }
     }
 
 
-    public void cashier_process_choice() {
+    public void cashier_process_choice(Cashier cashier) {
         System.out.flush();
         Scanner scanf = new Scanner(System.in);
         String choice;
@@ -562,12 +563,12 @@ public class Cashier {
 
             switch (choice) {
                 case "1":
-                    if (cashier_process.process_payment()) {
-                        cashier_dashboard();
+                    if (cashier_process.process_payment(cashier)) {
+                        cashier_dashboard(cashier);
                     }
                     break;
                 case "2":
-                    modify_counter_process();
+                    modify_counter_process(cashier);
                     break;
                 case "3":
                     cashier_process.display_counter();
@@ -575,7 +576,7 @@ public class Cashier {
                     scanf.nextLine(); //used for press any key to continue
                     break;
                 case "0":
-                    selecting_queue_list_to_process();
+                    selecting_queue_list_to_process(cashier);
                     return;
                 default:
                     System.out.println("\n\tAn error has occurred");
@@ -586,7 +587,7 @@ public class Cashier {
     }
 
     // ung mga changes here hanggang sa arraylist lang so pag nag back ka hindi mag reflect un sa csv
-    public void modify_counter_process() {
+    public void modify_counter_process(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -663,13 +664,13 @@ public class Cashier {
                     break;
                 case "P":
                 case "p":
-                    if (cashier_process.process_payment()) {
-                        cashier_dashboard(); // Return to dashboard after payment if true
+                    if (cashier_process.process_payment(cashier)) {
+                        cashier_dashboard(cashier); // Return to dashboard after payment if true
                     }
                     break;
                 case "B":
                 case "b":
-                    cashier_process_choice();
+                    cashier_process_choice(cashier);
                     return;
                 default:
                     System.out.println("\n\tAn error has occurred");
@@ -677,6 +678,133 @@ public class Cashier {
                     scanf.nextLine(); //used for press any key to continue
             }
         }
+    }
+
+
+    public void cashier_account_menu_profile(Cashier cashier) {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+
+        while (true) {
+            System.out.println("\n\n\t=================================================");
+            System.out.println("\t|                                               |");
+            System.out.println("\t|               Cashier Account Options         |");
+            System.out.printf ("\t|          Welcome ! %-27s|\n", cashier.getEmployee_full_name());
+            System.out.println("\t|                                               |");
+            System.out.println("\t|      [1] View Processed Receipt               |");
+            System.out.println("\t|      [2] Display Account Details              |");
+            System.out.println("\t|      [3] Reset Password                       |");
+            System.out.println("\t|                                               |");
+            System.out.println("\t|      [0] Exit                                 |");
+            System.out.println("\t|                                               |");
+            System.out.println("\t=================================================\n");
+            System.out.print("\n\tEnter Here: ");
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "0":
+                    cashier_dashboard(cashier);
+                    return;
+                case "1":
+                    view_cashier_receipts(cashier);
+                    break;
+                case "2":
+                    display_cashier_account_details(cashier);
+                    break;
+                case "3":
+                    cashier_employee_change_password(cashier);
+                    break;
+                default:
+                    System.out.println("\n\tAn error has occurred");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
+            }
+        }
+    }
+
+
+    public void view_cashier_receipts(Cashier cashier) {
+        Scanner scanf = new Scanner(System.in);
+        File receiptDirectory = new File(".");
+        FilenameFilter filter = (dir, name) -> name.startsWith("receipt_number_") && name.endsWith("Cashier_" + cashier.getEmployee_username() + ".csv");
+        File[] files = receiptDirectory.listFiles(filter);
+        List<String> csvFiles = new ArrayList<>();
+
+        System.out.println("\n\n\t=======================================");
+        System.out.println("\t|                                     |");
+        System.out.println("\t|         Transaction History         |");
+        System.out.println("\t|                                     |");
+        System.out.println("\t=======================================");
+        System.out.println("\n\tCSV Files to Open:");
+
+        if (files != null) {
+            for (File file : files) {
+                csvFiles.add(file.getName());
+                System.out.println("\t[" + (csvFiles.size()) + "] " + file.getName());
+            }
+        }
+
+        if (!csvFiles.isEmpty()) {
+            System.out.println("\t[0] Go back");
+
+            while (true) {
+                System.out.print("\n\tEnter the number of the file to open: ");
+                try {
+                    String input = scanf.nextLine().trim();
+                    int choice = Integer.parseInt(input);
+
+                    if (choice >= 0 && choice <= csvFiles.size()) {
+                        if (choice == 0) {
+                            System.out.println("\tReturning to previous menu...");
+                            cashier_account_menu_profile(cashier);
+                        }
+
+                        String selectedFile = csvFiles.get(choice - 1);
+                        System.out.println("\n\n\tYou selected: " + selectedFile);
+                        Manager.read_transaction_history_from_csv(selectedFile);
+                        System.out.print("\tPress Enter key to continue.\n");
+                        scanf.nextLine();
+                        break;
+                    } else {
+                        System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
+                        System.out.println("\t\tPress Enter key to continue.\n");
+                        scanf.nextLine(); //used for press any key to continue
+                    }
+                    view_cashier_receipts(cashier);
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid input! Please enter a valid number.");
+                }
+            }
+        } else {
+            System.out.println("\tNo CSV files found.");
+            System.out.print("\tPress Enter key to continue.\n");
+            scanf.nextLine();
+        }
+    }
+
+    public void display_cashier_account_details(Cashier cashier) {
+        Scanner scanf = new Scanner(System.in);
+
+        load_cashiers_from_CSV();
+
+        System.out.println("\n\t=================================================");
+        System.out.println("\t|              Employee Details                 |");
+        System.out.println("\t=================================================");
+        System.out.printf("\t%-5s %-15s %-20s %-15s %-12s %-24s%n",
+                "ID", "Username", "Full Name", "Phone", "Hire Date", "Total Transaction Processed");
+        System.out.println("\t-------------------------------------------------");
+
+            System.out.printf("\t%-5d %-15s %-20s %-15s %-12s %16d%n",
+                    cashier.getEmployee_id(),
+                    cashier.getEmployee_username(),
+                    cashier.getEmployee_full_name(),
+                    cashier.getPhone_number(),
+                    cashier.getHired_date(),
+                    cashier.getTotal_transaction_processed());
+
+        System.out.print("\n\tPress Enter to continue...");
+        scanf.nextLine();
+
     }
 
 
@@ -781,7 +909,9 @@ public class Cashier {
         }
     }
 
-    public void reset_employee_password() {
+
+    // dito ay id lang need ng manager para palitan password mo
+    public void manager_reset_employee_password() {
         Scanner scanf = new Scanner(System.in);
 
         // Show current employees first
@@ -817,12 +947,10 @@ public class Cashier {
                     continue;
                 }
 
-                // Confirm reset
                 System.out.println("\n\tResetting password for employee:");
                 System.out.println("\tID: " + employeeToReset.getEmployee_id());
                 System.out.println("\tName: " + employeeToReset.getEmployee_full_name());
 
-                // Get new password
                 String newPassword;
                 String confirmPassword;
                 do {
@@ -834,12 +962,11 @@ public class Cashier {
                     }
                 } while (!newPassword.equals(confirmPassword));
 
-                // Update password
                 employeeToReset.setPassword(newPassword);
                 save_all_cashiers_to_csv(); // Save updated list to CSV
 
                 System.out.println("\n\tPassword successfully reset.");
-                System.out.println("\n\tPress Enter to continue...");
+                System.out.print("\n\tPress Enter to continue...");
                 scanf.nextLine();
                 return;
 
@@ -848,6 +975,7 @@ public class Cashier {
             }
         }
     }
+
 
     // Helper method to save all cashiers to CSV after modifications
     private void save_all_cashiers_to_csv() {
@@ -872,6 +1000,65 @@ public class Cashier {
     }
 
 
+    // pag personal mismo na cashier ung magpapalit ng password
+    private void cashier_employee_change_password(Cashier cashier) {
+        Scanner scanf = new Scanner(System.in);
+        String new_password;
+        String confirm_password = "";
+        int attemptCount = 0;
+        final int MAX_ATTEMPTS = 3;
+
+        while (attemptCount < MAX_ATTEMPTS) {
+
+            System.out.print("\n\tAre you sure changing password (Y/N): ");
+            String change_password_confirmation = scanf.nextLine().trim();
+
+            if (change_password_confirmation.equalsIgnoreCase("Y")) {
+                System.out.print("\tEnter your current password: ");
+                String current_password = scanf.nextLine();
+
+                if (current_password.equals(cashier.getPassword())) {
+                    System.out.print("\tSet your new password: ");
+                    new_password = scanf.nextLine();
+
+                    while (!new_password.equals(confirm_password)) {
+                        System.out.print("\tConfirm the new password: ");
+                        confirm_password = scanf.nextLine();
+                        if (!new_password.equals(confirm_password)) {
+                            System.out.println("\n\tPasswords do not match. Please try again.");
+                        }
+                    }
+                    cashier.setPassword(new_password);
+                    save_all_cashiers_to_csv();
+                    System.out.println("\n\tThe password is successfully changed.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
+                    cashier_account_menu_profile(cashier);
+                    break;
+                } else {
+                    attemptCount++;
+                    System.out.println("\n\tIncorrect current password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine();
+                }
+
+            } else if (change_password_confirmation.equalsIgnoreCase("N")) {
+                cashier_account_menu_profile(cashier);
+                return;
+            } else {
+                System.out.println("\t\tPress Enter key to continue.\n");
+                scanf.nextLine();
+            }
+
+        }
+
+        // kapag sumosobra kana tigil ka na
+        if (attemptCount == MAX_ATTEMPTS) {
+            System.out.println("\n\tMaximum attempts reached. Password change failed.\n");
+            System.out.println("\t\tPress Enter key to continue.\n");
+            scanf.nextLine();
+        }
+    }
 
 
 }
