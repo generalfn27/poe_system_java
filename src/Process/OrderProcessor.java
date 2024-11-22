@@ -572,18 +572,17 @@ public class OrderProcessor {
 
         String fileName = generate_queue_file_name();
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            // Write header
-            writer.println("OrderID,ProductCode,ProductName,Quantity,Price,Subtotal");
+        // Replace with the absolute path to your "directory/queues" folder
+        String filePath = "queues/" + fileName;
 
-            // Generate a unique order ID (you might want to implement a more robust system)
-            String order_id = generate_order_id();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            // Write header
+            writer.println("ProductCode,ProductName,Quantity,Price,Subtotal");
 
             // Write cart items
             for (Product product : cart) {
                 double subtotal = product.getPrice() * product.getStock();
-                writer.printf("%s,%s,%s,%d,%.2f,%.2f%n",
-                        order_id,
+                writer.printf("%s,%s,%d,%.2f,%.2f%n",
                         product.getCode(),
                         product.getName(),
                         product.getStock(),
@@ -622,15 +621,10 @@ public class OrderProcessor {
         return String.format("queue_number_%02d_%s.csv", currentQueueNumber, formattedDate);
     }
 
-    //ai suggestion
-    private static String generate_order_id() {
-        // This is a simple implementation. You might want to use a more robust system
-        return "ORD" + System.currentTimeMillis();
-    }
 
     // Method to initialize the queue number by reading from a file
     public static void initialize_queue_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("current_queue_number.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("queues/current_queue_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentQueueNumber = Integer.parseInt(line);
@@ -643,7 +637,7 @@ public class OrderProcessor {
 
     // Method to save the current queue number to a file
     private static void save_queue_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("current_queue_number.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("queues/current_queue_number.txt"))) {
             writer.println(currentQueueNumber);
         } catch (IOException e) {
             System.out.println("\tError saving queue number: " + e.getMessage());
