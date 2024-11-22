@@ -21,29 +21,30 @@ public class CashierProcess extends OrderProcessor {
 
 
     public void read_order_from_csv(String filename) {
-        this.currentQueueOrderFile = filename; // Store the filename
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        this.currentQueueOrderFile = "queues/" + filename;
+        File file = new File(this.currentQueueOrderFile);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             boolean first_line = true;
             while ((line = reader.readLine()) != null) {
                 if (first_line) {
                     first_line = false;
-                    continue; // skip header or field
+                    continue;
                 }
                 String[] parts = line.split(",");
-                if (parts.length >= 4) {
-                    // part[0] ay ung order id
-                    String product_code = parts[1];
-                    String product_name = parts[2];
-                    int quantity = Integer.parseInt(parts[3]);
-                    double price = Double.parseDouble(parts[4]);
-                    // part[5] ay ung subtotal
+                if (parts.length > 4) {
+                    String product_code = parts[0];
+                    String product_name = parts[1];
+                    int quantity = Integer.parseInt(parts[2]);
+                    double price = Double.parseDouble(parts[3]);
+                    // part 4 ung subtotal sa csv
                     Product product = new Product(product_code, product_name, price, quantity);
                     add_to_cart(product, quantity);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error reading CSV file: " + e.getMessage());
+            System.out.println("\tError reading CSV file: " + e.getMessage());
         }
     }
 
@@ -176,7 +177,7 @@ public class CashierProcess extends OrderProcessor {
             return;
         }
 
-        String fileName = cashier_generate_receipt_file_name(cashier);
+        String fileName = "receipts/" + cashier_generate_receipt_file_name(cashier);
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header with cashier information
             writer.println("Cashier Name," + cashier.getEmployee_full_name());
@@ -192,7 +193,7 @@ public class CashierProcess extends OrderProcessor {
             }
 
             writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
-            writer.printf("Total Price: ,%.2f%n", totalPrice);
+            writer.printf("Total Price: ,%.2f%n", calculate_total_price());
             writer.printf("Payment: ,%.2f%n", payment);
 
             if (payment > totalPrice) {
@@ -212,7 +213,7 @@ public class CashierProcess extends OrderProcessor {
             return;
         }
 
-        String fileName = self_checkout_generate_receipt_file_name(customer);
+        String fileName = "receipts/" + self_checkout_generate_receipt_file_name(customer);
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header with customer information
             writer.println("Username,Payment method,Balance");
@@ -229,7 +230,7 @@ public class CashierProcess extends OrderProcessor {
             }
 
             writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
-            writer.printf("Total Price: ,%.2f%n", totalPrice);
+            writer.printf("Total Price: ,%.2f%n", calculate_total_price());
             writer.printf("Payment: ,%.2f%n", payment);
 
             if (payment > totalPrice) {
@@ -269,7 +270,7 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to initialize the resibo number by reading from a file
     public static void initialize_receipt_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("current_receipt_number.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("receipts/current_receipt_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentReceiptNumber = Integer.parseInt(line);
@@ -283,7 +284,7 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to save the current receipt number to a file
     private static void save_receipt_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("current_receipt_number.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("receipts/current_receipt_number.txt"))) {
             writer.println(currentReceiptNumber);
         } catch (IOException e) {
             System.out.println("Error saving queue number: " + e.getMessage());
