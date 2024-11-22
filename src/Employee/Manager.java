@@ -140,7 +140,7 @@ public class Manager {
 
     private void display_purchase_history_menu() {
         Scanner scanf = new Scanner(System.in);
-        File directory = new File(".");
+        File directory = new File("receipts/");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("receipt_number"));
         List<String> csvFiles = new ArrayList<>();
 
@@ -199,7 +199,7 @@ public class Manager {
 
 
     public static void read_transaction_history_from_csv(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("receipts/" + filename))) {
             String line;
 
             System.out.println("\n\t=== Purchase History ===\n");
@@ -333,7 +333,8 @@ public class Manager {
             System.out.println("\t|        [1] Add new item                    |");
             System.out.println("\t|        [2] Remove Product                  |");
             System.out.println("\t|        [3] Restock                         |");
-            System.out.println("\t|        [4] Update Price                    |");
+            System.out.println("\t|        [4] Decrease Stock                   |");
+            System.out.println("\t|        [5] Update Price                    |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t----------------------------------------------");
@@ -354,6 +355,9 @@ public class Manager {
                     restock_product(products);
                     break;
                 case "4":
+                    decrease_stock_product(products);
+                    break;
+                case "5":
                     update_product_price(products);
                     break;
                 default:
@@ -367,8 +371,9 @@ public class Manager {
     private void add_new_item(List<Product> products) {
         Scanner scanf = new Scanner(System.in);
         System.out.println("\n\t=== Add New Item ===");
+        BrowseProduct.display_products(products);
 
-        System.out.print("\tEnter product code: ");
+        System.out.print("\n\tEnter new product code for new item: ");
         String code = scanf.nextLine().toUpperCase();
 
         // Check if product code already exists
@@ -427,7 +432,8 @@ public class Manager {
         Scanner scanf = new Scanner(System.in);
         System.out.println("\n\t=== Remove Product ===");
 
-        System.out.print("\tEnter product code to remove: ");
+        BrowseProduct.display_products(products);
+        System.out.print("\n\tEnter product code to remove: ");
         String code = scanf.nextLine().toUpperCase();
 
         Product productToRemove = null;
@@ -463,7 +469,8 @@ public class Manager {
         Scanner scanf = new Scanner(System.in);
         System.out.println("\n\t=== Restock Product ===");
 
-        System.out.print("\tEnter product code to restock: ");
+        BrowseProduct.display_products(products);
+        System.out.print("\n\tEnter product code to restock: ");
         String code = scanf.nextLine().toUpperCase();
 
         Product productToRestock = null;
@@ -504,11 +511,58 @@ public class Manager {
     }
 
 
+    private void decrease_stock_product(List<Product> products) {
+        Scanner scanf = new Scanner(System.in);
+        System.out.println("\n\t=== Decrease Product ===");
+
+        BrowseProduct.display_products(products);
+        System.out.print("\n\tEnter product code to decrease: ");
+        String code = scanf.nextLine().toUpperCase();
+
+        Product productToRestock = null;
+        for (Product product : products) {
+            if (product.getCode().equals(code)) {
+                productToRestock = product;
+                break;
+            }
+        }
+
+        if (productToRestock != null) {
+            System.out.println("\tCurrent stock for " + productToRestock.getName() + ": " + productToRestock.getStock());
+
+            int additionalStock;
+            while (true) {
+                try {
+                    System.out.print("\tEnter reduction stock quantity: ");
+                    additionalStock = Integer.parseInt(scanf.nextLine());
+                    if (additionalStock <= 0) {
+                        System.out.println("\tPlease enter a positive number!");
+                        continue;
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("\tInvalid input. Please enter a valid number.");
+                }
+            }
+
+            productToRestock.update_stock(-additionalStock);
+            update_product_csv_file(products);
+            System.out.println("\n\tStock updated successfully!");
+        } else {
+            System.out.println("\n\tProduct not found!");
+        }
+
+        System.out.print("\t\tPress Enter key to continue...");
+        scanf.nextLine();
+    }
+
+
     private void update_product_price(List<Product> products) {
         Scanner scanf = new Scanner(System.in);
-
         System.out.println("\n\t=== Update Product Price ===");
-        System.out.print("\tEnter product code to update: ");
+
+        BrowseProduct.display_products(products);
+        System.out.print("\n\tEnter product code to update: ");
         String code = scanf.nextLine().toUpperCase();
 
         Product productToUpdate = null;
