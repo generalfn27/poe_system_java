@@ -356,7 +356,7 @@ public class Cashier {
 
     // Method to initialize the id number by reading from a file
     public static void initialize_id_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("current_id_number.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("accounts/current_id_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentIDNumber = Integer.parseInt(line);
@@ -369,7 +369,7 @@ public class Cashier {
 
     // Method to save the current id number to a file
     private static void save_id_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("current_id_number.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("accounts/current_id_number.txt"))) {
             writer.println(currentIDNumber);
         } catch (IOException e) {
             System.out.println("\tError saving queue number: " + e.getMessage());
@@ -378,7 +378,7 @@ public class Cashier {
 
 
     private void save_new_cashier_employee_to_csv(Cashier cashier) {
-        File file = new File("cashier_employees.csv");
+        File file = new File("accounts/cashier_employees.csv");
 
         boolean fileExists = file.exists();
 
@@ -408,7 +408,7 @@ public class Cashier {
         // Clear existing list before loading
         cashiers.clear();
 
-        String CASHIER_CSV_FILE = "cashier_employees.csv";
+        String CASHIER_CSV_FILE = "accounts/cashier_employees.csv";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CASHIER_CSV_FILE))) {
             String line;
             bufferedReader.readLine(); // Skip header
@@ -484,7 +484,7 @@ public class Cashier {
 
     public void selecting_queue_list_to_process(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
-        File directory = new File(".");
+        File directory = new File("queues");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
         List<String> csvFiles = new ArrayList<>();
 
@@ -726,7 +726,7 @@ public class Cashier {
 
     public void view_cashier_receipts(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
-        File receiptDirectory = new File(".");
+        File receiptDirectory = new File("receipts");
         FilenameFilter filter = (dir, name) -> name.startsWith("receipt_number_") && name.endsWith("Cashier_" + cashier.getEmployee_username() + ".csv");
         File[] files = receiptDirectory.listFiles(filter);
         List<String> csvFiles = new ArrayList<>();
@@ -980,7 +980,7 @@ public class Cashier {
 
     // Helper method to save all cashiers to CSV after modifications
     private void save_all_cashiers_to_csv() {
-        try (FileWriter writer = new FileWriter("cashier_employees.csv")) {
+        try (FileWriter writer = new FileWriter("accounts/cashier_employees.csv")) {
 
             writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname," +
                     "password,phone_number,hired_date,total_transaction_processed\n");
