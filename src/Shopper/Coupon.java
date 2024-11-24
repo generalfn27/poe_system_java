@@ -23,6 +23,9 @@ public class Coupon {
         this.discountType = discountType;
     }
 
+    // if discount type == off edi minus
+    // if discount type == percentage edi multiply sa double para 10% off or 5
+
     public double getDiscountValue() {
         return discountValue;
     }

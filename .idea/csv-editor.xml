@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\accounts\cashier_employees.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\bar_soap.csv">
           <value>
             <Attribute>
@@ -94,6 +101,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\queue_number_01_23_11_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\queues\queue_number_01_23_11_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\receipt_number_1_22_11_2024_Customer_felix.csv">
           <value>
             <Attribute>
@@ -101,14 +122,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\receipt_number_1_22_11_2024_felix.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\receipt_number_2_22_11_2024_Cashier_felix.csv">
+        <entry key="\receipts\receipt_number_1_23_11_2024_Cashier_felix II.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
