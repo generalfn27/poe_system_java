@@ -25,6 +25,7 @@ public class Coupon {
 
     // if discount type == off edi minus
     // if discount type == percentage edi multiply sa double para 10% off or 5
+    //gagamit lng ng off sa mga general store discount at max 15% off sa mga items
 
     public double getDiscountValue() {
         return discountValue;

@@ -52,13 +52,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\cashier_employees.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\condiments.csv">
           <value>
             <Attribute>
@@ -88,34 +81,6 @@
           </value>
         </entry>
         <entry key="\powder_detergents.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\queue_number_01_22_11_2024.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\queue_number_01_23_11_2024.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\queues\queue_number_01_23_11_2024.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\receipt_number_1_22_11_2024_Customer_felix.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
