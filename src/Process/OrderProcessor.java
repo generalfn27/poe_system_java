@@ -25,7 +25,7 @@ public class OrderProcessor {
         initialize_queue_number();
     }
 
-    public void process_customer_order(List<Product> products) {
+    public boolean process_customer_order(List<Product> products) {
         Scanner scanf = new Scanner(System.in);
         String product_code;
         int quantity = 0;
@@ -37,7 +37,7 @@ public class OrderProcessor {
             product_code = scanf.nextLine().toUpperCase();
 
             if (product_code.equals("///")){
-                return;
+                return false;
             }
 
             //find product code kung nag eexist
@@ -45,17 +45,16 @@ public class OrderProcessor {
 
             if (selected_product == null) {
                 System.out.println("\tInvalid product code. Try again.");
-                System.out.println("\tPress Enter to continue...");
+                System.out.print("\tPress Enter to continue...");
                 scanf.nextLine();
             }
 
         } while (selected_product == null);
 
-        display_product_details(selected_product);
-
         //quantity check at error handling din kung kulang or sobra order ng kupal
         boolean valid_input = false;
         do {
+            display_product_details(selected_product);
             System.out.print("\tEnter quantity: ");
 
             if (scanf.hasNextInt()) {
@@ -67,22 +66,23 @@ public class OrderProcessor {
                     valid_input = true;
                 } else {
                     System.out.println("\n\tInvalid quantity. Please enter a value between 1 and " + selected_product.getStock() + ".");
-                    System.out.println("\tType any key and enter to continue.");
-                    scanf.next(); // Clear buffer (optional)
+                    System.out.println("\t\tPress enter to continue.");
+                    scanf.nextLine();
                 }
             } else {
                 System.out.println("\n\tInvalid input. Please enter a number.");
-                System.out.println("\tType any key and enter to continue.");
-                scanf.next(); // Clear buffer to avoid issues with next calls
+                System.out.println("\t\tPress enter to continue.");
+                scanf.nextLine();
             }
         } while (!valid_input);
 
-        System.out.printf("\n\tPrice: %.2f\n", selected_product.getPrice() * quantity);
 
         //tatanong kung sigurado ba ung kupal pag may pangbili sya
         String add_item_confirmation;
 
         while (true) {
+            display_product_details(selected_product);
+            System.out.printf("\n\tPrice: %.2f\tQuantity: %2d\n", selected_product.getPrice() * quantity, quantity);
             System.out.print("\tAdd to cart (A) or cancel (C)? ");
             add_item_confirmation = scanf.nextLine().trim();
 
@@ -91,16 +91,18 @@ public class OrderProcessor {
                 case "A":
                     add_to_cart(selected_product, quantity);
                     System.out.println("\n\tItem added to cart.");
-                    break; // Exit the switch statement, but still in the loop
+                    return true;
                 case "c":
                 case "C":
                     System.out.println("\tItem not added to cart.");
-                    break; // Exit the switch statement, but still in the loop
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); //used for press any key to continue
+                    return false;
                 default:
                     System.out.println("\tInvalid input. Please enter A or C only.");
-                    continue; // Go back to the beginning of the loop if invalid input
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
             }
-            break; // Exit the loop after valid input
         }
     }
 
@@ -237,7 +239,7 @@ public class OrderProcessor {
                                 break;
                             default:
                                 System.out.println("\n\tWrong input");
-                                System.out.println("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                         }
                     }
@@ -284,14 +286,14 @@ public class OrderProcessor {
                                 break;
                             default:
                                 System.out.println("\n\tWrong input");
-                                System.out.println("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                         }
                     }
                     break;
                 default:
                     System.out.println("\tInvalid choice.");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -388,7 +390,7 @@ public class OrderProcessor {
                                 break;
                             default:
                                 System.out.println("\n\tWrong input");
-                                System.out.println("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                         }
                     }
@@ -432,14 +434,14 @@ public class OrderProcessor {
 
                             if (cancellation_confirmation.equalsIgnoreCase("Y")) {
                                 System.out.println("\n\tCheckout cancelled.");
-                                System.out.print("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                                 return;
                             } else if (cancellation_confirmation.equalsIgnoreCase("N")) {
                                 break;
                             } else {
                                 System.out.println("\n\tAn error has occurred.");
-                                System.out.print("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                             }
                         }
@@ -458,7 +460,7 @@ public class OrderProcessor {
                                 break;
                             } else {
                                 System.out.println("\n\tAn error has occurred.");
-                                System.out.print("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                             }
                         }
@@ -477,14 +479,14 @@ public class OrderProcessor {
                                 break;
                             } else {
                                 System.out.println("\n\tAn error has occurred.");
-                                System.out.print("\t\tPress Enter key to continue.\n");
+                                System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
                             }
                         }
                         break;
                     default:
                         System.out.println("\n\tAn error has occurred.");
-                        System.out.print("\t\tPress Enter key to continue.\n");
+                        System.out.print("\t\tPress Enter key to continue.");
                         scanf.nextLine(); //used for press any key to continue
                 }
             }
