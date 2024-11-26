@@ -153,7 +153,6 @@ public class UserCustomer {
     }
 
 
-    // Customer registration function
     private void customer_register() {
         Scanner scanf = new Scanner(System.in);
         final int MAX_CUSTOMERS = 100;
@@ -170,6 +169,7 @@ public class UserCustomer {
         String phoneNumber;
         String paymentMethod;
         double transaction = 1;
+        int reward_point = 0;
 
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|        suggestion another scanf para                  |");
@@ -244,7 +244,7 @@ public class UserCustomer {
 
             // Check if the entered PIN is exactly 4 digits
             // \\d dahil integer
-            // 4 ay ung bilang so dapat mag mmatch ung input na int
+            // 4 ay ung bilang so dapat mag match ung input na int
             if (pinCode.matches("\\d{4}")) { break; }
             else { System.out.println("\tInvalid PIN. Please enter a 4-digit number."); }
         }
@@ -268,7 +268,9 @@ public class UserCustomer {
                 System.out.println("\tInvalid input. Please enter a valid number.");
             }
         }
+
         newCustomer.setTransaction(transaction);
+        newCustomer.setRewardPoint(reward_point);
 
         save_customer_to_file(newCustomer);
 
@@ -277,7 +279,7 @@ public class UserCustomer {
 
         System.out.println("\n\tCongratulations! Your registration was successful.  " + newCustomer.getUsername() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
-        // para pause muna sa bawat pagkakamli para isipin muna sa susunod tama
+        // para pause muna sa bawat pagkakamali para isipin muna sa susunod tama
 
         registered_user_customer_item_category(newCustomer.getUsername(), newCustomer);
     }
@@ -296,10 +298,10 @@ public class UserCustomer {
     }
 
 
-    // Save a single customer to the CSV file
+    // eto sinisave naman lahat nito after every changes, rewriting data kumbaga
     public void saveAllCustomersToCSV() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("customers.csv"))) {
-            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction\n");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("accounts/customers.csv"))) {
+            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint\n");
             for (Customer customer : customers) {
                 // Debug: Print customer information that will be saved
                 //System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
@@ -310,7 +312,8 @@ public class UserCustomer {
                                 customer.getPaymentMethod() + "," +
                                 customer.getBalance() + "," +
                                 customer.getPinCode()+ "," +
-                                customer.getTransaction());
+                                customer.getTransaction() +
+                                customer.getRewardPoint());
                                 writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
@@ -320,8 +323,9 @@ public class UserCustomer {
     }
 
 
+    //dagdag ka lang sa line sa dulo after register
     private void save_customer_to_file(Customer customer) {
-        File file = new File("customers.csv");
+        File file = new File("accounts/customers.csv");
 
         // Check if the file exists before opening the writer
         boolean fileExists = file.exists();
@@ -329,7 +333,7 @@ public class UserCustomer {
         try (FileWriter writer = new FileWriter(file, true)) {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
-                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction\n");
+                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint\n");
             }
             // Write customer data
             writer.append(customer.getUsername()).append(",");
@@ -338,7 +342,8 @@ public class UserCustomer {
             writer.append(customer.getPaymentMethod()).append(",");
             writer.append(String.valueOf(customer.getBalance())).append(",");
             writer.append(customer.getPinCode()).append(",");
-            writer.append(String.valueOf(customer.getTransaction())).append("\n");
+            writer.append(String.valueOf(customer.getTransaction())).append(",");
+            writer.append(String.valueOf(customer.getRewardPoint())).append("\n");
 
         } catch (IOException e) {
             // Handle exceptions gracefully
@@ -350,7 +355,7 @@ public class UserCustomer {
     // Load all customers from the CSV file
     private void load_customers_from_CSV() {
         // CSV file name
-        String CUSTOMER_CSV_FILE = "customers.csv";
+        String CUSTOMER_CSV_FILE = "accounts/customers.csv";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CUSTOMER_CSV_FILE))) {
             String line;
             // Skip the field name / header line
@@ -358,7 +363,8 @@ public class UserCustomer {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 7) { // Expect 7 fields: username, password, phone number, payment method, balance, PIN, transaction
+                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction, reward points
+                if (data.length == 8) {
                     Customer customer = new Customer();
                     customer.setUsername(data[0]);
                     customer.setPassword(data[1]);
@@ -367,6 +373,7 @@ public class UserCustomer {
                     customer.setBalance(Float.parseFloat(data[4]));
                     customer.setPinCode(data[5]);
                     customer.setTransaction(Float.parseFloat(data[6]));
+                    customer.setRewardPoint(Integer.parseInt(data[7]));
                     customers.add(customer);
                 }
             }
@@ -605,7 +612,7 @@ public class UserCustomer {
 
     private void display_purchase_history_menu(Customer customer) {
         Scanner scanf = new Scanner(System.in);
-        File directory = new File(".");
+        File directory = new File("receipts");
         FilenameFilter filter = (dir, name) -> name.startsWith("receipt_number_") && name.endsWith("Customer_" + customer.getUsername() + ".csv");
         File[] files = directory.listFiles(filter);
         List<String> csvFiles = new ArrayList<>();
@@ -662,7 +669,7 @@ public class UserCustomer {
     }
 
     public void read_history_from_csv(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("receipts/" + filename))) {
             String line;
 
             System.out.println("\n\t=== Purchase History ===\n");
@@ -701,6 +708,7 @@ public class UserCustomer {
             System.out.println("\tError reading CSV file: " + e.getMessage());
         }
     }
+
 
     public void registered_customer_change_password(String username, Customer customer) {
         Scanner scanf = new Scanner(System.in);
