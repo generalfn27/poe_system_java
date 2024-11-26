@@ -142,8 +142,9 @@ public class UserCustomer {
 
             if (selected_products != null && !selected_products.isEmpty()) {
                 // After displaying products, process the order by asking for product code
-                order_processor.process_customer_order(selected_products);
-                order_processor.modify_menu_process();
+                if (order_processor.process_customer_order(selected_products)) {
+                    order_processor.modify_menu_process();
+                }
             } else {
                 if (!item_category.equals("9")){ // para hindi to lumalabas dahil di naman list ang case 9
                     System.out.println("No products available in this category.");
@@ -168,8 +169,6 @@ public class UserCustomer {
         String pinCode;
         String phoneNumber;
         String paymentMethod;
-        double transaction = 1;
-        int reward_point = 0;
 
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|        suggestion another scanf para                  |");
@@ -269,15 +268,15 @@ public class UserCustomer {
             }
         }
 
-        newCustomer.setTransaction(transaction);
-        newCustomer.setRewardPoint(reward_point);
+        newCustomer.setTransaction(0);
+        newCustomer.setRewardPoint(0);
 
         save_customer_to_file(newCustomer);
 
         // Add the customer to the in-memory list
         customers.add(newCustomer);
 
-        System.out.println("\n\tCongratulations! Your registration was successful.  " + newCustomer.getUsername() +".\n\t\t\tPress Enter key to start exploring!\n");
+        System.out.print("\n\tCongratulations! Your registration was successful.  " + newCustomer.getUsername() +".\n\t\t\tPress Enter key to start exploring!\n");
         scanf.nextLine(); //used for press any key to continue
         // para pause muna sa bawat pagkakamali para isipin muna sa susunod tama
 
@@ -311,8 +310,8 @@ public class UserCustomer {
                                 customer.getPhoneNumber() + "," +
                                 customer.getPaymentMethod() + "," +
                                 customer.getBalance() + "," +
-                                customer.getPinCode()+ "," +
-                                customer.getTransaction() +
+                                customer.getPinCode() + "," +
+                                customer.getTransaction() + "," +
                                 customer.getRewardPoint());
                                 writer.newLine();
             }
@@ -354,7 +353,8 @@ public class UserCustomer {
 
     // Load all customers from the CSV file
     private void load_customers_from_CSV() {
-        // CSV file name
+        customers.clear();
+
         String CUSTOMER_CSV_FILE = "accounts/customers.csv";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(CUSTOMER_CSV_FILE))) {
             String line;
@@ -373,7 +373,7 @@ public class UserCustomer {
                     customer.setBalance(Float.parseFloat(data[4]));
                     customer.setPinCode(data[5]);
                     customer.setTransaction(Float.parseFloat(data[6]));
-                    customer.setRewardPoint(Integer.parseInt(data[7]));
+                    customer.setRewardPoint(Double.parseDouble(data[7]));
                     customers.add(customer);
                 }
             }
@@ -392,9 +392,14 @@ public class UserCustomer {
         boolean login_successful = false;
         final int MAX_ATTEMPTS = 3;
 
+        load_customers_from_CSV();
         // Load customers from the CSV if not already loaded
         if (customers.isEmpty()) {
             load_customers_from_CSV();
+            System.out.println("\n\tNo registered customer so far. You are welcome to register, thank you...");
+            System.out.println("\t\tPress Enter key to continue.\n");
+            scanf.nextLine(); //used for press any key to continue
+            return;
         }
 
         // Loop until login is successful or maximum attempts reached
@@ -413,7 +418,7 @@ public class UserCustomer {
 
             // Check if the username and password match any customer record
             for (Customer customer : customers) {
-                if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
+                if (customer.getUsername().equalsIgnoreCase(username) && customer.getPassword().equals(password)) {
                     System.out.println("\n\tLogin successful.\n");
                     login_successful = true;
                     registered_user_customer_item_category(customer.getUsername(), customer);
@@ -456,8 +461,9 @@ public class UserCustomer {
             System.out.println("\t|        [9] Add funds                       |");
             System.out.println("\t|        [10] View Purchase History          |");
             System.out.println("\t|        [11] Change Password                |");
+            System.out.println("\t|        [12] Reward Points                  |");
             if (!OrderProcessor.cart.isEmpty()) {
-            System.out.println("\t|        [12] Modify Items in cart            |"); }
+            System.out.println("\t|        [13] Modify Items in cart           |"); }
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Log Out                         |");
             System.out.println("\t|                                            |");
@@ -505,6 +511,9 @@ public class UserCustomer {
                     registered_customer_change_password(username, customer);
                     break;
                 case "12":
+
+                    break;
+                case "13":
                     if (!OrderProcessor.cart.isEmpty()) {
                         order_processor.registered_user_modify_menu_process(customer);
                         break;
@@ -533,13 +542,13 @@ public class UserCustomer {
                     System.out.println("\n\tAn error has occurred");
                     System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
-                    continue;
             }
 
             // After displaying products, process the order by asking for product code
             if (selected_products != null && !selected_products.isEmpty()) {
-                order_processor.process_customer_order(selected_products);
-                order_processor.registered_user_modify_menu_process(customer);
+                if(order_processor.process_customer_order(selected_products)) {
+                    order_processor.registered_user_modify_menu_process(customer);
+                }
             } else {
                 if (!item_category.equals("12")){ // para hindi to lumalabas dahil di naman list ang case 12
                     //dapat pag 12 11 10 9
