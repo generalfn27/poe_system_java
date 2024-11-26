@@ -31,11 +31,11 @@ public class SelfCheckout {
             return;
         }
 
-        display_cart();
+        display_cart_self_checkout();
         process_e_wallet_payment(customer);
     }
 
-    private void display_cart() {
+    private void display_cart_self_checkout() {
         System.out.println("\n\tYour Cart:");
         for (Product product : this.cart) {
             System.out.printf("\t%-20s x%d  %.2f\n", product.getName(), product.getStock(), product.getPrice() * product.getStock());
@@ -97,7 +97,7 @@ public class SelfCheckout {
         cashierProcess.update_sales_report(calculate_total_items(), calculate_total_price());
 
         // Update stock levels after successful payment
-        cashierProcess.update_all_stocks();
+        cashierProcess.update_all_stocks(cart);
 
         print_receipt(customer, totalPrice);
 
@@ -106,7 +106,7 @@ public class SelfCheckout {
         customer.setTransaction(new_transaction);
         //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction());
         // debugger na naman kasi puro bug
-        //System.out.println("\tCalling saveAllCustomersToCSV to save updated balance.");  //debugger ulit
+
         userCustomer.saveAllCustomersToCSV();
         OrderProcessor.reset_cart_no_display();
 
