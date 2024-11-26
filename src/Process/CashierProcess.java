@@ -94,7 +94,7 @@ public class CashierProcess extends OrderProcessor {
                         update_sales_report(calculate_total_items(), calculate_total_price());
 
                         // Update stock levels after successful payment
-                        update_all_stocks();
+                        update_all_stocks(counter);
                         print_receipt(counter, payment, cashier);
 
                         counter.clear();
@@ -360,15 +360,16 @@ public class CashierProcess extends OrderProcessor {
         return false;
     }
 
-    // Update stock for all products in the counter array
-    public void update_all_stocks() {
-        for (Product product : counter) {
+    // Update stock for all products in the array of cart/counter
+    public void update_all_stocks(List<Product> products_to_update) {
+        for (Product product : products_to_update) {
             boolean updated = update_product_stock_in_files(product.getCode(), product.getStock());
             if (!updated) {
                 System.out.println("Product not found: " + product.getCode());
             }
         }
     }
+
 
     // Method to initialize the sales report by reading from a file
     public void initialize_sales_report() {
