@@ -75,11 +75,11 @@ public class Customer {
     }
 
     //every 50pesos, customer earn 1pt
-    public int getReward_point() {
+    public int getRewardPoint() {
         return reward_point;
     }
 
-    public void setReward_point(int reward_point) {
+    public void setRewardPoint(int reward_point) {
         this.reward_point = reward_point;
     }
 
