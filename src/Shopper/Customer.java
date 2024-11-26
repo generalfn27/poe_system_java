@@ -9,6 +9,7 @@ public class Customer {
     private double balance;
     private String pinCode; // New field for the 4-digit PIN code
     private double transaction;
+    private int reward_point;
 
 
     public Customer() {
@@ -72,4 +73,14 @@ public class Customer {
     public void setTransaction(double transaction) {
         this.transaction = transaction;
     }
+
+    //every 50pesos, customer earn 1pt
+    public int getReward_point() {
+        return reward_point;
+    }
+
+    public void setReward_point(int reward_point) {
+        this.reward_point = reward_point;
+    }
+
 }
