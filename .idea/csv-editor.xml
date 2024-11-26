@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\accounts\customers.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\bar_soap.csv">
           <value>
             <Attribute>
@@ -87,7 +94,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\receipts\receipt_number_1_23_11_2024_Cashier_felix II.csv">
+        <entry key="\receipts\receipt_number_7_27_11_2024_Cashier_felix.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
