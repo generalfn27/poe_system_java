@@ -106,6 +106,10 @@ public class SelfCheckout {
         customer.setRewardPoint(point_reward);
         System.out.printf("\tYour Total cashback reward point is %.0f\n", customer.getRewardPoint());
 
+        double total_spent = customer.getTotal_spent() + totalPrice;
+        customer.setTotal_spent(total_spent);
+        System.out.printf("\tYour Total spent is %-8.2f\n", customer.getTotal_spent());
+
         // need dagdag sa sales report kung ano mga items na ibenta
         // Update report sales with current transaction details
         cashierProcess.update_sales_report(calculate_total_items(), calculate_total_price());
