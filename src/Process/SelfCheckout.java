@@ -74,8 +74,14 @@ public class SelfCheckout {
         System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
 
         while (!enteredPin.equals(customer.getPinCode())) {
+            System.out.print("\n\tEnter /// to Cancel");
             System.out.print("\n\tEnter your PIN: ");
             enteredPin = scanf.nextLine().trim();
+
+            if (enteredPin.equals("///")){
+                return;
+            }
+
             if (!enteredPin.equals(customer.getPinCode())) {
                 System.out.println("\n\tPin do not match. Please try again.");
             }
@@ -88,29 +94,34 @@ public class SelfCheckout {
             return;
         }
 
-        // Deduct funds from customer's account
-        userCustomer.minus_funds(customer.getUsername(), totalPrice);
+        customer.setBalance(customer.getBalance() - totalPrice);
 
-        System.out.printf("\tPayment successful. New balance: %.2f\n", customer.getBalance());
+        // Debugger: Print balance after deduction
+        System.out.printf("\n\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
+        userCustomer.saveAllCustomersToCSV(); // Ensure this works as expected
 
+        //kada 5pesos ay 0.1 sa reward same sa globe
+        //cashback reward calculation
+        double point_reward = (totalPrice / 50.0) + customer.getRewardPoint();
+        customer.setRewardPoint(point_reward);
+        System.out.printf("\tYour Total cashback reward point is %.0f\n", customer.getRewardPoint());
+
+        // need dagdag sa sales report kung ano mga items na ibenta
         // Update report sales with current transaction details
         cashierProcess.update_sales_report(calculate_total_items(), calculate_total_price());
 
-        // Update stock levels after successful payment
         cashierProcess.update_all_stocks(cart);
 
         print_receipt(customer, totalPrice);
 
         new_transaction = customer.getTransaction() + 1.0;
-
         customer.setTransaction(new_transaction);
-        //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction());
-        // debugger na naman kasi puro bug
+        //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction()); // debugger na naman kasi puro bug
 
         userCustomer.saveAllCustomersToCSV();
         OrderProcessor.reset_cart_no_display();
 
-        System.out.println("\t\tPress Enter key to continue.\n");
+        System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
 
         userCustomer.registered_user_customer_item_category(customer.getUsername(), customer);
@@ -132,6 +143,7 @@ public class SelfCheckout {
         System.out.printf("\tTotal Items: %d\n", calculate_total_items());
         System.out.printf("\tTotal Amount: %.2f\n", totalPrice);
         System.out.printf("\tNew Balance: %.2f\n", customer.getBalance());
+        System.out.printf("\tCurrent Reward Points: %.0f\n", customer.getRewardPoint());
         System.out.println("\t-----------------------------");
         System.out.println("\tThank you for your purchase!");
 
