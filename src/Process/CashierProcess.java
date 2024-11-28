@@ -199,7 +199,7 @@ public class CashierProcess extends OrderProcessor {
             if (payment > totalPrice) {
                 writer.printf("Change: ,%.2f%n", payment - totalPrice);
             }
-            System.out.println("\n\tReceipt successfully saved to " + fileName + "\n\n");
+            System.out.println("\n\tReceipt successfully saved to " + fileName);
             delete_queue_order_file();
         } catch (IOException e) {
             System.out.println("Error saving the receipt: " + e.getMessage());
@@ -236,7 +236,7 @@ public class CashierProcess extends OrderProcessor {
             if (payment > totalPrice) {
                 writer.printf("Change: ,%.2f%n", payment - totalPrice);
             }
-            System.out.println("\n\tReceipt successfully saved to " + fileName + "\n\n");
+            System.out.println("\n\tReceipt successfully saved to " + fileName);
             delete_queue_order_file();
         } catch (IOException e) {
             System.out.println("Error saving the receipt: " + e.getMessage());
