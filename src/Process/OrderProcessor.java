@@ -401,6 +401,8 @@ public class OrderProcessor {
                     break;
                 case "B":
                 case "b":
+                    UserCustomer user_customer = new UserCustomer();
+                    user_customer.registered_user_customer_item_category(customer.getUsername(), customer);
                     return;
                 case "P":
                 case "p":
@@ -410,20 +412,25 @@ public class OrderProcessor {
         }
     }
 
+
     public void self_checkout_or_queue_process(Customer customer) {
         Scanner scanf = new Scanner(System.in);
         while (true) {
-            // Confirmation before checkout
             System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
             String confirmInput = scanf.nextLine();
 
             if (confirmInput.equalsIgnoreCase("y")) {
-                System.out.println("\n\tProcessing checkout...");
-                System.out.println("\n\tChoose payment method:");
-                System.out.println("\t1. Cash (Queue at Cashier)");
-                System.out.println("\t2. " + customer.getPaymentMethod() + " (Self-Checkout)");
-                System.out.println("\t0. Cancel");
-                System.out.print("\tEnter choice: ");
+                System.out.println("\t===========================================");
+                System.out.println("\t|          Processing Checkout...         |");
+                System.out.println("\t|                                         |");
+                System.out.println("\t|      Choose payment method:             |");
+                System.out.println("\t|      [1] Cash (Queue at Cashier)        |");
+                System.out.printf ("\t|      [2] %-8s(Self-Checkout)        |\n", customer.getPaymentMethod());
+                System.out.println("\t|                                         |");
+                System.out.println("\t|      [0] Cancel                         |");
+                System.out.println("\t|                                         |");
+                System.out.println("\t===========================================");
+                System.out.print  ("\tEnter choice: ");
                 String payment_choice = scanf.nextLine().trim();
 
                 switch (payment_choice) {
@@ -436,6 +443,7 @@ public class OrderProcessor {
                                 System.out.println("\n\tCheckout cancelled.");
                                 System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
+                                registered_user_modify_menu_process(customer);
                                 return;
                             } else if (cancellation_confirmation.equalsIgnoreCase("N")) {
                                 break;
@@ -489,6 +497,12 @@ public class OrderProcessor {
                         System.out.print("\t\tPress Enter key to continue.");
                         scanf.nextLine(); //used for press any key to continue
                 }
+            } else if (confirmInput.equalsIgnoreCase("n")){
+                registered_user_modify_menu_process(customer);
+            } else {
+                System.out.println("\n\tAn error has occurred.");
+                System.out.print("\t\tPress Enter key to continue.");
+                scanf.nextLine(); //used for press any key to continue
             }
         }
     }
