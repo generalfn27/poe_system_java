@@ -271,6 +271,7 @@ public class UserCustomer {
 
         newCustomer.setTransaction(0);
         newCustomer.setRewardPoint(0);
+        newCustomer.setTotal_spent(0);
 
         save_customer_to_file(newCustomer);
 
@@ -301,7 +302,7 @@ public class UserCustomer {
     // eto sinisave naman lahat nito after every changes, rewriting data kumbaga
     public void saveAllCustomersToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("accounts/customers.csv"))) {
-            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint\n");
+            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent\n");
             for (Customer customer : customers) {
                 // Debug: Print customer information that will be saved
                 //System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
@@ -313,7 +314,8 @@ public class UserCustomer {
                                 customer.getBalance() + "," +
                                 customer.getPinCode() + "," +
                                 customer.getTransaction() + "," +
-                                customer.getRewardPoint());
+                                customer.getRewardPoint() + "," +
+                                customer.getTotal_spent());
                                 writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
@@ -343,7 +345,8 @@ public class UserCustomer {
             writer.append(String.valueOf(customer.getBalance())).append(",");
             writer.append(customer.getPinCode()).append(",");
             writer.append(String.valueOf(customer.getTransaction())).append(",");
-            writer.append(String.valueOf(customer.getRewardPoint())).append("\n");
+            writer.append(String.valueOf(customer.getRewardPoint())).append(",");
+            writer.append(String.valueOf(customer.getTotal_spent())).append("\n");
 
         } catch (IOException e) {
             // Handle exceptions gracefully
@@ -364,8 +367,8 @@ public class UserCustomer {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction, reward points
-                if (data.length == 8) {
+                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction, reward points, total_spent
+                if (data.length == 9) {
                     Customer customer = new Customer();
                     customer.setUsername(data[0]);
                     customer.setPassword(data[1]);
@@ -375,6 +378,7 @@ public class UserCustomer {
                     customer.setPinCode(data[5]);
                     customer.setTransaction(Float.parseFloat(data[6]));
                     customer.setRewardPoint(Double.parseDouble(data[7]));
+                    customer.setTotal_spent(Double.parseDouble(data[8]));
                     customers.add(customer);
                 }
             }
@@ -608,6 +612,7 @@ public class UserCustomer {
         System.out.println("\t=======================================");
         System.out.println("\t|                                     |");
         System.out.println("\t|           Purchase History          |");
+        System.out.printf ("\t|      Your total spent %-8.2f      |\n", customer.getTotal_spent());
         System.out.println("\t|                                     |");
         System.out.println("\t=======================================");
         System.out.println("\n\tCSV Files to Open:");
