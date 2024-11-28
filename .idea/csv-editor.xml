@@ -94,20 +94,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\receipts\receipt_number_7_27_11_2024_Cashier_felix.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\sales_report.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\snacks.csv">
           <value>
             <Attribute>
