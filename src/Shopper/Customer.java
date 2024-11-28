@@ -10,6 +10,7 @@ public class Customer {
     private String pinCode; // New field for the 4-digit PIN code
     private double transaction;
     private double reward_point;
+    private double total_spent;
 
 
     public Customer() {
@@ -74,7 +75,6 @@ public class Customer {
         this.transaction = transaction;
     }
 
-    //every 100 pesos, customer earn 1pt
     public double getRewardPoint() {
         return reward_point;
     }
@@ -83,4 +83,11 @@ public class Customer {
         this.reward_point = reward_point;
     }
 
+    public double getTotal_spent() {
+        return total_spent;
+    }
+
+    public void setTotal_spent(double total_spent) {
+        this.total_spent = total_spent;
+    }
 }
