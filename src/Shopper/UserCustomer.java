@@ -49,7 +49,7 @@ public class UserCustomer {
                     return;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -61,6 +61,7 @@ public class UserCustomer {
         String item_category;
 
         // Create an instance of OrderProcessor to handle the guest's order
+        //bale parang nag ready na ba ng kariton pag napunta sa puregold
         OrderProcessor order_processor = new OrderProcessor();
 
         while (true) {
@@ -135,7 +136,7 @@ public class UserCustomer {
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
                     continue;
             }
@@ -397,7 +398,7 @@ public class UserCustomer {
         if (customers.isEmpty()) {
             load_customers_from_CSV();
             System.out.println("\n\tNo registered customer so far. You are welcome to register, thank you...");
-            System.out.println("\t\tPress Enter key to continue.\n");
+            System.out.print("\t\tPress Enter key to continue.");
             scanf.nextLine(); //used for press any key to continue
             return;
         }
@@ -461,7 +462,7 @@ public class UserCustomer {
             System.out.println("\t|        [9] Add funds                       |");
             System.out.println("\t|        [10] View Purchase History          |");
             System.out.println("\t|        [11] Change Password                |");
-            System.out.println("\t|        [12] Reward Points                  |");
+            System.out.println("\t|        [12] Redeem Rewards                 |");
             if (!OrderProcessor.cart.isEmpty()) {
             System.out.println("\t|        [13] Modify Items in cart           |"); }
             System.out.println("\t|                                            |");
@@ -501,7 +502,8 @@ public class UserCustomer {
                     selected_products = BrowseProduct.browse_detergents(); // Browse detergents
                     break;
                 case "9":
-                    add_funds(username);
+                    add_funds(customer);
+                    registered_user_customer_item_category(username, customer);
                     break;
                 case "10":
                     display_purchase_history_menu(customer);
@@ -511,7 +513,7 @@ public class UserCustomer {
                     registered_customer_change_password(username, customer);
                     break;
                 case "12":
-
+                    redeem_reward_points(customer);
                     break;
                 case "13":
                     if (!OrderProcessor.cart.isEmpty()) {
@@ -533,14 +535,14 @@ public class UserCustomer {
                             break;
                         } else {
                             System.out.println("\n\tAn error has occurred");
-                            System.out.println("\t\tPress Enter key to continue.\n");
+                            System.out.print("\t\tPress Enter key to continue.");
                             scanf.nextLine(); //used for press any key to continue
                         }
                     }
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
 
@@ -559,10 +561,8 @@ public class UserCustomer {
     }
 
     // Add funds to customer's account
-    private void add_funds(String username) {
+    private void add_funds(Customer customer) {
         Scanner scanf = new Scanner(System.in);
-        for (Customer customer : customers) {
-            if (customer.getUsername().equals(username)) {
                 float amount = 0;
                 boolean validInput = false;
 
@@ -581,31 +581,10 @@ public class UserCustomer {
                 saveAllCustomersToCSV();
 
                 System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
-                System.out.println("\t\tPress Enter key to continue.\n");
+                System.out.print("\t\tPress Enter key to continue.");
                 scanf.nextLine();
                 //registered_user_customer_item_category(username, customer);
-            }
-        }
-        System.out.println("\n\tUsername not found. Please try again.");
-    }
 
-
-    // Deduct funds from customer's account
-    public void minus_funds(String username, Double amount) {
-        for (Customer customer : customers) {
-            if (customer.getUsername().equals(username)) {
-                // Deduct the amount from the customer's balance
-                customer.setBalance(customer.getBalance() - amount);
-
-                // Debug: Print balance after deduction
-                System.out.printf("\n\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
-
-                // Save all customers back to the CSV after updating the balance
-                saveAllCustomersToCSV(); // Ensure this works as expected
-                return;
-            }
-        }
-        System.out.println("\n\tUsername not found. Please try again.");
     }
 
 
@@ -658,7 +637,7 @@ public class UserCustomer {
                         String selectedFile = csvFiles.get(choice - 1);
                         System.out.println("\tYou selected: " + selectedFile);
                         read_history_from_csv(selectedFile);
-                        System.out.println("\tPress Enter key to continue.\n");
+                        System.out.print("\tPress Enter key to continue.");
                         scanf.nextLine();
                         display_purchase_history_menu(customer);
                         break;
@@ -671,7 +650,7 @@ public class UserCustomer {
             }
         } else {
             System.out.println("\tNo CSV files found.");
-            System.out.println("\tPress Enter key to continue.\n");
+            System.out.print("\tPress Enter key to continue.");
             scanf.nextLine();
             System.out.println("\tReturning to previous menu.");
         }
@@ -755,7 +734,7 @@ public class UserCustomer {
                 } else {
                     attemptCount++;
                     System.out.println("\n\tIncorrect current password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine();
                 }
 
@@ -763,7 +742,7 @@ public class UserCustomer {
                 registered_user_customer_item_category(username, customer);
                 return;
             } else {
-                System.out.println("\t\tPress Enter key to continue.\n");
+                System.out.print("\t\tPress Enter key to continue.");
                 scanf.nextLine();
             }
 
@@ -772,9 +751,103 @@ public class UserCustomer {
         // Handle case where attempts are exhausted
         if (attemptCount == MAX_ATTEMPTS) {
             System.out.println("\n\tMaximum attempts reached. Password change failed.\n");
-            System.out.println("\t\tPress Enter key to continue.\n");
+            System.out.print("\t\tPress Enter key to continue.");
             scanf.nextLine();
         }
+    }
+
+
+    public void redeem_reward_points(Customer customer) {
+        Scanner scanf = new Scanner(System.in);
+        String promo_choice;
+        double cashback;
+        double reward_points;
+
+        while (true) {
+            // Display the menu
+            System.out.println("\t-------------------------------------------------");
+            System.out.printf ("\t|         Your remaining Points: %-5.0fPts      |\n", customer.getRewardPoint());
+            System.out.println("\t|   Cashback Reward!!! Convert Your Points Now  |");
+            System.out.println("\t|                                               |");
+            System.out.println("\t|        [1] 1 PT To 5 peso                     |");
+            System.out.println("\t|        [2] 5 PT To 30 pesos                   |");
+            System.out.println("\t|        [3] 10 PT To 60 pesos                  |");
+            System.out.println("\t|        [4] 25 PT To 300 pesos                 |");
+            System.out.println("\t|        [5] 50 PT To 600 pesos                 |");
+            System.out.println("\t|                                               |");
+            System.out.println("\t|        [0] Go back                            |");
+            System.out.println("\t-------------------------------------------------");
+            System.out.print("\n\tEnter choice: ");
+            promo_choice = scanf.nextLine();
+
+            switch (promo_choice) {
+                case "0":
+                    registered_user_customer_item_category(customer.getUsername(), customer);
+                    return;
+                case "1":
+                    cashback = 5;
+                    reward_points = 1;
+                    break;
+                case "2":
+                    cashback = 30;
+                    reward_points = 5;
+                    break;
+                case "3":
+                    cashback = 60;
+                    reward_points = 10;
+                    break;
+                case "4":
+                    cashback = 300;
+                    reward_points = 25;
+                    break;
+                case "5":
+                    cashback = 600;
+                    reward_points = 50;
+                    break;
+                default:
+                    System.out.println("\n\tWrong input");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
+                    continue; // Restart the loop
+            }
+
+            while (true) {
+                System.out.print("\n\tAre you sure you want to proceed to redeem points? (Y/N): ");
+                String confirm_redeem = scanf.nextLine().trim().toUpperCase();
+
+                switch (confirm_redeem) {
+                    case "Y":
+                        redeem_point_reward_process(cashback, reward_points, customer);
+                        System.out.println("\n\tRedemption successful! Cashback: " + cashback + " pesos.");
+                        return;
+                    case "N":
+                        System.out.println("\n\tRedeem cancelled.");
+                        System.out.print("\t\tPress Enter key to continue.");
+                        scanf.nextLine();
+                        return;
+                    default:
+                        System.out.println("\n\tWrong input");
+                        System.out.print("\t\tPress Enter key to continue.");
+                        scanf.nextLine(); // Pause for user acknowledgment
+                }
+            }
+        }
+    }
+
+
+
+    public void redeem_point_reward_process(double cashBack, double rewardPoints, Customer customer) {
+        Scanner scanf = new Scanner(System.in);
+        customer.setRewardPoint(customer.getRewardPoint() - rewardPoints);
+        customer.setBalance(customer.getBalance() + cashBack);
+
+        saveAllCustomersToCSV();
+
+        System.out.printf("\n\tRemaining points. New balance: %.0f\n", customer.getRewardPoint());
+        System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
+
     }
 
 
