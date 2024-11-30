@@ -14,6 +14,7 @@ public class UserCustomer {
 
     public UserCustomer() {
         // Load customers from CSV file when the program starts
+        this.OrderProcessor = new OrderProcessor();
         load_customers_from_CSV();
     }
 
@@ -565,7 +566,7 @@ public class UserCustomer {
         }
     }
 
-    // Add funds to customer's account
+
     private void add_funds(Customer customer) {
         Scanner scanf = new Scanner(System.in);
                 float amount = 0;
@@ -590,16 +591,6 @@ public class UserCustomer {
                 scanf.nextLine();
                 //registered_user_customer_item_category(username, customer);
 
-    }
-
-
-    public Customer get_customer_by_username(String username) {
-        for (Customer customer : customers) {
-            if (customer.getUsername().equals(username)) {
-                return customer;
-            }
-        }
-        return null;
     }
 
 
@@ -661,6 +652,7 @@ public class UserCustomer {
             System.out.println("\tReturning to previous menu.");
         }
     }
+
 
     public void read_history_from_csv(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader("receipts/" + filename))) {
@@ -769,6 +761,13 @@ public class UserCustomer {
         double cashback;
         double reward_points;
 
+        if (customer.getRewardPoint() <= 0) {
+            System.out.println("\n\tYou do not have enough points to redeem rewards.");
+            System.out.print("\t\tPress Enter key to continue.");
+            scanf.nextLine();
+            return;
+        }
+
         while (true) {
             // Display the menu
             System.out.println("\t-------------------------------------------------");
@@ -830,6 +829,7 @@ public class UserCustomer {
                         System.out.println("\n\tRedeem cancelled.");
                         System.out.print("\t\tPress Enter key to continue.");
                         scanf.nextLine();
+                        registered_user_customer_item_category(customer.getUsername(), customer);
                         return;
                     default:
                         System.out.println("\n\tWrong input");
@@ -841,7 +841,6 @@ public class UserCustomer {
     }
 
 
-
     public void redeem_point_reward_process(double cashBack, double rewardPoints, Customer customer) {
         Scanner scanf = new Scanner(System.in);
         customer.setRewardPoint(customer.getRewardPoint() - rewardPoints);
@@ -849,13 +848,10 @@ public class UserCustomer {
 
         saveAllCustomersToCSV();
 
-        System.out.printf("\n\tRemaining points. New balance: %.0f\n", customer.getRewardPoint());
         System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
         System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
-
     }
-
 
 
 }
