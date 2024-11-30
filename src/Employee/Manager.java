@@ -1,6 +1,7 @@
 package Employee;
 
 import Shopper.Product;
+import Shopper.UserCustomer;
 import User_Types.UserType;
 import Process.BrowseProduct;
 import Process.CouponManager;
@@ -116,20 +117,21 @@ public class Manager {
                     //revise ung save files dapat may date ang resibo at sa total sales dun din mapupunta mga items na benta, listahan
                     break;
                 case "3":
-                    //refactor ng resibo dagdag date and time pati sa mismong csv
                     display_purchase_history_menu();
                     break;
                 case "4":
-                    //nababawasan na pero need madagdagan na at pwede mag dagdag mismo ng new items
                     inventory_management();
                     break;
                 case "5":
                     hr_management_menu();
                     break;
+                case "6":
+                    customer_account_management();
+                    break;
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
                     if (logout_confirmed) {
-                        UserType.user_type_menu(); //redundant
+                        UserType.user_type_menu();
                         return;
                     }
                     break;
@@ -739,6 +741,45 @@ public class Manager {
     }
 
 
+    public void customer_account_management() {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+        UserCustomer userCustomer = new UserCustomer();
+
+        while (true) {
+            System.out.println("\n\n\t=======================================");
+            System.out.println("\t|                                     |");
+            System.out.println("\t|      Customer Account Management    |");
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
+            System.out.println("\t[1] View Customer List");
+            System.out.println("\t[2] Delete Customer Account");
+            System.out.println("\t[3] Reset Customer Password");
+            System.out.println("\n\t[0] Go back to Dashboard");
+
+            System.out.print("\n\n\tEnter Here: ");
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "0":
+                    manager_dashboard();
+                    return;
+                case "1":
+                    userCustomer.view_customer_list();
+                    break;
+                case "2":
+                    userCustomer.delete_customer();
+                    break;
+                case "3":
+                    userCustomer.manager_reset_customer_password();
+                    break;
+                default:
+                    System.out.println("\n\tInvalid input. Try again...");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
+            }
+        }
+    }
 
 
 
