@@ -844,13 +844,12 @@ public class Cashier {
     public void delete_employee() {
         Scanner scanf = new Scanner(System.in);
 
-        view_employee_list();
-
         if (cashiers.isEmpty()) {
             return;
         }
 
         while (true) {
+            view_employee_list();
             System.out.print("\n\tEnter employee ID to delete (0 to cancel): ");
             try {
                 int employeeId = Integer.parseInt(scanf.nextLine());
@@ -872,6 +871,8 @@ public class Cashier {
 
                 if (employeeToDelete == null) {
                     System.out.println("\n\tEmployee ID not found. Please try again.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
                     continue;
                 }
 
@@ -917,14 +918,12 @@ public class Cashier {
     public void manager_reset_employee_password() {
         Scanner scanf = new Scanner(System.in);
 
-        // Show current employees first
-        view_employee_list();
-
         if (cashiers.isEmpty()) {
             return;
         }
 
         while (true) {
+            view_employee_list();
             System.out.print("\n\tEnter employee ID to reset password (0 to cancel): ");
             try {
                 int employeeId = Integer.parseInt(scanf.nextLine());
@@ -947,6 +946,8 @@ public class Cashier {
 
                 if (employeeToReset == null) {
                     System.out.println("\n\tEmployee ID not found. Please try again.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
                     continue;
                 }
 
