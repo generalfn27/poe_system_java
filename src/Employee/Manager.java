@@ -3,6 +3,7 @@ package Employee;
 import Shopper.Product;
 import User_Types.UserType;
 import Process.BrowseProduct;
+import Process.CouponManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,11 +13,14 @@ import java.util.Scanner;
 public class Manager {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
     private String currentCategoryFile;
+    public CouponManager couponManager;
 
     public void user_manager() {
+        this.couponManager = new CouponManager();
         manager_login();
     }
-//GAWAN NG TXT OR CSV FILE PARA HINDI HARD CODED ANG CREDENTIALS AT KUNG WALA PANG CREDENTIALS,SA UNANG OPEN NG PROGRAM DUN DAPAT MAG ASK ANO NAME AT PASS, ALSO NAME NARIN NG STORE
+
+    //GAWAN NG TXT OR CSV FILE PARA HINDI HARD CODED ANG CREDENTIALS AT KUNG WALA PANG CREDENTIALS,SA UNANG OPEN NG PROGRAM DUN DAPAT MAG ASK ANO NAME AT PASS, ALSO NAME NARIN NG STORE
     private void manager_login() {
         Scanner scanf = new Scanner(System.in);
         int attempt_count = 0; // Count failed login attempts
@@ -55,7 +59,7 @@ public class Manager {
         }
     }
 
-
+    // ma iiba to dahil sa unang open ng program dapat mag set up
     private boolean validate_manager_login(String inputUsername, String inputPassword) {
         // Default username
         String username = "manager";
@@ -106,7 +110,7 @@ public class Manager {
 
             switch (choice) {
                 case "1":
-                    //di pa nagagawa
+                    voucher_management_dashboard();
                     break;
                 case "2":
                     //revise ung save files dapat may date ang resibo at sa total sales dun din mapupunta mga items na benta, listahan
@@ -260,7 +264,7 @@ public class Manager {
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
-            System.out.print("\t|        Enter here: ");
+            System.out.print  ("\t|        Enter here: ");
 
             item_category = scanf.nextLine();
 
@@ -446,8 +450,17 @@ public class Manager {
 
         if (productToRemove != null) {
             System.out.println("\tProduct found: " + productToRemove.getName());
-            System.out.print("\tAre you sure you want to remove this product? (Y/N): ");
-            String confirm = scanf.nextLine();
+
+            String confirm;
+            while (true) {
+                System.out.print("\tAre you sure you want to remove this product? (Y/N): ");
+                confirm = scanf.nextLine();
+                if (confirm.equalsIgnoreCase("Y") || confirm.equalsIgnoreCase("N")) {
+                    break;
+                } else {
+                    System.out.println("\tInvalid input. Please enter 'Y' or 'N'.");
+                }
+            }
 
             if (confirm.equalsIgnoreCase("Y")) {
                 products.remove(productToRemove);
@@ -460,7 +473,7 @@ public class Manager {
             System.out.println("\tProduct not found!");
         }
 
-        System.out.println("\t\tPress Enter key to continue.\n");
+        System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
     }
 
@@ -672,10 +685,60 @@ public class Manager {
                     System.out.println("\t\tPress Enter key to continue.\n");
                     scanf.nextLine(); //used for press any key to continue
             }
+        }
+    }
+
+
+    public void voucher_management_dashboard() {
+        Scanner scanf = new Scanner(System.in);
+        String choice;
+
+        while (true) {
+            System.out.println("\n\n\t=======================================");
+            System.out.println("\t|                                     |");
+            System.out.println("\t|        Voucher Codes Manager        |");
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
+            System.out.println("\t[1] Register New Coupon");
+            System.out.println("\t[2] View Coupon List");
+            System.out.println("\t[3] Restock");
+            System.out.println("\t[4] Decrease stock");
+            System.out.println("\t[5] Delete Coupon Code");
+            System.out.println("\n\t[0] Go back to Dashboard");
+
+            System.out.print("\n\n\tEnter Here: ");
+            choice = scanf.nextLine();
+
+            switch (choice) {
+                case "0":
+                    manager_dashboard();
+                    return;
+                case "1":
+                    couponManager.register_coupon();
+                    break;
+                case "2":
+                    couponManager.view_employee_list();
+                    break;
+                case "3":
+                    couponManager.restock_coupon_quantity();
+                    break;
+                case "4":
+                    couponManager.decrease_coupon_quantity();
+                    break;
+                case "5":
+                    couponManager.delete_coupon();
+                    break;
+                default:
+                    System.out.println("\n\tInvalid input. Try again...");
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
+            }
 
         }
 
     }
+
+
 
 
 
