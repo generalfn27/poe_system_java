@@ -12,15 +12,14 @@ public class SelfCheckout {
     private final CashierProcess cashierProcess;
     private final List<Product> cart;
 
-    public SelfCheckout(UserCustomer userCustomer, List<Product> cart) {
-        this.userCustomer = userCustomer;
+    public SelfCheckout(List<Product> cart) {
+        this.userCustomer = new UserCustomer();
         this.cashierProcess = new CashierProcess();
         this.cart = cart;
         CashierProcess.initialize_receipt_number();
     }
 
-    public void processSelfCheckout(String username) {
-        Customer customer = userCustomer.get_customer_by_username(username);
+    public void processSelfCheckout(Customer customer) {
         if (customer == null) {
             System.out.println("\tCustomer not found. Aborting self-checkout.");
             return;
@@ -64,67 +63,143 @@ public class SelfCheckout {
     }
 
 
-    private void process_e_wallet_payment(Customer customer) {
+    private void process_e_wallet_payment (Customer customer) {
         Scanner scanf = new Scanner(System.in);
-        double totalPrice = calculate_total_price();
-        String enteredPin = "";
-        double new_transaction;
 
-        System.out.println("\n\tProcessing e-wallet payment for " + customer.getUsername());
-        System.out.println("\tYou have chosen " + customer.getPaymentMethod() + " as your mode of payment.");
+        while (true) {
+            double totalPrice = calculate_total_price();
+            display_cart_self_checkout();
+            System.out.printf("\n\tTotal Amount to Pay: %.2f\n", totalPrice);
+            System.out.println("\tDo you want to proceed with the payment?\n");
+            System.out.println("\t[1] Yes");
+            System.out.println("\t[2] Apply Discount Coupon");
+            System.out.println("\n\t[0] Cancel");
+            System.out.print("\tEnter choice: ");
+            String choice = scanf.nextLine();
 
-        while (!enteredPin.equals(customer.getPinCode())) {
-            System.out.print("\n\tEnter /// to Cancel");
-            System.out.print("\n\tEnter your PIN: ");
-            enteredPin = scanf.nextLine().trim();
+            switch (choice) {
+                case "1":
+                    processFinalPayment(customer, totalPrice);
+                    break;
+                case "2":
+                    double discountedPrice = handleCouponApplication(totalPrice, scanf);
 
-            if (enteredPin.equals("///")){
+                    // If coupon application is cancelled or fails
+                    if (discountedPrice < 0) {
+                        System.out.println("\tCoupon application cancelled or failed.");
+                        System.out.print("\t\tPress Enter key to continue.");
+                        scanf.nextLine();
+                        continue; // Go back to main payment menu
+                    }
+                    // Proceed with discounted payment
+                    processFinalPayment(customer, discountedPrice);
+                    break;
+                case "0":
+                    System.out.println("\tPayment cancelled.");
+                    cashierProcess.self_checkout_or_queue_process(customer, cart);
+                    return;
+                default:
+                    System.out.println("\n\tInvalid choice. Please try again.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
+            }
+        }
+    }
+
+
+    private double handleCouponApplication(double totalPrice, Scanner scanf) {
+        CouponManager coupon_manager = new CouponManager();
+
+        while (true) {
+            System.out.print("\n\tEnter coupon code: ");
+            String couponCode = scanf.nextLine();
+
+            double discountedPrice = coupon_manager.apply_coupon(couponCode, totalPrice);
+
+            if (discountedPrice == -1) { // Invalid code or coupon exhausted
+                System.out.println("\n\tInvalid coupon or coupon has been exhausted.");
+
+                while (true) {
+                    System.out.println("\tWould you like to try another coupon?");
+                    System.out.println("\t[1] Yes");
+                    System.out.println("\t[0] No, proceed without coupon");
+                    System.out.print("\tEnter choice: ");
+                    String retryChoice = scanf.nextLine();
+
+                    if (retryChoice.equals("1")) {
+                        break; // Try another coupon
+                    } else if (retryChoice.equals("0")) {
+                        return -1; // Cancel coupon application
+                    } else {
+                        System.out.println("\tInvalid choice. Please enter [1] or [0].");
+                    }
+                }
+            } else {
+                // Successful coupon application
+                System.out.printf("\tCoupon applied. New total: %.2f\n", discountedPrice);
+                return discountedPrice;
+            }
+        }
+    }
+
+
+    private void processFinalPayment(Customer customer, double totalPrice) {
+        Scanner scanf = new Scanner(System.in);
+
+        int maxAttempts = 3;
+        for (int attempt = 0; attempt < maxAttempts; attempt++) {
+            System.out.print("\n\tEnter PIN (or '///' to Cancel): ");
+            String enteredPin = scanf.nextLine().trim();
+
+            if (enteredPin.equals("///")) {
+                System.out.println("\tPayment cancelled.");
                 return;
             }
 
-            if (!enteredPin.equals(customer.getPinCode())) {
-                System.out.println("\n\tPin do not match. Please try again.");
+            if (enteredPin.equals(customer.getPinCode())) {
+                // Check balance
+                if (customer.getBalance() < totalPrice) {
+                    System.out.println("\tInsufficient balance. Payment cancelled.");
+                    return;
+                }
+
+                customer.setBalance(customer.getBalance() - totalPrice);
+                updateCustomerDetails(customer, totalPrice);
+                return;
+            } else {
+                System.out.printf("\tIncorrect PIN. %d attempts remaining.\n",
+                        maxAttempts - attempt - 1);
             }
         }
 
-        if (customer.getBalance() < totalPrice) {
-            System.out.println("\tInsufficient balance. Payment cancelled.");
-            System.out.println("\t\tPress Enter key to continue.\n");
-            scanf.nextLine();
-            return;
-        }
+        System.out.println("\tToo many incorrect PIN attempts. Payment cancelled.");
+    }
 
-        customer.setBalance(customer.getBalance() - totalPrice);
-
-        // Debugger: Print balance after deduction
-        System.out.printf("\n\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
-        userCustomer.saveAllCustomersToCSV(); // Ensure this works as expected
-
-        //kada 5pesos ay 0.1 sa reward same sa globe
-        //cashback reward calculation
-        double point_reward = (totalPrice / 50.0) + customer.getRewardPoint();
+    private void updateCustomerDetails(Customer customer, double totalPrice) {
+        Scanner scanf = new Scanner(System.in);
+        int point_reward = (int) ((totalPrice / 50) + customer.getRewardPoint());
         customer.setRewardPoint(point_reward);
-        System.out.printf("\tYour Total cashback reward point is %.0f\n", customer.getRewardPoint());
 
         double total_spent = customer.getTotal_spent() + totalPrice;
         customer.setTotal_spent(total_spent);
-        System.out.printf("\tYour Total spent is %-8.2f\n", customer.getTotal_spent());
 
-        // need dagdag sa sales report kung ano mga items na ibenta
-        // Update report sales with current transaction details
+        customer.setTransaction(customer.getTransaction() + 1);
+
         cashierProcess.update_sales_report(calculate_total_items(), calculate_total_price());
-
         cashierProcess.update_all_stocks(cart);
 
         print_receipt(customer, totalPrice);
 
-        new_transaction = customer.getTransaction() + 1.0;
-        customer.setTransaction(new_transaction);
-        //System.out.printf("\tPayment successful. New transaction: %.0f\n", customer.getTransaction()); // debugger na naman kasi puro bug
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
 
         userCustomer.saveAllCustomersToCSV();
-        OrderProcessor.reset_cart_no_display();
 
+        cart.clear();
+
+        System.out.printf("\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
+        System.out.printf("\tTotal cashback reward point: %.0f\n", customer.getRewardPoint());
+        System.out.printf("\tTotal spent: %.2f\n", customer.getTotal_spent());
         System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
 
@@ -151,7 +226,6 @@ public class SelfCheckout {
         System.out.println("\t-----------------------------");
         System.out.println("\tThank you for your purchase!");
 
-        // Save receipt to CSV
         cashierProcess.self_checkout_save_receipt_to_csv(this.cart, totalPrice, totalPrice, customer);
     }
 
