@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 public class OrderProcessor {
-    public static List<Product> cart;
+    public  List<Product> cart;
     public static int total_items;
     public static double total_price;
     private static int currentQueueNumber;
@@ -131,7 +131,7 @@ public class OrderProcessor {
     }
 
 
-    public static void display_cart() {
+    public void display_cart() {
         System.out.println("\n\tYour Cart:");
         if (cart.isEmpty()) {
             System.out.println("\tYour cart is empty.");
@@ -406,8 +406,26 @@ public class OrderProcessor {
                     return;
                 case "P":
                 case "p":
-                    self_checkout_or_queue_process(customer);
+                    while (true) {
+                        System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+                        String confirmInput = scanf.nextLine();
+
+                        if (confirmInput.equalsIgnoreCase("y")) {
+                            self_checkout_or_queue_process(customer);
+                            break;
+                        } else if (confirmInput.equalsIgnoreCase("n")) {
+                            registered_user_modify_menu_process(customer);
+                        } else {
+                            System.out.println("\n\tAn error has occurred.");
+                            System.out.print("\t\tPress Enter key to continue.");
+                            scanf.nextLine(); //used for press any key to continue
+                        }
+                    }
                     break;
+                default:
+                    System.out.println("\n\tAn error has occurred.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
@@ -416,10 +434,6 @@ public class OrderProcessor {
     public void self_checkout_or_queue_process(Customer customer) {
         Scanner scanf = new Scanner(System.in);
         while (true) {
-            System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-            String confirmInput = scanf.nextLine();
-
-            if (confirmInput.equalsIgnoreCase("y")) {
                 System.out.println("\t===========================================");
                 System.out.println("\t|          Processing Checkout...         |");
                 System.out.println("\t|                                         |");
@@ -497,13 +511,7 @@ public class OrderProcessor {
                         System.out.print("\t\tPress Enter key to continue.");
                         scanf.nextLine(); //used for press any key to continue
                 }
-            } else if (confirmInput.equalsIgnoreCase("n")){
-                registered_user_modify_menu_process(customer);
-            } else {
-                System.out.println("\n\tAn error has occurred.");
-                System.out.print("\t\tPress Enter key to continue.");
-                scanf.nextLine(); //used for press any key to continue
-            }
+
         }
     }
 
@@ -565,21 +573,21 @@ public class OrderProcessor {
         }
     }
 
-    public static void reset_cart() {
+    public void reset_cart() {
         cart.clear();
         total_items = 0;
         total_price = 0;
         System.out.println("\tThe cart has been reset.");
     }
 
-    public static void reset_cart_no_display() {
+    public void reset_cart_no_display() {
         cart.clear();
         total_items = 0;
         total_price = 0;
     }
 
 
-    public static void save_cart_to_queue_csv() {
+    public void save_cart_to_queue_csv() {
         Scanner scanf = new Scanner(System.in);
         if (cart.isEmpty()) {
             System.out.println("\tCart is empty. Nothing to save.");

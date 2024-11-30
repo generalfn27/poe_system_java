@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class UserCustomer {
     private final List<Customer> customers = new ArrayList<>();
+    public OrderProcessor OrderProcessor;
 
     public UserCustomer() {
         // Load customers from CSV file when the program starts
