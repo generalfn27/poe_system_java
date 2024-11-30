@@ -42,4 +42,14 @@ public class Coupon {
     public void setCouponQuantity(int couponQuantity) {
         this.couponQuantity = couponQuantity;
     }
+
+    public void update_quantity(int quantityChange) {
+        if (this.couponQuantity + quantityChange >= 0) {  // Ensure stock doesn't go negative
+            this.couponQuantity += quantityChange;
+            //need ng update stock sa manager part para update product stock sa csv
+        } else {
+            System.out.println("Not enough stock available!");
+        }
+    }
+
 }
