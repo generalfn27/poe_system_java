@@ -173,9 +173,38 @@ public class UserCustomer {
         String phoneNumber;
         String paymentMethod;
 
-        System.out.println("\n\t----------------------------------------------");
-        System.out.println("\t|        suggestion another scanf para                  |");
-        System.out.println("\t|            sa agreement consent sa data etc.            |");
+        System.out.println("\n\t-----------------------------------------------");
+        System.out.println("\t|               Terms of Agreement            |");
+        System.out.println("\t|  By registering, you acknowledge that this  |");
+        System.out.println("\t|  is a sample project and the information    |");
+        System.out.println("\t|  you provide will only be used for the      |");
+        System.out.println("\t|  purpose of demonstrating customer          |");
+        System.out.println("\t|  registration functionality. Your data will |");
+        System.out.println("\t|  not be shared or used for any other        |");
+        System.out.println("\t|  purposes.                                  |");
+        System.out.println("\t|  (Press Enter to continue, or type 'exit'   |");
+        System.out.println("\t|  to cancel registration.)                   |");
+        System.out.println("\t----------------------------------------------");
+
+        String agreement = "";
+        boolean agreement_consent = false;
+
+        while (!agreement_consent) {
+            System.out.print("\n\tDo you agree to the terms? (y/n): ");
+            agreement = scanf.nextLine().trim().toLowerCase();
+
+            if (agreement.equals("y") || agreement.equals("n")) {
+                agreement_consent = true;
+            } else {
+                System.out.println("\n\tInvalid input. Please enter 'y' or 'n'.");
+            }
+        }
+
+        if (agreement.equals("n")) {
+            System.out.println("\n\tRegistration cancelled.");
+            return;
+        }
+
         System.out.print("\n\tEnter Username: ");
         String username = scanf.nextLine();
 
@@ -196,19 +225,23 @@ public class UserCustomer {
         newCustomer.setUsername(username);
 
         // Password input naka ibang method para sa future changes para mas madali mag asterisk
-        String password = inputPassword(scanf, "\n\tEnter Password: ");
+        String password = input_password(scanf, "\n\tEnter Password: ");
         newCustomer.setPassword(password);
 
         while (!newCustomer.getPassword().equals(confirmPassword)) {
-            confirmPassword = inputPassword(scanf, "\tConfirm Password: ");
+            System.out.print("\n\tEnter /// to Cancel");
+            confirmPassword = input_password(scanf, "\tConfirm Password: ");
+            if (confirmPassword.equals("///")){ return; }
             if (!newCustomer.getPassword().equals(confirmPassword)) {
                 System.out.println("\n\tPasswords do not match. Please try again.");
             }
         }
 
         while (true) {
+            System.out.print("\n\tEnter /// to Cancel");
             System.out.print("\n\tEnter Phone Number: ");
             phoneNumber = scanf.nextLine();
+            if (phoneNumber.equals("///")){ return; }
 
             //  Check if the entered Phone Number starts with "09" and is exactly 11 digits
             //  ^: This is a beginning-of-line anchor, which means that the pattern must match from the very start of the string.
@@ -216,7 +249,6 @@ public class UserCustomer {
             //  \d: This matches any single digit character (0-9).
             //  {9}: This is a quantifier that specifies that the preceding element (\d) must occur exactly 9 times.
             //  $: This is an end-of-line anchor, which means that the pattern must match up to the very end of the string.
-
             if (phoneNumber.matches("^09\\d{9}$")) { break; }
             else { System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");   }
         }
@@ -241,9 +273,10 @@ public class UserCustomer {
         System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using " + newCustomer.getPaymentMethod());
 
         while (true) {
+            System.out.print("\n\tEnter /// to Cancel");
             System.out.print("\n\tEnter a 4-digit PIN code: ");
             pinCode = scanf.nextLine();
-
+            if (pinCode.equals("///")){ return; }
             // Check if the entered PIN is exactly 4 digits
             // \\d dahil integer
             // 4 ay ung bilang so dapat mag match ung input na int
@@ -276,7 +309,6 @@ public class UserCustomer {
         newCustomer.setTotal_spent(0);
 
         save_customer_to_file(newCustomer);
-
         // Add the customer to the in-memory list
         customers.add(newCustomer);
 
@@ -290,7 +322,7 @@ public class UserCustomer {
 
     // Helper method to input hidden password pero dapat magiging ****
     //shortcut sa pag fill ups thanks sa AI
-    private String inputPassword(Scanner scanner, String prompt) {
+    private String input_password(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
     }
@@ -421,7 +453,7 @@ public class UserCustomer {
             String username = scanf.nextLine();
 
             // Get hidden password input
-            String password = inputPassword(scanf, "\tEnter Password: ");
+            String password = input_password(scanf, "\tEnter Password: ");
 
             // Check if the username and password match any customer record
             for (Customer customer : customers) {
@@ -851,6 +883,195 @@ public class UserCustomer {
         System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
         System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
+    }
+
+
+    public void view_customer_list() {
+        Scanner scanf = new Scanner(System.in);
+        load_customers_from_CSV();
+
+        if (customers.isEmpty()) {
+            System.out.println("\n\tNo customer found in the system.");
+            System.out.println("\n\tPress Enter to continue...");
+            scanf.nextLine();
+            return;
+        }
+
+        System.out.println("\n\t=========================================================");
+        System.out.println("\t|                    Customer List                      |");
+        System.out.println("\t=========================================================");
+        System.out.printf("\t%-10s %-13s %-16s %-9s %-12s %-14s %-12s%n",
+                "Username", "Phone", "Payment Method", "Balance", "Transactions", "Reward Points", "Total Spent");
+        System.out.println("\t-------------------------------------------------");
+
+        for (Customer customer : customers) {
+            System.out.printf("\t%-10s %-13s %-16s %-12s %-12s %-14s %-12s%n",
+                    customer.getUsername(),
+                    customer.getPhoneNumber(),
+                    customer.getPaymentMethod(),
+                    customer.getBalance(),
+                    customer.getTransaction(),
+                    customer.getRewardPoint(),
+                    customer.getTotal_spent());
+        }
+
+        System.out.print("\n\tPress Enter to continue...");
+        scanf.nextLine();
+    }
+
+
+    public void delete_customer() {
+        Scanner scanf = new Scanner(System.in);
+
+        if (customers.isEmpty()) {
+            return;
+        }
+
+        while (true) {
+            view_customer_list();
+            System.out.print("\n\tEnter Username to delete (0 to cancel): ");
+            try {
+                String user_name = scanf.nextLine();
+
+                if (user_name.equalsIgnoreCase("0")) {
+                    System.out.println("\n\tDeletion cancelled.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
+                    return;
+                }
+
+                Customer customer_to_delete = null;
+                for (Customer customer : customers) {
+                    if (customer.getUsername().equals(user_name)) {
+                        customer_to_delete = customer;
+                        break;
+                    }
+                }
+
+                if (customer_to_delete == null) {
+                    System.out.println("\n\tEmployee ID not found. Please try again.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
+                    continue;
+                }
+
+                while (true) {
+                    System.out.println("\n\tAre you sure you want to delete employee:");
+                    System.out.println("\tUser Name: " + customer_to_delete.getUsername());
+                    System.out.println("\tPhone Number: " + customer_to_delete.getPhoneNumber());
+                    System.out.println("\tPayment Method: " + customer_to_delete.getPaymentMethod());
+                    System.out.println("\tBalance: " + customer_to_delete.getBalance());
+                    System.out.println("\tTotal Transaction: " + customer_to_delete.getTransaction());
+                    System.out.println("\tReward Points: " + customer_to_delete.getTransaction());
+                    System.out.println("\tTotal Spent: " + customer_to_delete.getTotal_spent());
+
+                    System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
+                    String confirmation = scanf.nextLine();
+
+                    if (confirmation.equalsIgnoreCase("Y")) {
+                        customers.remove(customer_to_delete);
+                        saveAllCustomersToCSV();
+                        System.out.println("\n\tEmployee successfully deleted.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                        return;
+                    } else if (confirmation.equalsIgnoreCase("N")) {
+                        System.out.println("\n\tDeletion cancelled.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                        return;
+                    } else {
+                        System.out.println("\n\tInvalid Input");
+                        System.out.print("\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tInvalid input. Please enter a valid customer Username.");
+                System.out.print("\t\tPress Enter to continue...");
+                scanf.nextLine();
+            }
+        }
+    }
+
+
+    public void manager_reset_customer_password() {
+        Scanner scanf = new Scanner(System.in);
+
+        if (customers.isEmpty()) {
+            return;
+        }
+
+        while (true) {
+            view_customer_list();
+            System.out.print("\n\tEnter Username to delete (0 to cancel): ");
+            try {
+                String user_name = scanf.nextLine();
+
+                if (user_name.equalsIgnoreCase("0")) {
+                    System.out.println("\n\tPassword reset cancelled.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
+                    return;
+                }
+
+                Customer customer_to_reset = null;
+                for (Customer customer : customers) {
+                    if (customer.getUsername().equals(user_name)) {
+                        customer_to_reset = customer;
+                        break;
+                    }
+                }
+
+                if (customer_to_reset == null) {
+                    System.out.println("\n\tCustomer Username not found. Please try again.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    scanf.nextLine();
+                    continue;
+                }
+
+                System.out.println("\n\tResetting password for customer:");
+                System.out.println("\tUser Name: " + customer_to_reset.getUsername());
+                System.out.println("\tPhone Number: " + customer_to_reset.getPhoneNumber());
+                System.out.println("\tPayment Method: " + customer_to_reset.getPaymentMethod());
+                System.out.println("\tBalance: " + customer_to_reset.getBalance());
+                System.out.println("\tTotal Transaction: " + customer_to_reset.getTransaction());
+                System.out.println("\tReward Points: " + customer_to_reset.getTransaction());
+                System.out.println("\tTotal Spent: " + customer_to_reset.getTotal_spent());
+
+                String newPassword;
+                String confirmPassword;
+                do {
+                    System.out.print("\n\tEnter (0 to cancel): ");
+                    newPassword = input_password(scanf, "\n\tEnter new password: ");
+                    if (newPassword.equalsIgnoreCase("0")) {
+                        System.out.println("\n\tPassword reset cancelled.");
+                        System.out.print("\n\tPress Enter to continue...");
+                        scanf.nextLine();
+                        return;
+                    }
+                    confirmPassword = input_password(scanf, "\tConfirm new password: ");
+
+                    if (!newPassword.equals(confirmPassword)) {
+                        System.out.println("\n\tPasswords do not match. Please try again.");
+                    }
+                } while (!newPassword.equals(confirmPassword));
+
+                customer_to_reset.setPassword(newPassword);
+                saveAllCustomersToCSV();
+
+                System.out.println("\n\tPassword successfully reset.");
+                System.out.print("\n\tPress Enter to continue...");
+                scanf.nextLine();
+                return;
+
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tInvalid input. Please enter a valid customer Username.");
+                System.out.print("\t\tPress Enter to continue...");
+                scanf.nextLine();
+            }
+        }
     }
 
 
