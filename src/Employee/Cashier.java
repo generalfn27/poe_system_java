@@ -906,6 +906,8 @@ public class Cashier {
 
             } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
+                System.out.print("\t\tPress Enter to continue...");
+                scanf.nextLine();
             }
         }
     }
@@ -973,6 +975,8 @@ public class Cashier {
 
             } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
+                System.out.print("\t\tPress Enter to continue...");
+                scanf.nextLine();
             }
         }
     }
