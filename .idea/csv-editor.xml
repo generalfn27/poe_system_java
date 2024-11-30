@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\accounts\customers.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\bar_soap.csv">
           <value>
             <Attribute>
