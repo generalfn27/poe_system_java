@@ -305,6 +305,8 @@ public class CouponManager {
                     break;
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input. Please enter a valid number.");
+                    System.out.print("\t\tPress Enter to continue...");
+                    scanf.nextLine();
                 }
             }
 
@@ -350,6 +352,8 @@ public class CouponManager {
                     break;
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input. Please enter a valid number.");
+                    System.out.print("\t\tPress Enter to continue...");
+                    scanf.nextLine();
                 }
             }
             couponToRestock.update_quantity(-additionalStock);
