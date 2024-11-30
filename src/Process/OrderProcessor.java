@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 public class OrderProcessor {
-    public  List<Product> cart;
+    public List<Product> cart;
     public static int total_items;
     public static double total_price;
     private static int currentQueueNumber;
@@ -140,9 +140,26 @@ public class OrderProcessor {
                 System.out.printf("\tProduct Code: %-10s Name: %-20s Quantity: %d Price: %.2f\n",
                         product.getCode(), product.getName(), product.getStock(), product.getPrice());
             }
-            System.out.printf("\n\tTotal Items: %d\n", total_items);
-            System.out.printf("\tTotal Price: %.2f\n", total_price);
+            System.out.printf("\n\tTotal Items: %d\n", calculate_total_items());
+            System.out.printf("\tTotal Price: %.2f\n", calculate_total_price());
         }
+    }
+
+    private int calculate_total_items() {
+        int total = 0;
+        for (Product product : cart) {
+            total += product.getStock();
+        }
+        return total;
+    }
+
+
+    private double calculate_total_price() {
+        double total = 0;
+        for (Product product : cart) {
+            total += product.getPrice() * product.getStock();
+        }
+        return total;
     }
 
 
@@ -411,7 +428,7 @@ public class OrderProcessor {
                         String confirmInput = scanf.nextLine();
 
                         if (confirmInput.equalsIgnoreCase("y")) {
-                            self_checkout_or_queue_process(customer);
+                            self_checkout_or_queue_process(customer, cart);
                             break;
                         } else if (confirmInput.equalsIgnoreCase("n")) {
                             registered_user_modify_menu_process(customer);
@@ -431,9 +448,10 @@ public class OrderProcessor {
     }
 
 
-    public void self_checkout_or_queue_process(Customer customer) {
+    public void self_checkout_or_queue_process(Customer customer, List<Product> cart) {
         Scanner scanf = new Scanner(System.in);
         while (true) {
+                this.cart = cart;
                 System.out.println("\t===========================================");
                 System.out.println("\t|          Processing Checkout...         |");
                 System.out.println("\t|                                         |");
@@ -493,10 +511,8 @@ public class OrderProcessor {
                             String self_checkout_confirmation = scanf.nextLine();
 
                             if (self_checkout_confirmation.equalsIgnoreCase("Y")) {
-                                // New e-wallet self-checkout process
-                                UserCustomer userCustomer = new UserCustomer(); // Create a new UserCustomer instance
-                                SelfCheckout selfCheckout = new SelfCheckout(userCustomer, cart);
-                                selfCheckout.processSelfCheckout(customer.getUsername());
+                                SelfCheckout selfCheckout = new SelfCheckout(cart);
+                                selfCheckout.processSelfCheckout(customer);
                             } else if (self_checkout_confirmation.equalsIgnoreCase("N")) {
                                 break;
                             } else {
