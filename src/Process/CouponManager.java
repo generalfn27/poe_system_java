@@ -363,5 +363,25 @@ public class CouponManager {
     }
 
 
+    public void show_random_Coupon() {
+        if (availableCoupons.isEmpty()) {
+            System.out.println("\n\tNo coupons available to display.");
+            return;
+        }
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(availableCoupons.size());
+
+        Coupon randomCoupon = availableCoupons.get(randomIndex);
+
+        System.out.println("\n\t=== Special Coupon Advertisement ===");
+        System.out.printf("\tDiscount Code: %s%n", randomCoupon.getDiscountCode());
+        System.out.printf("\tDiscount Value: %.2f%n", randomCoupon.getDiscountValue());
+        System.out.printf("\tAvailable Quantity: %d%n", randomCoupon.getCouponQuantity());
+        System.out.println("\t====================================");
+    }
+
+
+
 
 }
