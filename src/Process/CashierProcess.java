@@ -58,57 +58,112 @@ public class CashierProcess extends OrderProcessor {
 
     public boolean process_payment(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
-        display_counter();
+        String retryChoice;
 
         while (true) {
-            System.out.printf("\n\tTotal Amount need Pay: %.2f\n", calculate_total_price());
+            display_counter();
+            double totalPrice = calculate_total_price();
+            System.out.printf("\tTotal Amount to Pay: %.2f\n", totalPrice);
             System.out.println("\tDo you want to proceed with the payment?\n");
             System.out.println("\t[1] Yes");
-            System.out.println("\t[0] Cancel");
+            System.out.println("\t[2] Yes & apply a discount coupon");
+            System.out.println("\n\t[0] Cancel");
             System.out.print("\tEnter choice: ");
             String choice = scanf.nextLine();
 
             switch (choice) {
                 case "1":
-                    double payment = 0;
-                    boolean validInput = false;
-
-                    // Keep asking until a valid number is entered
-                    while (!validInput) {
-                        try {
-                            System.out.print("\n\tEnter rendered amount: ");
-                            payment = Float.parseFloat(scanf.nextLine());
-                            validInput = true; // Input is valid, exit the loop
-                        } catch (NumberFormatException e) {
-                            System.out.println("\tInvalid input. Please enter a valid number.");
-                        }
+                    if (proceed_to_payment(totalPrice, cashier)) {
+                        return true;
                     }
+                    break;
+                case "2":
+                    while (true) {
+                        System.out.print("\n\tEnter coupon code: ");
+                        String couponCode = scanf.nextLine();
+                        CouponManager coupon_manager = new CouponManager();
+                        double discountedPrice = coupon_manager.apply_coupon(couponCode, totalPrice);
 
-                    if (payment >= calculate_total_price()) {
-                        System.out.println("\tPayment accepted.");
-                        if (payment > calculate_total_price()) {
-                            System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
+                        if (discountedPrice == -1) { // Invalid code or coupon exhausted
+                            while (true) {
+                                System.out.println("\n\tWould you like to try another coupon?");
+                                System.out.println("\t[1] Yes");
+                                System.out.println("\t[0] No, proceed without coupon");
+                                System.out.print("\tEnter choice: ");
+                                retryChoice = scanf.nextLine();
+
+                                if (retryChoice.equals("1")) {
+                                    break; // Break out of the retry choice loop to allow another coupon input
+                                } else if (retryChoice.equals("0")) {
+                                    break; // Exit the coupon application loop
+                                } else {
+                                    System.out.println("\tInvalid choice. Please enter [1] or [0].");
+                                    System.out.print("\t\tPress Enter key to continue.");
+                                    scanf.nextLine();
+                                }
+                            }
+
+                            if (retryChoice.equals("0")) {
+                                break; // Exit the outer coupon loop
+                            }
                         }
 
-                        // Update report sales with current transaction details
-                        update_sales_report(calculate_total_items(), calculate_total_price());
-
-                        // Update stock levels after successful payment
-                        update_all_stocks(counter);
-                        print_receipt(counter, payment, cashier);
-
-                        counter.clear();
-                        return true; // Return true to indicate successful payment para balik dashboard
-                    } else {
-                        System.out.println("\tInsufficient payment. Try again.");
-                        System.out.println("\t\tPress Enter key to continue.\n");
-                        scanf.nextLine(); //used for press any key to continue
+                        else {
+                            totalPrice = discountedPrice; // Apply the valid discount
+                            if (proceed_to_payment(totalPrice, cashier)) {
+                                return true;
+                            }
+                            break;
+                        }
                     }
                     break;
                 case "0":
-                    return false;
+                    return false; // Cancel payment process
+                default:
+                    System.out.println("\tInvalid choice. Please try again.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
             }
         }
+    }
+
+
+
+    public boolean proceed_to_payment (double totalPrice, Cashier cashier) {
+        Scanner scanf = new Scanner(System.in);
+        double payment = 0;
+        boolean validInput = false;
+
+        // Keep asking until a valid number is entered
+        while (!validInput) {
+            try {
+                System.out.print("\n\tEnter rendered amount: ");
+                payment = Float.parseFloat(scanf.nextLine());
+                validInput = true; // Input is valid, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println("\tInvalid input. Please enter a valid number.");
+            }
+        }
+
+        if (payment >= totalPrice) {
+            System.out.println("\tPayment accepted.");
+            if (payment > calculate_total_price()) {
+                System.out.printf("\tChange: %.2f\n", payment - totalPrice);
+            }
+
+            update_sales_report(calculate_total_items(), totalPrice);
+
+            update_all_stocks(counter);
+            print_receipt(counter, payment, cashier);
+
+            counter.clear();
+            return true; // Return true to indicate successful payment para balik dashboard
+        } else {
+            System.out.println("\tInsufficient payment. Try again.");
+            System.out.println("\t\tPress Enter key to continue.\n");
+            scanf.nextLine(); //used for press any key to continue
+        }
+        return false;
     }
 
 
