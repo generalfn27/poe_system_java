@@ -10,6 +10,12 @@ public class UserType {
         Scanner scanf = new Scanner(System.in);
 
         while (true) {
+            String storeName = ManagerCredentials.getStoreName();
+            System.out.println("\n\t=======================================");
+            System.out.println("\t|                                     |");
+            System.out.printf ("\t|       Welcome to %-15s    |\n", storeName + " Store");
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
             System.out.println("\n\tPlease enter what user type you are:\n");
             System.out.println("\t[1] Customer");
             System.out.println("\t[2] Cashier");
@@ -53,19 +59,17 @@ public class UserType {
                             scanf.close();
                             System.exit(0);
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
-                            // Do nothing, stay in the loop and return to the menu
                             user_type_menu();
                             break;
                         } else {
                             System.out.println("\n\tAn error has occurred");
-                            System.out.println("\t\tPress Enter key to continue.\n");
+                            System.out.print("\t\tPress Enter key to continue.");
                             scanf.nextLine(); //used for press any key to continue
-                            // Do nothing, stay in the loop and return to the menu
                         }
                     }
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
             System.out.println();
