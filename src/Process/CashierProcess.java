@@ -151,7 +151,7 @@ public class CashierProcess extends OrderProcessor {
                 System.out.printf("\tChange: %.2f\n", payment - totalPrice);
             }
 
-            update_sales_report(calculate_total_items(), totalPrice);
+            update_sales_report(counter);
 
             update_all_stocks(counter);
             print_receipt(counter, payment, cashier);
@@ -426,49 +426,72 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    // Method to initialize the sales report by reading from a file
-    public void initialize_sales_report() {
-        File file = new File("sales_report.csv");
-        if (!file.exists()) {
-            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-                writer.println("Total Items,Total Sales");  // Header
-                writer.println("0,0.00");  // Initial values
-            } catch (IOException e) {
-                System.out.println("Error initializing sales report not yet exist: " + e.getMessage());
-            }
-        }
-    }
+    public void update_sales_report(List<Product> soldProducts) {
+        String filename = "products/sales_report.csv";
+        int currentTotalItems = 0;
+        double currentTotalSales = 0.0;
+        List<String> existingEntries = new ArrayList<>();
 
-
-    public void update_sales_report(int newItems, double newSales) {
-        String filename = "sales_report.csv";
-        int currentItems = 0;
-        double currentSales = 0.0;
-
-        // Try to read existing values
+        // Read existing sales report to collect only product entries
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            reader.readLine(); // Skip header
-            String line = reader.readLine();
-            if (line != null) {
-                String[] values = line.split(",");
-                if (values.length == 2) {
-                    currentItems = Integer.parseInt(values[0].trim());
-                    currentSales = Double.parseDouble(values[1].trim());
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Only keep non-total lines
+                if (!line.startsWith("TOTAL_ITEMS")) {
+                    existingEntries.add(line);
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.out.println("\tError reading the sales report, reinitializing...");
-            initialize_sales_report();
+        } catch (IOException e) {
+            System.out.println("\tError reading the sales report. Proceeding with new file...");
         }
 
-        currentItems += newItems;
-        currentSales += newSales;
-
-        // Write back updated values to the file
+        // Write all entries including new products and updated totals
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            writer.println("Total Items,Total Sales");  // Header
-            writer.printf("%d,%.2f%n", currentItems, currentSales);  // Data
-            //debugger System.out.printf("\tSales report updated: Total Items = %d, Total Sales = %.2f\n", currentItems, currentSales);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String currentDateTime = dateFormat.format(new Date());
+
+            // Write existing entries first
+            for (String entry : existingEntries) {
+                writer.println(entry);
+                // Re-calculate total items and sales from existing entries
+                if (!entry.startsWith("TOTAL_ITEMS") && entry.split(",").length > 2) {
+                    try {
+                        int itemCount = Integer.parseInt(entry.split(",")[2]);
+                        double productSales = Double.parseDouble(entry.split(",")[4]);
+                        currentTotalItems += itemCount;
+                        currentTotalSales += productSales;
+                    } catch (NumberFormatException e) {
+                        // Skip if parsing fails
+                    }
+                }
+            }
+
+            // Write new product entries
+            for (Product product : soldProducts) {
+                double productTotalSales = product.getPrice() * product.getStock();
+                writer.printf("%s,%s,%d,%.2f,%.2f,%s%n",
+                        product.getCode(),
+                        product.getName(),
+                        product.getStock(),
+                        product.getPrice(),
+                        productTotalSales,
+                        currentDateTime
+                );
+                currentTotalItems += product.getStock();
+                currentTotalSales += productTotalSales;
+            }
+
+            // Append new totals at the end
+            writer.printf("TOTAL_ITEMS,%d,TOTAL_SALES,%.2f,%s%n",
+                    currentTotalItems,
+                    currentTotalSales,
+                    currentDateTime
+            );
+
+            System.out.printf("\tSales report updated: Total Items = %d, Total Sales = %.2f\n",
+                    currentTotalItems,
+                    currentTotalSales
+            );
         } catch (IOException e) {
             System.out.println("\tError updating the sales report: " + e.getMessage());
         }
