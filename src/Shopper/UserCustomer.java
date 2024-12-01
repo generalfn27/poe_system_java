@@ -1,5 +1,6 @@
 package Shopper;
 
+import Employee.ManagerCredentials;
 import User_Types.*;
 import Process.*;
 
@@ -11,9 +12,10 @@ import java.util.Scanner;
 public class UserCustomer {
     private final List<Customer> customers = new ArrayList<>();
     public OrderProcessor OrderProcessor;
+    public CouponManager couponManager;
 
     public UserCustomer() {
-        // Load customers from CSV file when the program starts
+        this.couponManager = new CouponManager();
         this.OrderProcessor = new OrderProcessor();
         load_customers_from_CSV();
     }
@@ -23,16 +25,17 @@ public class UserCustomer {
         String choice;
 
         while (true) {
-            System.out.println("\n\t----------------------------------------------");
-            System.out.println("\t|              Welcome Customer!                 |");
-            System.out.println("\t|             Log in  |  Register                |");
+            String storeName = ManagerCredentials.getStoreName();
+            System.out.println("\n\t--------------------------------------------------");
+            System.out.printf ("\t|           Welcome to %-22s    |\n", storeName + " Store");
             System.out.println("\t|                                                |");
             System.out.println("\t|        [1] Login                               |");
             System.out.println("\t|        [2] Continue as Guest                   |");
             System.out.println("\t|        [3] Register                            |");
             System.out.println("\t|        [0] Go Back                             |");
             System.out.println("\t|                                                |");
-            System.out.println("\t----------------------------------------------");
+            System.out.println("\t--------------------------------------------------");
+
             System.out.print("\n\tEnter Here: ");
             choice = scanf.nextLine();
 
@@ -51,6 +54,7 @@ public class UserCustomer {
                     return;
                 default:
                     System.out.println("\n\tAn error has occurred");
+                    couponManager.show_random_Coupon();
                     System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
@@ -90,6 +94,7 @@ public class UserCustomer {
             item_category = scanf.nextLine();
 
             // Variable to hold the products in the chosen category
+            // parang shelf to
             List<Product> selected_products = null;
 
             switch (item_category) {
@@ -138,7 +143,8 @@ public class UserCustomer {
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.print("\t\tPress Enter key to continue.");
+                    couponManager.show_random_Coupon();
+                    System.out.print("\n\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
                     continue;
             }
@@ -316,6 +322,10 @@ public class UserCustomer {
         scanf.nextLine(); //used for press any key to continue
         // para pause muna sa bawat pagkakamali para isipin muna sa susunod tama
 
+        //ads bigla para mapa sarap ung pamimili
+        couponManager.show_random_Coupon();
+        scanf.nextLine(); //used for press any key to continue
+
         registered_user_customer_item_category(newCustomer.getUsername(), newCustomer);
     }
 
@@ -471,7 +481,12 @@ public class UserCustomer {
                 System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
             }
         }
-        if (!login_successful) { System.out.println("\n\tMaximum login attempts reached. Please try again later."); }
+        if (!login_successful) {
+            System.out.println("\n\tMaximum login attempts reached. Please try again later.");
+            couponManager.show_random_Coupon();
+            System.out.print("\t\tPress Enter key to continue.");
+            scanf.nextLine(); //used for press any key to continue
+        }
     }
 
 
@@ -580,6 +595,7 @@ public class UserCustomer {
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
+                    couponManager.show_random_Coupon();
                     System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
@@ -621,7 +637,6 @@ public class UserCustomer {
                 System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
                 System.out.print("\t\tPress Enter key to continue.");
                 scanf.nextLine();
-                //registered_user_customer_item_category(username, customer);
 
     }
 
@@ -856,17 +871,22 @@ public class UserCustomer {
                     case "Y":
                         redeem_point_reward_process(cashback, reward_points, customer);
                         System.out.println("\n\tRedemption successful! Cashback: " + cashback + " pesos.");
+                        couponManager.show_random_Coupon();
+                        System.out.print("\t\tPress Enter key to continue.");
+                        scanf.nextLine(); //used for press any key to continue
                         return;
                     case "N":
                         System.out.println("\n\tRedeem cancelled.");
+                        couponManager.show_random_Coupon();
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine();
+                        scanf.nextLine(); //used for press any key to continue
                         registered_user_customer_item_category(customer.getUsername(), customer);
                         return;
                     default:
                         System.out.println("\n\tWrong input");
+                        couponManager.show_random_Coupon();
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); // Pause for user acknowledgment
+                        scanf.nextLine(); //used for press any key to continue
                 }
             }
         }
