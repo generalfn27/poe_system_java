@@ -474,7 +474,7 @@ public class Cashier {
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
                     break;
             }
@@ -533,7 +533,7 @@ public class Cashier {
         } else {
             System.out.println("\tNo CSV files found.");
             System.out.println("\tNo Queue Order to process.");
-            System.out.println("\t\tPress Enter key to continue.\n");
+            System.out.print("\t\tPress Enter key to continue.");
             scanf.nextLine(); //used for press any key to continue
 
             System.out.println("\tReturning to Cashier Dashboard.");
@@ -573,7 +573,7 @@ public class Cashier {
                     break;
                 case "3":
                     cashier_process.display_counter();
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
                     break;
                 case "0":
@@ -581,7 +581,7 @@ public class Cashier {
                     return;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -659,7 +659,7 @@ public class Cashier {
                     break;
                 case "V":
                 case "v":
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     cashier_process.display_counter();
                     scanf.nextLine();
                     break;
@@ -675,7 +675,7 @@ public class Cashier {
                     return;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -717,7 +717,7 @@ public class Cashier {
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -763,12 +763,12 @@ public class Cashier {
                         String selectedFile = csvFiles.get(choice - 1);
                         System.out.println("\n\n\tYou selected: " + selectedFile);
                         Manager.read_transaction_history_from_csv(selectedFile);
-                        System.out.print("\tPress Enter key to continue.\n");
+                        System.out.print("\tPress Enter key to continue.");
                         scanf.nextLine();
                         break;
                     } else {
                         System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
-                        System.out.println("\t\tPress Enter key to continue.\n");
+                        System.out.print("\t\tPress Enter key to continue.");
                         scanf.nextLine(); //used for press any key to continue
                     }
                     view_cashier_receipts(cashier);
@@ -778,7 +778,7 @@ public class Cashier {
             }
         } else {
             System.out.println("\tNo CSV files found.");
-            System.out.print("\tPress Enter key to continue.\n");
+            System.out.print("\tPress Enter key to continue.");
             scanf.nextLine();
         }
     }
@@ -1044,7 +1044,7 @@ public class Cashier {
                 } else {
                     attemptCount++;
                     System.out.println("\n\tIncorrect current password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine();
                 }
 
@@ -1052,7 +1052,7 @@ public class Cashier {
                 cashier_account_menu_profile(cashier);
                 return;
             } else {
-                System.out.println("\t\tPress Enter key to continue.\n");
+                System.out.print("\t\tPress Enter key to continue.");
                 scanf.nextLine();
             }
 
@@ -1061,7 +1061,7 @@ public class Cashier {
         // kapag sumosobra kana tigil ka na
         if (attemptCount == MAX_ATTEMPTS) {
             System.out.println("\n\tMaximum attempts reached. Password change failed.\n");
-            System.out.println("\t\tPress Enter key to continue.\n");
+            System.out.print("\t\tPress Enter key to continue.");
             scanf.nextLine();
         }
     }
