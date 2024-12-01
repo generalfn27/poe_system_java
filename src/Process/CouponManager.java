@@ -383,6 +383,7 @@ public class CouponManager {
         System.out.printf("\tDiscount Value: %.2f%n", randomCoupon.getDiscountValue());
         System.out.printf("\tAvailable Quantity: %d%n", randomCoupon.getCouponQuantity());
         System.out.println("\t====================================");
+
     }
 
 
