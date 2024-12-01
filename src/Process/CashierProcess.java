@@ -160,7 +160,7 @@ public class CashierProcess extends OrderProcessor {
             return true; // Return true to indicate successful payment para balik dashboard
         } else {
             System.out.println("\tInsufficient payment. Try again.");
-            System.out.println("\t\tPress Enter key to continue.\n");
+            System.out.print("\t\tPress Enter key to continue.");
             scanf.nextLine(); //used for press any key to continue
         }
         return false;
@@ -220,7 +220,7 @@ public class CashierProcess extends OrderProcessor {
         scanf.nextLine(); //used for press any key to continue
 
         cashier_save_receipt_to_csv(counter, calculate_total_price(), payment, cashier);
-        System.out.println("\t\tPress Enter key to continue.\n");
+        System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine(); //used for press any key to continue
         counter.clear();
     }
