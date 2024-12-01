@@ -114,7 +114,9 @@ public class Manager {
                     voucher_management_dashboard();
                     break;
                 case "2":
-                    //revise ung save files dapat may date ang resibo at sa total sales dun din mapupunta mga items na benta, listahan
+                    display_sales_report();
+                    System.out.println("\t\tPress Enter key to continue.\n");
+                    scanf.nextLine(); //used for press any key to continue
                     break;
                 case "3":
                     display_purchase_history_menu();
@@ -782,8 +784,39 @@ public class Manager {
     }
 
 
+    public void display_sales_report() {
+        String filename = "products/sales_report.csv";
 
-//more code review para sa efficiency 
+        // Read and display the sales report
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+
+            System.out.println("\n===== Sales Report =====");
+            System.out.println("Product Code | Product Name         | Quantity | Price/Unit | Total Sales | Date");
+            System.out.println("-------------------------------------------------------------------------------");
+
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 6) {
+                    if (!fields[0].equals("TOTAL_ITEMS")) {
+                        // Display product entries
+                        System.out.printf("%-12s | %-20s | %-8s | %-10s | %-11s | %s%n",
+                                fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
+                    } else {
+                        // Display totals
+                        System.out.println("-------------------------------------------------------------------------------");
+                        System.out.printf("Total Items: %-6s | Total Sales: %-10s | Date: %s%n",
+                                fields[1], fields[3], fields[4]);
+                    }
+                }
+            }
+            System.out.println("===============================================================================");
+        } catch (IOException e) {
+            System.out.println("\tError reading the sales report: " + e.getMessage());
+        }
+    }
+
+
 
 
 
