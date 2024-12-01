@@ -21,52 +21,60 @@ public class Manager {
         manager_login();
     }
 
-    //GAWAN NG TXT OR CSV FILE PARA HINDI HARD CODED ANG CREDENTIALS AT KUNG WALA PANG CREDENTIALS,SA UNANG OPEN NG PROGRAM DUN DAPAT MAG ASK ANO NAME AT PASS, ALSO NAME NARIN NG STORE
+
     private void manager_login() {
         Scanner scanf = new Scanner(System.in);
-        int attempt_count = 0; // Count failed login attempts
-        boolean valid = false; // Indicate if login is valid
+        int attempt_count = 0;
+        boolean valid = false;
 
         while (!valid) {
-            System.out.println("\n\n\t===================================");
-            System.out.println("\t|                                 |");
+            System.out.println("\n\t===================================");
             System.out.println("\t|          Manager Login          |");
-            System.out.println("\t|                                 |");
             System.out.println("\t===================================");
-            System.out.println("\tEnter Credentials\n");
+            System.out.println("\t[1] Login");
+            System.out.println("\t[2] Forgot Password");
+            System.out.println("\t[0] Exit");
+            System.out.print("\tEnter choice: ");
 
-            System.out.print("\tEnter username: ");
-            String inputUsername = scanf.nextLine();
+            String choice = scanf.nextLine();
 
-            System.out.print("\tEnter password: ");
-            String inputPassword = scanf.nextLine(); // Capture password input directly without hiding
+            switch (choice) {
+                case "1":
+                    System.out.print("\n\tEnter username: ");
+                    String inputUsername = scanf.nextLine();
+                    System.out.print("\tEnter password: ");
+                    String inputPassword = scanf.nextLine();
 
-            // Validate login
-            if (validate_manager_login(inputUsername, inputPassword)) {
-                valid = true; // Set flag to exit loop
-                System.out.println("\tLogin successful!");
-                manager_dashboard();
-            } else {
-                attempt_count++;
-                System.out.println("\tInvalid login attempt #" + attempt_count + " for user: " + inputUsername);
+                    if (validate_manager_login(inputUsername, inputPassword)) {
+                        valid = true;
+                        System.out.println("\tLogin successful!");
+                        manager_dashboard();
+                    } else {
+                        attempt_count++;
+                        System.out.println("\tInvalid login attempt #" + attempt_count);
 
-                if (attempt_count >= MAX_ATTEMPTS) {
-                    System.out.println("\tMaximum attempts reached.");
-                    System.out.println("\t\tPress Enter key to continue.\n");
-                    scanf.nextLine(); //used for press any key to continue
+                        if (attempt_count >= MAX_ATTEMPTS) {
+                            System.out.println("\tMaximum attempts reached.");
+                            return;
+                        }
+                    }
                     break;
-                }
+                case "2":
+                    ManagerCredentials.recover_manager_credentials(scanf);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("\tInvalid choice!");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); //used for press any key to continue
             }
         }
     }
 
-    // ma iiba to dahil sa unang open ng program dapat mag set up
+
     private boolean validate_manager_login(String inputUsername, String inputPassword) {
-        // Default username
-        String username = "manager";
-        // Default password
-        String password = "manager";
-        return inputUsername.equals(username) && inputPassword.equals(password);
+        return ManagerCredentials.validate_manager_login(inputUsername, inputPassword);
     }
 
 
@@ -93,11 +101,12 @@ public class Manager {
         String choice;
 
         while (true) {
+            String storeName = ManagerCredentials.getStoreName();
             System.out.println("\n\t=======================================");
-            System.out.println  ("\t|                                     |");
-            System.out.println  ("\t|          Manager Dashboard          |");
-            System.out.println  ("\t|                                     |");
-            System.out.println  ("\t=======================================\n");
+            System.out.println("\t|                                     |");
+            System.out.printf ("\t|     %-11s  Manager Dashboard  |\n", storeName);
+            System.out.println("\t|                                     |");
+            System.out.println("\t=======================================\n");
             System.out.println  ("\t[1] Voucher code / Promotions");
             System.out.println("\t[2] Sales report"); //display total sales at recent total transactions
             System.out.println("\t[3] Purchase/Transaction History"); //same sa personal account
@@ -115,7 +124,7 @@ public class Manager {
                     break;
                 case "2":
                     display_sales_report();
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
                     break;
                 case "3":
@@ -139,7 +148,7 @@ public class Manager {
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -184,24 +193,26 @@ public class Manager {
                         String selectedFile = csvFiles.get(choice - 1);
                         System.out.println("\n\n\tYou selected: " + selectedFile);
                         read_transaction_history_from_csv(selectedFile);
-                        System.out.print("\tPress Enter key to continue.\n");
+                        System.out.print("\tPress Enter key to continue.");
                         scanf.nextLine();
                         break;
                     } else {
                         System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
-                        System.out.println("\t\tPress Enter key to continue.\n");
+                        System.out.print("\t\tPress Enter key to continue.");
                         scanf.nextLine(); //used for press any key to continue
                     }
                     display_purchase_history_menu();
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input! Please enter a valid number.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); //used for press any key to continue
                 }
             }
         } else {
             System.out.println("\tNo CSV files found.");
-            System.out.print("\tPress Enter key to continue.\n");
+            System.out.println("\tReturning to previous menu...");
+            System.out.print("\tPress Enter key to continue.");
             scanf.nextLine();
-            System.out.println("\tReturning to previous menu.");
         }
     }
 
@@ -663,6 +674,7 @@ public class Manager {
             System.out.println("\t[2] View Employee List");
             System.out.println("\t[3] Delete Employee");
             System.out.println("\t[4] Reset Employee Password");
+            System.out.println("\t[5] Change Store Name");
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -684,9 +696,12 @@ public class Manager {
                 case "4":
                     cashier.manager_reset_employee_password();
                     break;
+                case "5":
+                    ManagerCredentials.change_store_name(scanf);
+                    break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
@@ -734,7 +749,7 @@ public class Manager {
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
 
@@ -777,7 +792,7 @@ public class Manager {
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
-                    System.out.println("\t\tPress Enter key to continue.\n");
+                    System.out.print("\t\tPress Enter key to continue.");
                     scanf.nextLine(); //used for press any key to continue
             }
         }
