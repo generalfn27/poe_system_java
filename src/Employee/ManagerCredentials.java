@@ -24,11 +24,10 @@ public class ManagerCredentials {
         System.out.println("\t=======================================\n");
 
         String username = getValidInput(scanf, "\tEnter manager username: ",
-                "\tUsername must be at least 3 characters long.", 3);
+                "\tManager username must be at least 3 characters long.", 3);
 
         String password = getValidPassword(scanf);
 
-        // Set Phone Number
         String phoneNumber = getValidPhoneNumber(scanf);
 
         save_credentials(username, password, phoneNumber);
