@@ -185,7 +185,7 @@ public class SelfCheckout {
 
         customer.setTransaction(customer.getTransaction() + 1);
 
-        cashierProcess.update_sales_report(calculate_total_items(), calculate_total_price());
+        cashierProcess.update_sales_report(cart);
         cashierProcess.update_all_stocks(cart);
 
         print_receipt(customer, totalPrice);
