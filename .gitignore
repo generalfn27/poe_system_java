@@ -34,3 +34,5 @@ bin/
 /sales_report.csv
 /current_id_number.txt
 /cashier_employees.csv
+/accounts/manager_credentials.txt
+/accounts/store_name.txt
