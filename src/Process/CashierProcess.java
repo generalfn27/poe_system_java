@@ -211,6 +211,7 @@ public class CashierProcess extends OrderProcessor {
         System.out.println("\t----------------------------------------");
         System.out.printf("\n\tTotal Items: %d\n", calculate_total_items());
         System.out.printf("\tTotal Price: %.2f\n", calculate_total_price());
+        //gawan to ng tax vat 12% need lng ng isang method para taga display
 
         if (payment > calculate_total_price()) {
             System.out.printf("\tChange: %.2f\n", payment - calculate_total_price());
