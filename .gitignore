@@ -36,3 +36,6 @@ bin/
 /cashier_employees.csv
 /accounts/manager_credentials.txt
 /accounts/store_name.txt
+/accounts/null
+/queues/null
+/receipts/null
