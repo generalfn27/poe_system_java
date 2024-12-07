@@ -303,9 +303,7 @@ public class Cashier {
         new_cashier.setTotal_transaction_processed(transaction);
 
         currentIDNumber++;
-        save_id_number();
         new_cashier.setEmployee_id(currentIDNumber);
-
 
         String detail_confirmation;
         while (true) {
@@ -325,6 +323,7 @@ public class Cashier {
             if (detail_confirmation.equalsIgnoreCase("y")){
                 save_new_cashier_employee_to_csv(new_cashier);
                 cashiers.add(new_cashier);
+                save_id_number();
                 break;
             } else if (detail_confirmation.equalsIgnoreCase("n")) {
                 System.out.println("\n\tReturning to HR Management Menu");
