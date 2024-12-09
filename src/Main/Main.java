@@ -11,5 +11,4 @@ public class Main {
         }
         UserType.user_type_menu();
     }
-//hindi ko pa ma upload dahil sakit ng ulo ko sa molds
 }
