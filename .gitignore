@@ -34,9 +34,9 @@ bin/
 /sales_report.csv
 /current_id_number.txt
 /cashier_employees.csv
-/accounts/manager_credentials.txt
-/accounts/store_name.txt
-/accounts/null
-/queues/null
-/receipts/null
-/accounts/customers.csv
+/oopr-poe-data/accounts/manager_credentials.txt
+/oopr-poe-data/accounts/store_name.txt
+/oopr-poe-data/accounts/null
+/oopr-poe-data/queues/null
+/oopr-poe-data/receipts/null
+/oopr-poe-data/accounts/customers.csv
