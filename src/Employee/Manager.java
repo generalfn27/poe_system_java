@@ -33,8 +33,8 @@ public class Manager {
             System.out.println("\t===================================");
             System.out.println("\t[1] Login");
             System.out.println("\t[2] Forgot Password");
-            System.out.println("\t[0] Exit");
-            System.out.print("\tEnter choice: ");
+            System.out.println("\n\t[0] Exit");
+            System.out.print("\n\tEnter choice: ");
 
             String choice = scanf.nextLine();
 
@@ -113,6 +113,7 @@ public class Manager {
             System.out.println("\t[4] Inventory Report"); //refill stocks
             System.out.println("\t[5] HR Management"); //sino mga employees at handle ng account nila change pass/delete acc
             System.out.println("\t[6] Customer Account Management"); //account retrieval at delete account
+            System.out.println("\t[7] Manager Account Management");
             System.out.println("\t[0] Exit");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -139,6 +140,9 @@ public class Manager {
                 case "6":
                     customer_account_management();
                     break;
+                case "7":
+                    manager_account_management(scanf);
+                    break;
                 case "0":
                     boolean logout_confirmed = handle_logout(scanf);
                     if (logout_confirmed) {
@@ -157,7 +161,7 @@ public class Manager {
 
     private void display_purchase_history_menu() {
         Scanner scanf = new Scanner(System.in);
-        File directory = new File("receipts/");
+        File directory = new File("oopr-poe-data/receipts/");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("receipt_number"));
         List<String> csvFiles = new ArrayList<>();
 
@@ -218,7 +222,7 @@ public class Manager {
 
 
     public static void read_transaction_history_from_csv(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("receipts/" + filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("oopr-poe-data/" + filename))) {
             String line;
 
             System.out.println("\n\t=== Purchase History ===\n");
@@ -347,17 +351,19 @@ public class Manager {
         while (true) {
             System.out.println("\n\t----------------------------------------------");
             System.out.println("\t|             INVENTORY MANAGEMENT           |");
-            System.out.println("\t|         Select options to do               |");
+            System.out.printf ("\t|                %-19s         |\n", currentCategoryFile);
+            System.out.println("\t|             Select Options to do           |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [1] Add new item                    |");
             System.out.println("\t|        [2] Remove Product                  |");
             System.out.println("\t|        [3] Restock                         |");
-            System.out.println("\t|        [4] Decrease Stock                   |");
+            System.out.println("\t|        [4] Decrease Stock                  |");
             System.out.println("\t|        [5] Update Price                    |");
+            System.out.println("\t|        [6] Display Product                 |");
             System.out.println("\t|                                            |");
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t----------------------------------------------");
-            System.out.print("\t|        Enter here: ");
+            System.out.print  ("\t|        Enter here: ");
             inventory_option_choice = scanf.nextLine();
 
             switch (inventory_option_choice) {
@@ -379,6 +385,11 @@ public class Manager {
                 case "5":
                     update_product_price(products);
                     break;
+                case "6":
+                    BrowseProduct.display_products(products);
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
+                    break;
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
@@ -392,8 +403,7 @@ public class Manager {
         System.out.println("\n\t=== Add New Item ===");
         BrowseProduct.display_products(products);
 
-        System.out.print("\n\tEnter new product code for new item: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = get_valid_input(scanf);
 
         // Check if product code already exists
         if (products.stream().anyMatch(p -> p.getCode().equals(code))) {
@@ -436,7 +446,6 @@ public class Manager {
             }
         }
 
-        // Add to list and update CSV
         Product newProduct = new Product(code, name, price, stock);
         products.add(newProduct);
         update_product_csv_file(products);
@@ -674,7 +683,6 @@ public class Manager {
             System.out.println("\t[2] View Employee List");
             System.out.println("\t[3] Delete Employee");
             System.out.println("\t[4] Reset Employee Password");
-            System.out.println("\t[5] Change Store Name");
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -695,9 +703,6 @@ public class Manager {
                     break;
                 case "4":
                     cashier.manager_reset_employee_password();
-                    break;
-                case "5":
-                    ManagerCredentials.change_store_name(scanf);
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
@@ -800,7 +805,7 @@ public class Manager {
 
 
     public void display_sales_report() {
-        String filename = "products/sales_report.csv";
+        String filename = "oopr-poe-data/products/sales_report.csv";
 
         // Read and display the sales report
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -832,7 +837,48 @@ public class Manager {
     }
 
 
+    private String get_valid_input(Scanner scanf) {
+        String input;
+        while (true) {
+            System.out.print("\n\tEnter new product code for new item: ");
+            input = scanf.nextLine().trim();
+            if (input.length() >= 6) {
+                return input;
+            }
+            System.out.println("\t" + "\n\tProduct code must be at least 6 characters long.");
+        }
+    }
 
+
+    private void manager_account_management(Scanner scanf) {
+        while (true) {
+            System.out.println("\n\t=======================================");
+            System.out.println("\t|    Manager Account Management      |");
+            System.out.println("\t=======================================\n");
+            System.out.println("\t[1] Change Password");
+            System.out.println("\t[2] Change Store Name");
+            System.out.println("\t[0] Return to Main Menu");
+
+            System.out.print("\n\n\tEnter Here: ");
+            String choice = scanf.nextLine();
+
+            switch (choice) {
+                case "1":
+                    ManagerCredentials.recover_manager_credentials(scanf);
+                    break;
+                case "2":
+                    ManagerCredentials.change_store_name(scanf);
+                    break;
+                case "0":
+                    manager_dashboard();
+                    return;
+                default:
+                    System.out.println("\n\tInvalid input. Try again...");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine();
+            }
+        }
+    }
 
 
 }
