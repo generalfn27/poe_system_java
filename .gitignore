@@ -39,3 +39,4 @@ bin/
 /accounts/null
 /queues/null
 /receipts/null
+/accounts/customers.csv
