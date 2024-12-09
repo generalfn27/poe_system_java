@@ -21,7 +21,7 @@ public class CashierProcess extends OrderProcessor {
 
 
     public void read_order_from_csv(String filename) {
-        this.currentQueueOrderFile = "queues/" + filename;
+        this.currentQueueOrderFile = "oopr-poe-data/queues/" + filename;
         File file = new File(this.currentQueueOrderFile);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -128,7 +128,6 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-
     public boolean proceed_to_payment (double totalPrice, Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
         double payment = 0;
@@ -155,6 +154,11 @@ public class CashierProcess extends OrderProcessor {
 
             update_all_stocks(counter);
             print_receipt(counter, payment, cashier);
+
+            CouponManager couponManager = new CouponManager();
+            couponManager.show_random_Coupon();
+            System.out.print("\t\tPress Enter key to continue.");
+            scanf.nextLine();
 
             counter.clear();
             return true; // Return true to indicate successful payment para balik dashboard
@@ -233,7 +237,7 @@ public class CashierProcess extends OrderProcessor {
             return;
         }
 
-        String fileName = "receipts/" + cashier_generate_receipt_file_name(cashier);
+        String fileName = "oopr-poe-data/receipts/" + cashier_generate_receipt_file_name(cashier);
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header with cashier information
             writer.println("Cashier Name," + cashier.getEmployee_full_name());
@@ -269,7 +273,7 @@ public class CashierProcess extends OrderProcessor {
             return;
         }
 
-        String fileName = "receipts/" + self_checkout_generate_receipt_file_name(customer);
+        String fileName = "oopr-poe-data/receipts/" + self_checkout_generate_receipt_file_name(customer);
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             // Write header with customer information
             writer.println("Username,Payment method,Balance");
@@ -326,7 +330,7 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to initialize the resibo number by reading from a file
     public static void initialize_receipt_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("receipts/current_receipt_number.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("oopr-poe-data/receipts/current_receipt_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentReceiptNumber = Integer.parseInt(line);
@@ -340,7 +344,7 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to save the current receipt number to a file
     private static void save_receipt_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("receipts/current_receipt_number.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("oopr-poe-data/receipts/current_receipt_number.txt"))) {
             writer.println(currentReceiptNumber);
         } catch (IOException e) {
             System.out.println("Error saving queue number: " + e.getMessage());
