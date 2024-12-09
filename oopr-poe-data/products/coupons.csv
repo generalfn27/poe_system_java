@@ -1,0 +1,12 @@
+DiscountCode,DiscountType,DiscountValue,CouponQuantity
+XMAS1225,percentage,25.00,1
+BDAY2024,off,40.00,1
+SAVE2024,percentage,10.00,1
+DEAL5678,percentage,20.00,1
+SHOP1234,percentage,15.00,1
+OOPR2024,percentage,50.00,1
+HOLY2024,off,50.00,1
+CODE4040,off,45.00,1
+HTML1234,off,35.00,1
+WBDV0112,off,65.00,1
+ALVN1234,off,100.00,1
