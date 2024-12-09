@@ -193,8 +193,11 @@ public class Cashier {
     public void create_new_cashier_employee() {
         Scanner scanf = new Scanner(System.in);
         final int MAX_EMPLOYEES = 10;
+
         if (cashiers.size() >= MAX_EMPLOYEES) {
             System.out.println("\n\tCashier employees limit reached. Cannot register and hire new cashier.");
+            System.out.print("\t\tPress Enter to continue...");
+            scanf.nextLine();
             return;
         }
 
@@ -202,125 +205,85 @@ public class Cashier {
 
         Cashier new_cashier = new Cashier();
 
-        String cashier_username;
-        String cashier_first_name;
-        String cashier_surname;
-        String confirmPassword = "";
-        String phoneNumber;
-        int transaction = 0;
-
-        System.out.println("\n\t----------------------------------------------");
-        System.out.println("\t|        New Cashier Employee Registration                |");
-        System.out.println("\t|            sa agreement consent sa data etc.            |");
-        System.out.print("\n\tEnter cashier user name (0 to cancel): ");
-        cashier_username = scanf.nextLine();
-
-        if (cashier_username.equals("0")) {
+        String cashier_username = get_valid_input(scanf, "\n\tEnter cashier user name ('exit' to cancel): ",
+                "\tUsername cannot be empty.", 4);
+        if (cashier_username.equals("exit")) {
             System.out.println("\n\tRegistration Canceled.");
             System.out.print("\n\t\tPress Enter to continue...");
             scanf.nextLine();
             return;
         }
 
+        // Check if the username already exists
         boolean cashier_username_not_exist = false;
         while (!cashier_username_not_exist) {
-            cashier_username_not_exist = true;  // assume username doesn't exist until proven otherwise
-            // Check if the username already exists
+            cashier_username_not_exist = true;
             for (Cashier cashier : cashiers) {
                 if (cashier.getEmployee_username().equals(cashier_username)) {
                     System.out.println("\n\tCashier already exists. Please choose a different username.");
-                    System.out.print("\n\tEnter cashier_name: ");
-                    cashier_username = scanf.nextLine();
-                    cashier_username_not_exist = false;  // username exists, so set flag to false
-                    break;  // break out of the loop to recheck the new username
+                    cashier_username = get_valid_input(scanf, "\n\tEnter cashier user name ('exit' to cancel): ",
+                            "\tUsername cannot be empty.", 4);
+                    if (cashier_username.equals("exit")) {
+                        System.out.println("\n\tRegistration Canceled.");
+                        System.out.print("\n\t\tPress Enter to continue...");
+                        scanf.nextLine();
+                        return;
+                    }
+                    cashier_username_not_exist = false;
+                    break;
                 }
             }
         }
         new_cashier.setEmployee_username(cashier_username);
 
-
-        while (true) {
-            System.out.print("\n\tEnter cashier first name: ");
-            cashier_first_name = scanf.nextLine();
-
-            if (cashier_first_name.matches("^[a-zA-Z\\\\s]*$")){ break; }
-            else {
-                System.out.println("\n\tInvalid first name. Please enter your name without using numbers or symbols/signs.");
-                System.out.println("\n\t\tPress enter to Continue");
-                scanf.nextLine();
-            }
-        }
+        String cashier_first_name = get_valid_input(scanf, "\n\tEnter cashier first name: ",
+                "\tFirst name must only contain letters.", 3);
         new_cashier.setEmployee_first_name(cashier_first_name);
 
-        while (true) {
-            System.out.print("\n\tEnter cashier surname: ");
-            cashier_surname = scanf.nextLine();
-
-            if (cashier_surname.matches("^[a-zA-Z\\\\s]*$")){ break; }
-            else {
-                System.out.println("\n\tInvalid first name. Please enter your name without using numbers or symbols/signs.");
-                System.out.print("\n\t\tPress enter to Continue");
-                scanf.nextLine();
-            }
-        }
+        String cashier_surname = get_valid_input(scanf, "\n\tEnter cashier surname: ",
+                "\tSurname must only contain letters.", 3);
         new_cashier.setEmployee_surname(cashier_surname);
 
         System.out.println("\n\tWelcome " + new_cashier.getEmployee_first_name() + " "
-        + new_cashier.getEmployee_surname());
+                + new_cashier.getEmployee_surname());
 
-        // Password input naka ibang method para sa future changes para mas madali mag asterisk
-        String password = input_password(scanf, "\n\tEnter Password: ");
+        String password = get_valid_password(scanf);
         new_cashier.setPassword(password);
 
-        while (!new_cashier.getPassword().equals(confirmPassword)) {
-            confirmPassword = input_password(scanf, "\tConfirm Password: ");
-            if (!new_cashier.getPassword().equals(confirmPassword)) {
-                System.out.println("\n\tPasswords do not match. Please try again.");
-            }
-        }
-
+        String phoneNumber;
         while (true) {
             System.out.print("\n\tEnter Phone Number: ");
             phoneNumber = scanf.nextLine();
-
-            //  Check if the entered Phone Number starts with "09" and is exactly 11 digits
-            //  ^: This is a beginning-of-line anchor, which means that the pattern must match from the very start of the string.
-            //  09: This simply matches the literal characters "09".
-            //  \d: This matches any single digit character (0-9).
-            //  {9}: This is a quantifier that specifies that the preceding element (\d) must occur exactly 9 times.
-            //  $: This is an end-of-line anchor, which means that the pattern must match up to the very end of the string.
-
-            if (phoneNumber.matches("^09\\d{9}$")) { break; }
-            else { System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");   }
+            if (phoneNumber.matches("^09\\d{9}$")) {
+                break;
+            } else {
+                System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");
+            }
         }
         new_cashier.setPhone_number(phoneNumber);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
         String formattedDate = dateFormat.format(new Date());
-
         new_cashier.setHired_date(formattedDate);
-
-        new_cashier.setTotal_transaction_processed(transaction);
+        new_cashier.setTotal_transaction_processed(0);
 
         currentIDNumber++;
         new_cashier.setEmployee_id(currentIDNumber);
 
         String detail_confirmation;
         while (true) {
-            //change tong display na to
             System.out.println("\tID: " + new_cashier.getEmployee_id());
             System.out.println("\tName: " + new_cashier.getEmployee_full_name());
             System.out.println("\tPhone Number: " + new_cashier.getPhone_number());
             System.out.println("\tHired Date: " + new_cashier.getHired_date());
 
             System.out.println("\n\tCheck your information.");
-            System.out.println("\n\tEnter Y if you are sure.");
-            System.out.println("\n\tEnter N if you are not sure and return to HR Manager Dashboard.");
-            System.out.print("\n\tEnter choice: ");
+            System.out.println("\tEnter (Y) if you are sure.");
+            System.out.println("\tEnter (N) if you are not sure and return to HR Manager Dashboard.");
+            System.out.print("\tEnter choice: ");
             detail_confirmation = scanf.nextLine();
 
-            // update dapat to may confirmation kung sure ba sya sa sagot nya
-            if (detail_confirmation.equalsIgnoreCase("y")){
+            if (detail_confirmation.equalsIgnoreCase("y")) {
                 save_new_cashier_employee_to_csv(new_cashier);
                 cashiers.add(new_cashier);
                 save_id_number();
@@ -329,21 +292,50 @@ public class Cashier {
                 System.out.println("\n\tReturning to HR Management Menu");
                 System.out.println("\n\t\tPress enter to Continue");
                 scanf.nextLine();
-                //dapat ang balik nito ay sa hr management dashboard
                 return;
             } else {
                 System.out.println("\n\tInvalid Input");
                 System.out.println("\n\t\tPress enter to Continue");
                 scanf.nextLine();
             }
-
-
         }
 
-        System.out.print("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() +".\n\t\t\tPress Enter key to start exploring!\n");
-        scanf.nextLine(); //used for press any key to continue
-        // para pause muna sa bawat na pagkakamali para isipin muna sa susunod tama
+        System.out.print("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() + ".\n\t\t\tPress Enter key to start exploring!\n");
+        scanf.nextLine(); // used for press any key to continue
     }
+
+
+    private static String get_valid_input(Scanner scanf, String prompt, String errorMsg, int minLength) {
+        String input;
+        while (true) {
+            System.out.print(prompt);
+            input = scanf.nextLine().trim();
+            if (input.length() >= minLength) {
+                return input;
+            }
+            System.out.println("\t" + errorMsg);
+        }
+    }
+
+
+    private static String get_valid_password(Scanner scanf) {
+        String password, confirmPassword;
+        while (true) {
+            password = get_valid_input(scanf, "\n\tEnter password (min 8 characters): ",
+                    "\tPassword must be at least 8 characters long.", 8);
+
+            System.out.print("\tConfirm password: ");
+            confirmPassword = scanf.nextLine().trim();
+
+            if (password.equals(confirmPassword)) {
+                return password;
+            }
+            System.out.println("\tPasswords do not match. Please try again.");
+            System.out.print("\t\tPress Enter key to continue.");
+            scanf.nextLine(); // used for press any key to continue
+        }
+    }
+
 
     // Helper method to input hidden password pero dapat magiging ****
     //shortcut sa pag fill ups thanks sa AI
@@ -814,7 +806,7 @@ public class Cashier {
 
         if (cashiers.isEmpty()) {
             System.out.println("\n\tNo employees found in the system.");
-            System.out.println("\n\tPress Enter to continue...");
+            System.out.print("\t\tPress Enter to continue...");
             scanf.nextLine();
             return;
         }
@@ -844,6 +836,9 @@ public class Cashier {
         Scanner scanf = new Scanner(System.in);
 
         if (cashiers.isEmpty()) {
+            System.out.println("\n\tNo employees found in the system.");
+            System.out.print("\t\tPress Enter to continue...");
+            scanf.nextLine();
             return;
         }
 
@@ -918,6 +913,9 @@ public class Cashier {
         Scanner scanf = new Scanner(System.in);
 
         if (cashiers.isEmpty()) {
+            System.out.println("\n\tNo employees found in the system.");
+            System.out.print("\t\tPress Enter to continue...");
+            scanf.nextLine();
             return;
         }
 
