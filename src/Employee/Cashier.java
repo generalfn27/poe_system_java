@@ -585,12 +585,11 @@ public class Cashier {
 
         while (true) {
             cashier_process.display_counter();
-            System.out.println("\n\tMODIFY MENU: not updating kasi cart ang nasa for each hindi counter");
+            System.out.println("\n\tMODIFY MENU: Modified changes doesn't reflect to CSV file after.");
             System.out.println("\tIncrease Quantity (I)");
             System.out.println("\tDeduct Quantity (D)");
             System.out.println("\tRemove Items (R)");
             System.out.println("\tProceed to Pay (P)");
-            System.out.println("\tDisplay cart(V)");
             System.out.println("\tGo Back to Dashboard (B)");
             System.out.print("\n\tEnter choice: ");
             choice = scanf.nextLine();
@@ -647,12 +646,6 @@ public class Cashier {
                     String codeToRemove = scanf.nextLine();
                     if (codeToRemove.equals("0")) { break; }
                     cashier_process.remove_item_counter(codeToRemove);  // Remove the item sa cart all quantity
-                    break;
-                case "V":
-                case "v":
-                    System.out.print("\t\tPress Enter key to continue.");
-                    cashier_process.display_counter();
-                    scanf.nextLine();
                     break;
                 case "P":
                 case "p":
