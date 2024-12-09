@@ -1,7 +1,6 @@
 package Shopper;
 
 public class Customer {
-
     private String username;
     private String password;
     private String phoneNumber;
@@ -11,7 +10,6 @@ public class Customer {
     private double transaction;
     private double reward_point;
     private double total_spent;
-
 
     public Customer() {
         // Default constructor, you can initialize default values if needed
