@@ -24,7 +24,7 @@ public class ManagerCredentials {
         create_required_directories();
         Scanner scanf = new Scanner(System.in);
 
-        System.out.println("\n\t=======================================");
+        System.out.println("\n\n\n\t=======================================");
         System.out.println("\t|                                     |");
         System.out.println("\t|     First Time Program Setup        |");
         System.out.println("\t|                                     |");
@@ -49,9 +49,41 @@ public class ManagerCredentials {
         System.out.println("\tBirthplace: " + birthplace);
         System.out.println("\tMother's Maiden Name: " + motherMaidenName);
 
-        if (!confirm_action(scanf, "\n\tAre you sure you want to save these credentials?")) {
-            System.out.println("\tSetup cancelled.");
-            return;
+        while (true) {
+            System.out.println("\n\tAre you sure you want to save these credentials? ");
+            System.out.println("\t[1] Save.");
+            System.out.println("\t[2] Refill the initial setup.");
+            System.out.println("\t[3] Exit the program.");
+            System.out.print("\n\tChoose an option: ");
+
+            String choice = scanf.nextLine().trim();
+            switch (choice) {
+                case "1":
+                    save_credentials(username, password, phoneNumber, birthplace, motherMaidenName);
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); // Wait for user to press enter
+                    break;
+                case "2":
+                    System.out.println("\n\tRestarting initial setup...");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    scanf.nextLine(); // Wait for user to press enter
+                    initialSetup();
+                    break;
+                case "3":
+                    System.out.println("\tSetup cancelled.");
+                    System.out.println("\t============================================\n");
+                    System.out.println("\t|                                          |\n");
+                    System.out.println("\t|     Thank You for Using our Program!     |\n");
+                    System.out.println("\t|                                          |\n");
+                    System.out.println("\t============================================\n");
+                    scanf.close();
+                    System.exit(0);
+                    return;
+                default:
+                    System.out.println("\tInvalid input. Please enter 1, 2, or 3.");
+                    continue;
+            }
+            break;
         }
 
         save_credentials(username, password, phoneNumber, birthplace, motherMaidenName);
@@ -63,9 +95,9 @@ public class ManagerCredentials {
     }
 
 
-    private static boolean confirm_action(Scanner scanf, String prompt) {
+    private static boolean confirm_action(Scanner scanf) {
         while (true) {
-            System.out.print(prompt + " (y/n): ");
+            System.out.print("\tAre you sure you want to change your password?" + " (y/n): ");
             String choice = scanf.nextLine().trim().toLowerCase();
             switch (choice) {
                 case "y": return true;
@@ -148,7 +180,7 @@ public class ManagerCredentials {
     private static void set_store_name(Scanner scanf) {
         File storeNameFile = new File(STORE_NAME_FILE);
 
-        String storeName = get_valid_input(scanf, "\tEnter store name: ",
+        String storeName = get_valid_input(scanf, "\n\tEnter store name: ",
                 "\tStore name must be at least 4 characters long.", 4);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(storeNameFile))) {
@@ -235,7 +267,7 @@ public class ManagerCredentials {
                         }
                     } while (!newPassword.equals(confirmPassword) || newPassword.isEmpty());
 
-                    if (confirm_action(scanf, "\tAre you sure you want to change your password?")) {
+                    if (confirm_action(scanf)) {
                         credentials[1] = newPassword;
 
                         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CREDENTIALS_FILE))) {
