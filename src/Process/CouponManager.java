@@ -22,7 +22,6 @@ public class CouponManager {
         String discountCode = "";
         double discountValue;
         String discountType;
-        int couponQuantity;
 
         System.out.println("\n\t----------------------------------------------");
         System.out.println("\t|            Coupon Registration                |");
@@ -30,13 +29,12 @@ public class CouponManager {
 
         boolean coupon_exist = true;
         while (coupon_exist) {
-            System.out.print("\n\tEnter /// to Cancel");
+            System.out.print("\n\tEnter 'exit' to Cancel");
             System.out.print("\tEnter New Discount Code (4 letters followed by 4 digits): ");
             discountCode = scanf.nextLine();
 
-            if (discountCode.equals("///")){ return; }
+            if (discountCode.equals("exit")){ return; }
 
-            // Validate discount code format
             if (discountCode.matches("^[a-zA-Z]{4}[0-9]{4}$")) {
                 boolean duplicateFound = false;
                 for (Coupon existingCoupon : availableCoupons) {
@@ -80,22 +78,10 @@ public class CouponManager {
         } while (discountValue <= 0);
         newCoupon.setDiscountValue(discountValue);
 
-        do {
-            System.out.print("\tEnter Coupon Quantity: ");
-            try {
-                couponQuantity = Integer.parseInt(scanf.nextLine());
-                if (couponQuantity <= 0) {
-                    System.out.println("\tCoupon quantity must be positive.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("\tInvalid input. Please enter an integer value.");
-                couponQuantity = -1; // Force loop to repeat
-            }
-        } while (couponQuantity <= 0);
-        newCoupon.setCouponQuantity(couponQuantity);
+        newCoupon.setCouponQuantity(1);
 
-        availableCoupons.add(newCoupon);
         saveCouponsToFile();
+        availableCoupons.add(newCoupon);
 
         System.out.println("\tCoupon " + discountCode + " registered successfully.");
         System.out.print("\t\tPress Enter key to continue.");
