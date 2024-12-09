@@ -80,6 +80,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\oopr-poe-data\accounts\customers.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\oopr-poe-data\queues\queue_number_01_09_12_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\powder_detergents.csv">
           <value>
             <Attribute>
