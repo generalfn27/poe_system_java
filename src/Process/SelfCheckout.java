@@ -203,7 +203,7 @@ public class SelfCheckout {
         System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
 
-        userCustomer.registered_user_customer_item_category(customer.getUsername(), customer);
+        userCustomer.registered_user_customer_item_category(customer.getUsername(), customer, OrderProcessor.cart);
     }
 
 
