@@ -197,9 +197,14 @@ public class SelfCheckout {
 
         cart.clear();
 
-        System.out.printf("\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
+        /* System.out.printf("\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
         System.out.printf("\tTotal cashback reward point: %.0f\n", customer.getRewardPoint());
-        System.out.printf("\tTotal spent: %.2f\n", customer.getTotal_spent());
+        System.out.printf("\tTotal spent: %.2f\n", customer.getTotal_spent()); */
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
+
+        CouponManager couponManager = new CouponManager();
+        couponManager.show_random_Coupon();
         System.out.print("\t\tPress Enter key to continue.");
         scanf.nextLine();
 
