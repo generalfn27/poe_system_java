@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 public class OrderProcessor {
-    public List<Product> cart;
+    public static List<Product> cart;
     public static int total_items;
     public static double total_price;
     private static int currentQueueNumber;
@@ -22,6 +22,14 @@ public class OrderProcessor {
         cart = new ArrayList<>();
         total_items = 0;
         total_price = 0;
+        initialize_queue_number();
+    }
+
+    // New constructor to accept an existing cart
+    public OrderProcessor(List<Product> existingCart) {
+        cart = existingCart;
+        total_items = existingCart.size();
+        total_price = calculate_total_price(existingCart);
         initialize_queue_number();
     }
 
@@ -131,7 +139,7 @@ public class OrderProcessor {
     }
 
 
-    public void display_cart() {
+    public static void display_cart() {
         System.out.println("\n\tYour Cart:");
         if (cart.isEmpty()) {
             System.out.println("\tYour cart is empty.");
@@ -145,7 +153,7 @@ public class OrderProcessor {
         }
     }
 
-    private int calculate_total_items() {
+    private static int calculate_total_items() {
         int total = 0;
         for (Product product : cart) {
             total += product.getStock();
@@ -154,7 +162,15 @@ public class OrderProcessor {
     }
 
 
-    private double calculate_total_price() {
+    private static double calculate_total_price() {
+        double total = 0;
+        for (Product product : cart) {
+            total += product.getPrice() * product.getStock();
+        }
+        return total;
+    }
+
+    private static double calculate_total_price(List<Product> cartItems) {
         double total = 0;
         for (Product product : cart) {
             total += product.getPrice() * product.getStock();
@@ -177,7 +193,6 @@ public class OrderProcessor {
             System.out.println("\tRemove Items (R)");
             System.out.println("\tClear Cart (C)");
             System.out.println("\tProceed to checkout (P)");
-            System.out.println("\tDisplay cart(V)");
             System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
             choice = scanf.nextLine();
@@ -261,10 +276,6 @@ public class OrderProcessor {
                         }
                     }
                     break;
-                case "V":
-                case "v":
-                    display_cart();
-                    break;
                 case "B":
                 case "b":
                     return; //as far as i know kaya nagana ung return kasi return sa menu agad dahil dun sya last na callout
@@ -317,7 +328,7 @@ public class OrderProcessor {
     }
 
 
-    public void registered_user_modify_menu_process(Customer customer) {
+    public void registered_user_modify_menu_process(Customer customer, List<Product> cart) {
         Scanner scanf = new Scanner(System.in);
         String choice;
 
@@ -329,7 +340,6 @@ public class OrderProcessor {
             System.out.println("\tRemove Items (R)");
             System.out.println("\tClear Cart (C)");
             System.out.println("\tProceed to checkout (P)");
-            System.out.println("\tDisplay cart(V)");
             System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
             choice = scanf.nextLine();
@@ -412,14 +422,11 @@ public class OrderProcessor {
                         }
                     }
                     break;
-                case "V":
-                case "v":
-                    display_cart();
-                    break;
                 case "B":
                 case "b":
+                    //hindi maipasa ung cart dahil pag return lng ginamit ay balik balik lng sa methods
                     UserCustomer user_customer = new UserCustomer();
-                    user_customer.registered_user_customer_item_category(customer.getUsername(), customer);
+                    user_customer.registered_user_customer_item_category(customer.getUsername(), customer, cart);
                     return;
                 case "P":
                 case "p":
@@ -431,7 +438,7 @@ public class OrderProcessor {
                             self_checkout_or_queue_process(customer, cart);
                             break;
                         } else if (confirmInput.equalsIgnoreCase("n")) {
-                            registered_user_modify_menu_process(customer);
+                            registered_user_modify_menu_process(customer, cart);
                         } else {
                             System.out.println("\n\tAn error has occurred.");
                             System.out.print("\t\tPress Enter key to continue.");
@@ -451,7 +458,7 @@ public class OrderProcessor {
     public void self_checkout_or_queue_process(Customer customer, List<Product> cart) {
         Scanner scanf = new Scanner(System.in);
         while (true) {
-                this.cart = cart;
+                OrderProcessor.cart = cart;
                 System.out.println("\t===========================================");
                 System.out.println("\t|          Processing Checkout...         |");
                 System.out.println("\t|                                         |");
@@ -475,7 +482,7 @@ public class OrderProcessor {
                                 System.out.println("\n\tCheckout cancelled.");
                                 System.out.print("\t\tPress Enter key to continue.");
                                 scanf.nextLine(); //used for press any key to continue
-                                registered_user_modify_menu_process(customer);
+                                registered_user_modify_menu_process(customer, cart);
                                 return;
                             } else if (cancellation_confirmation.equalsIgnoreCase("N")) {
                                 break;
@@ -495,7 +502,7 @@ public class OrderProcessor {
                                 save_cart_to_queue_csv();
                                 reset_cart();
                                 UserCustomer user_customer = new UserCustomer();
-                                user_customer.registered_user_customer_item_category(customer.getUsername(), customer);
+                                user_customer.registered_user_customer_item_category(customer.getUsername(), customer, cart);
                             } else if (queue_confirmation.equalsIgnoreCase("N")) {
                                 break;
                             } else {
@@ -533,6 +540,7 @@ public class OrderProcessor {
 
 
     public void increase_item_quantity(String product_code, int quantity) {
+        Scanner scanf = new Scanner(System.in);
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() + quantity;
@@ -547,10 +555,13 @@ public class OrderProcessor {
                 return;
             }
         }
-        System.out.println("\tProduct not found in the cart.");
+        System.out.println("\n\tProduct not found in the cart. Please add the item first.");
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
     }
 
     public void deduct_item_quantity(String product_code, int quantity) {
+        Scanner scanf = new Scanner(System.in);
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() - quantity;
@@ -566,11 +577,14 @@ public class OrderProcessor {
                 return;
             }
         }
-        System.out.println("\tProduct not found in the cart.");
+        System.out.println("\n\tProduct not found in the cart. Please add the item first.");
+        System.out.print("\t\tPress Enter key to continue.");
+        scanf.nextLine();
     }
 
 
     public void remove_item(String product_code) {
+        Scanner scanf = new Scanner(System.in);
         Product to_remove = null;
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
@@ -585,7 +599,9 @@ public class OrderProcessor {
             cart.remove(to_remove);
             System.out.printf("\tRemoved %s from the cart.\n", to_remove.getName());
         } else {
-            System.out.println("\tProduct not found in the cart.");
+            System.out.println("\n\tProduct not found in the cart. Please add the item first.");
+            System.out.print("\t\tPress Enter key to continue.");
+            scanf.nextLine();
         }
     }
 
@@ -613,7 +629,7 @@ public class OrderProcessor {
         String fileName = generate_queue_file_name();
 
         // Replace with the absolute path to your "directory/queues" folder
-        String filePath = "queues/" + fileName;
+        String filePath = "oopr-poe-data/queues/" + fileName;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             // Write header
@@ -642,7 +658,6 @@ public class OrderProcessor {
             System.out.print("\n\tPress Enter key to continue...");
             scanf.nextLine();
 
-            // Save the updated queue number
             save_queue_number();
 
         } catch (IOException e) {
@@ -662,9 +677,8 @@ public class OrderProcessor {
     }
 
 
-    // Method to initialize the queue number by reading from a file
     public static void initialize_queue_number() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("queues/current_queue_number.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("oopr-poe-data/queues/current_queue_number.txt"))) {
             String line = reader.readLine();
             if (line != null) {
                 currentQueueNumber = Integer.parseInt(line);
@@ -675,9 +689,9 @@ public class OrderProcessor {
         }
     }
 
-    // Method to save the current queue number to a file
+
     private static void save_queue_number() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("queues/current_queue_number.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("oopr-poe-data/queues/current_queue_number.txt"))) {
             writer.println(currentQueueNumber);
         } catch (IOException e) {
             System.out.println("\tError saving queue number: " + e.getMessage());
