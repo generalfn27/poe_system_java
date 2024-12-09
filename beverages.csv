@@ -1,4 +1,4 @@
-code,name,price,stock
+Code,Name,Price,Stock
 BEV000,C2 Solo,13.00,100
 BEV001,Chuckie 110ml,15.25,100
 BEV002,Chuckie 180ml,22.50,100
@@ -17,3 +17,5 @@ BEV014,Natures Spring 1Liter,27.75,100
 BEV015,Wilkins 1000 ml,29.99,100
 BEV016,Wilkins 237ml,20.25,100
 BEV017,Wilkins 500ml,20.50,100
+BEV018,gin bulag isang litro,90.00,44
+,bev000,11.00,11
