@@ -133,6 +133,9 @@ public class Cashier {
 
             //kung empty uli after file reading edi mag return sya sa menu
             if (cashiers.isEmpty()) {
+                System.out.println("\tNo cashier loaded. Please apply to manager.");
+                System.out.print("\t\tPress Enter to continue...");
+                scanf.nextLine();
                 UserType.user_type_menu();
             }
         }
