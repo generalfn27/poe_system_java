@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class CouponManager {
-    private static final String COUPON_FILE = "products/coupons.csv";
+    private static final String COUPON_FILE = "oopr-poe-data/products/coupons.csv";
     private final List<Coupon> availableCoupons;
 
     public CouponManager() {
@@ -368,23 +368,36 @@ public class CouponManager {
 
 
     public void show_random_Coupon() {
-        if (availableCoupons.isEmpty()) {
-            System.out.println("\n\tNo coupons available to display.");
+        // Create a list to hold valid coupons (those with quantity > 0)
+        List<Coupon> validCoupons = new ArrayList<>();
+
+        // Add only coupons with quantity > 0 to validCoupons list
+        for (Coupon coupon : availableCoupons) {
+            if (coupon.getCouponQuantity() > 0) {
+                validCoupons.add(coupon);
+            }
+        }
+
+        // If there are no valid coupons, return
+        if (validCoupons.isEmpty()) {
+            System.out.println("\n\tNo valid coupons available to display.");
             return;
         }
 
+        // Select a random coupon from the valid coupons
         Random random = new Random();
-        int randomIndex = random.nextInt(availableCoupons.size());
+        int randomIndex = random.nextInt(validCoupons.size());
 
-        Coupon randomCoupon = availableCoupons.get(randomIndex);
+        Coupon randomCoupon = validCoupons.get(randomIndex);
 
+        // Display the coupon details
         System.out.println("\n\t=== Special Coupon Advertisement ===");
         System.out.printf("\tDiscount Code: %s%n", randomCoupon.getDiscountCode());
         System.out.printf("\tDiscount Value: %.2f%n", randomCoupon.getDiscountValue());
         System.out.printf("\tAvailable Quantity: %d%n", randomCoupon.getCouponQuantity());
         System.out.println("\t====================================");
-
     }
+
 
 
 
