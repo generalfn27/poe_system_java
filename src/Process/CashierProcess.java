@@ -432,7 +432,7 @@ public class CashierProcess extends OrderProcessor {
 
 
     public void update_sales_report(List<Product> soldProducts) {
-        String filename = "products/sales_report.csv";
+        String filename = "oopr-poe-data/products/sales_report.csv";
         int currentTotalItems = 0;
         double currentTotalSales = 0.0;
         List<String> existingEntries = new ArrayList<>();
@@ -493,10 +493,7 @@ public class CashierProcess extends OrderProcessor {
                     currentDateTime
             );
 
-            System.out.printf("\tSales report updated: Total Items = %d, Total Sales = %.2f\n",
-                    currentTotalItems,
-                    currentTotalSales
-            );
+            //System.out.printf("\tSales report updated: Total Items = %d, Total Sales = %.2f\n", currentTotalItems, currentTotalSales);
         } catch (IOException e) {
             System.out.println("\tError updating the sales report: " + e.getMessage());
         }
