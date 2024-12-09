@@ -331,7 +331,7 @@ public class UserCustomer {
     //shortcut sa pag fill ups thanks sa AI
     private String input_password(Scanner scanner, String prompt) {
         System.out.print(prompt);
-        return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
+        return scanner.nextLine().trim();  // Simplified for Java, as hiding characters is more complex
     }
 
     /*private String inputPin(Scanner scanner) {
@@ -794,15 +794,15 @@ public class UserCustomer {
 
             if (change_password_confirmation.equalsIgnoreCase("Y")) {
                 System.out.print("\tEnter your current password: ");
-                String current_password = scanf.nextLine();
+                String current_password = scanf.nextLine().trim();
 
                 if (current_password.equals(customer.getPassword())) {
                     System.out.print("\tSet your new password: ");
-                    new_password = scanf.nextLine();
+                    new_password = scanf.nextLine().trim();
 
                     while (!new_password.equals(confirm_password)) {
                         System.out.print("\tConfirm the new password: ");
-                        confirm_password = scanf.nextLine();
+                        confirm_password = scanf.nextLine().trim();
                         if (!new_password.equals(confirm_password)) {
                             System.out.println("\n\tPasswords do not match. Please try again.");
                         }
