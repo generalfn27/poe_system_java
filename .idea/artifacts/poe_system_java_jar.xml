@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="poe_system_java:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/poe_system_java_jar</output-path>
+    <root id="archive" name="poe_system_java.jar">
+      <element id="module-output" name="poe_system_java" />
+    </root>
+  </artifact>
+</component>
