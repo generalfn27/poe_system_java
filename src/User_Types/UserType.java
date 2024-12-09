@@ -16,7 +16,7 @@ public class UserType {
             System.out.printf ("\t|       Welcome to %-15s    |\n", storeName + " Store");
             System.out.println("\t|                                     |");
             System.out.println("\t=======================================\n");
-            System.out.println("\tGood day user");
+            System.out.println("\tGood day user!");
             System.out.println("\tPlease enter what user type you are: \n");
             System.out.println("\t[1] Customer");
             System.out.println("\t[2] Cashier");
