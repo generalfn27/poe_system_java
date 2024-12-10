@@ -22,6 +22,8 @@ public class CouponManager {
             return;
         }
 
+        loadCouponsFromFile();
+
         Coupon newCoupon = new Coupon();
         String discountCode = "";
         double discountValue;
@@ -84,8 +86,8 @@ public class CouponManager {
 
         newCoupon.setCouponQuantity(1);
 
-        saveCouponsToFile();
         availableCoupons.add(newCoupon);
+        saveCouponsToFile();
 
         System.out.println("\tCoupon " + discountCode + " registered successfully.");
         System.out.print("\t\tPress Enter key to continue.");
