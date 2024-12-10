@@ -1,7 +1,6 @@
 package Employee;
 
 import java.io.*;
-import java.util.Scanner;
 
 public class ManagerCredentials {
     private static final String BASE_DIRECTORY = "oopr-poe-data/";
@@ -22,7 +21,11 @@ public class ManagerCredentials {
 
     public static void initialSetup() {
         create_required_directories();
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         System.out.println("\n\n\n\t=======================================");
         System.out.println("\t|                                     |");
@@ -30,17 +33,18 @@ public class ManagerCredentials {
         System.out.println("\t|                                     |");
         System.out.println("\t=======================================\n");
 
-        String username = get_valid_input(scanf, "\tEnter manager username: ",
+
+        String username = get_valid_input(console, "\tEnter manager username: ",
                 "\tManager username must be at least 8 characters long.", 8);
 
-        String password = get_valid_password(scanf);
+        String password = get_valid_password(console);
 
-        String phoneNumber = getValidPhoneNumber(scanf);
+        String phoneNumber = getValidPhoneNumber(console);
 
-        String birthplace = get_valid_input(scanf, "\tEnter your birthplace: ",
+        String birthplace = get_valid_input(console, "\tEnter your birthplace: ",
                 "\tBirthplace must be at least 3 characters long.", 3);
 
-        String motherMaidenName = get_valid_input(scanf, "\tEnter your mother's maiden name: ",
+        String motherMaidenName = get_valid_input(console, "\tEnter your mother's maiden name: ",
                 "\tMother's maiden name must be at least 3 characters long.", 3);
 
         System.out.println("\n\tPlease confirm your details:");
@@ -56,17 +60,17 @@ public class ManagerCredentials {
             System.out.println("\t[3] Exit the program.");
             System.out.print("\n\tChoose an option: ");
 
-            String choice = scanf.nextLine().trim();
+            String choice = console.readLine().trim();
             switch (choice) {
                 case "1":
                     save_credentials(username, password, phoneNumber, birthplace, motherMaidenName);
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); // Wait for user to press enter
+                    console.readLine(); // Wait for the user to press Enter
                     break;
                 case "2":
                     System.out.println("\n\tRestarting initial setup...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); // Wait for user to press enter
+                    console.readLine(); // Wait for the user to press Enter
                     initialSetup();
                     break;
                 case "3":
@@ -76,7 +80,7 @@ public class ManagerCredentials {
                     System.out.println("\t|     Thank You for Using our Program!     |\n");
                     System.out.println("\t|                                          |\n");
                     System.out.println("\t============================================\n");
-                    scanf.close();
+                    console.readLine(); // Wait for the user to press Enter
                     System.exit(0);
                     return;
                 default:
@@ -88,20 +92,22 @@ public class ManagerCredentials {
 
         save_credentials(username, password, phoneNumber, birthplace, motherMaidenName);
 
-        set_store_name(scanf);
+        set_store_name(console);
 
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine(); //used for press any key to continue
+        console.readLine(); // Wait for the user to press Enter
+        console.flush();
     }
 
 
-    private static boolean confirm_action(Scanner scanf) {
+    private static boolean confirm_action(Console console) {
         while (true) {
-            System.out.print("\tAre you sure you want to change your password?" + " (y/n): ");
-            String choice = scanf.nextLine().trim().toLowerCase();
+            String choice = console.readLine("\tAre you sure you want to change your password? (y/n): ").trim().toLowerCase();
             switch (choice) {
-                case "y": return true;
-                case "n": return false;
+                case "y":
+                    return true;
+                case "n":
+                    return false;
                 default:
                     System.out.println("\tInvalid input. Please enter 'y' for yes or 'n' for no.");
             }
@@ -109,11 +115,12 @@ public class ManagerCredentials {
     }
 
 
-    private static String get_valid_input(Scanner scanf, String prompt, String errorMsg, int minLength) {
+
+    private static String get_valid_input(Console console, String prompt, String errorMsg, int minLength) {
         String input;
         while (true) {
             System.out.print(prompt);
-            input = scanf.nextLine().trim();
+            input = console.readLine().trim();
             if (input.length() >= minLength) {
                 return input;
             }
@@ -122,29 +129,37 @@ public class ManagerCredentials {
     }
 
 
-    private static String get_valid_password(Scanner scanf) {
+    private static String get_valid_password(Console console) {
+        char[] passwordArray, confirmPasswordArray;
         String password, confirmPassword;
+
         while (true) {
-            password = get_valid_input(scanf, "\n\tEnter password (min 8 characters): ",
-                    "\tPassword must be at least 8 characters long.", 8);
+            System.out.print("\n\tEnter password (min 8 characters): ");
+            passwordArray = console.readPassword();
+            password = new String(passwordArray);
+
+            if (password.length() < 8) {
+                System.out.println("\tPassword must be at least 8 characters long.");
+                continue;
+            }
 
             System.out.print("\tConfirm password: ");
-            confirmPassword = scanf.nextLine().trim();
+            confirmPasswordArray = console.readPassword();
+            confirmPassword = new String(confirmPasswordArray);
 
-            if (password.equals(confirmPassword)) {
+            if (!password.equals(confirmPassword)) {
+                System.out.println("\tPasswords do not match. Please try again.");
+            } else {
                 return password;
             }
-            System.out.println("\tPasswords do not match. Please try again.");
-            System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); //used for press any key to continue
         }
     }
 
 
-    private static String getValidPhoneNumber(Scanner scanf) {
+    private static String getValidPhoneNumber(Console console) {
         String phoneNumber;
         while (true) {
-            phoneNumber = get_valid_input(scanf, "\n\tEnter contact phone number (e.g. 09091234567): ",
+            phoneNumber = get_valid_input(console, "\n\tEnter contact phone number (e.g. 09091234567): ",
                     "\tPhone number must be at least 11 digits.", 11);
 
             if (phoneNumber.matches("^09\\d{9}$")) {
@@ -152,8 +167,6 @@ public class ManagerCredentials {
             } else {
                 System.out.println("\tInvalid phone number. Please enter an 11-digit number starting with '09'.");
             }
-            System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); //used for press any key to continue
         }
     }
 
@@ -177,10 +190,10 @@ public class ManagerCredentials {
     }
 
 
-    private static void set_store_name(Scanner scanf) {
+    private static void set_store_name(Console console) {
         File storeNameFile = new File(STORE_NAME_FILE);
 
-        String storeName = get_valid_input(scanf, "\n\tEnter store name: ",
+        String storeName = get_valid_input(console, "\n\tEnter store name: ",
                 "\tStore name must be at least 4 characters long.", 4);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(storeNameFile))) {
@@ -188,7 +201,8 @@ public class ManagerCredentials {
         } catch (IOException e) {
             System.out.println("\tError saving store name: " + e.getMessage());
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); //used for press any key to continue
+            console.readLine(); // Wait for the user to press Enter
+            console.flush();
         }
     }
 
@@ -221,31 +235,31 @@ public class ManagerCredentials {
     }
 
 
-    public static void recover_manager_credentials(Scanner scanf) {
+    public static void recover_manager_credentials() {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         try (BufferedReader reader = new BufferedReader(new FileReader(CREDENTIALS_FILE))) {
             String line = reader.readLine();
             if (line != null) {
                 String[] credentials = line.split(",");
                 if (credentials.length >= 5) {
                     System.out.println("\n\tPassword Recovery");
-                    System.out.print("\tEnter registered phone number: ");
-                    String inputPhone = scanf.nextLine().replaceAll("[^0-9]", "");
 
+                    String inputPhone = console.readLine("\tEnter registered phone number: ").replaceAll("[^0-9]", "");
                     if (!inputPhone.equals(credentials[2])) {
                         System.out.println("\tVerification failed.");
                         return;
                     }
 
-                    System.out.print("\tEnter your birthplace: ");
-                    String inputBirthplace = scanf.nextLine().trim();
-
-                    System.out.print("\tEnter your mother's maiden name: ");
-                    String inputMotherMaidenName = scanf.nextLine().trim();
+                    String inputBirthplace = console.readLine("\tEnter your birthplace: ").trim();
+                    String inputMotherMaidenName = console.readLine("\tEnter your mother's maiden name: ").trim();
 
                     if (!inputBirthplace.equals(credentials[3]) || !inputMotherMaidenName.equals(credentials[4])) {
                         System.out.println("\tVerification failed.");
-                        System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
                         return;
                     }
 
@@ -255,10 +269,8 @@ public class ManagerCredentials {
                     String newPassword;
                     String confirmPassword;
                     do {
-                        System.out.print("\tEnter new password: ");
-                        newPassword = scanf.nextLine();
-                        System.out.print("\tConfirm new password: ");
-                        confirmPassword = scanf.nextLine();
+                        newPassword = console.readLine("\tEnter new password: ");
+                        confirmPassword = console.readLine("\tConfirm new password: ");
 
                         if (!newPassword.equals(confirmPassword)) {
                             System.out.println("\tError: Passwords do not match. Please try again.");
@@ -267,7 +279,7 @@ public class ManagerCredentials {
                         }
                     } while (!newPassword.equals(confirmPassword) || newPassword.isEmpty());
 
-                    if (confirm_action(scanf)) {
+                    if (confirm_action(console)) {
                         credentials[1] = newPassword;
 
                         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CREDENTIALS_FILE))) {
@@ -276,10 +288,11 @@ public class ManagerCredentials {
                         } catch (IOException e) {
                             System.out.println("\tError saving updated credentials: " + e.getMessage());
                         }
-                    } else { System.out.println("\tPassword change cancelled."); }
-
-                    System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    } else {
+                        System.out.println("\tPassword change cancelled.");
+                        console.readLine();
+                        console.flush();
+                    }
                     return;
                 }
             }
@@ -290,18 +303,23 @@ public class ManagerCredentials {
     }
 
 
-    public static void change_store_name(Scanner scanf) {
+    public static void change_store_name() {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String currentStoreName = getStoreName();
         System.out.println("\n\tCurrent store name: " + currentStoreName);
-        String choice;
 
         while (true) {
             System.out.print("\n\tDo you want to change the store name? (y/n): ");
-            choice = scanf.nextLine().trim().toLowerCase();
+            String choice = console.readLine().trim().toLowerCase();
 
             switch (choice) {
                 case "y":
-                    String newStoreName = get_valid_input(scanf, "\n\tEnter new store name: ",
+                    String newStoreName = get_valid_input(console, "\n\tEnter new store name: ",
                             "\tStore name must be at least 2 characters long.", 2);
 
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(STORE_NAME_FILE))) {
@@ -313,17 +331,14 @@ public class ManagerCredentials {
                     return; // Exit the method after updating the store name
                 case "n":
                     System.out.println("\tStore name was not changed.");
-                    System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
                     return; // Exit the method without making changes
                 default:
                     System.out.println("\tInvalid input. Please enter 'y' for yes or 'n' for no.");
-                    System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
                     break;
             }
         }
     }
+
 
 
     private static void create_required_directories() {
