@@ -125,7 +125,7 @@ public class Manager {
             System.out.println("\t[4] Inventory Report"); //refill stocks
             System.out.println("\t[5] HR Management"); //sino mga employees at handle ng account nila change pass/delete acc
             System.out.println("\t[6] Customer Account Management"); //account retrieval at delete account
-            System.out.println("\t[7] Manager Account Management");
+            System.out.println("\t[7] Manager Account Management\n");
             System.out.println("\t[0] Exit");
 
             System.out.print("\n\n\tEnter Here: ");
