@@ -69,7 +69,7 @@ public class BrowseProduct {
         String choice;
 
         while (true) {
-            System.out.println("\t----------------------------------------------");
+            System.out.println("\n\n\t----------------------------------------------");
             System.out.println("\t|              Select kind of Canned Goods: |");
             System.out.println("\t|                                            |");
             System.out.println("\t|              [1] Canned Fish               |");
@@ -139,7 +139,7 @@ public class BrowseProduct {
         String choice;
 
         while (true) {
-            System.out.println("\t���������������������������������������������������������");
+            System.out.println("\n\n\t���������������������������������������������������������");
             System.out.println("\t�              Select kind of Self Care Product:        �");
             System.out.println("\t�                                                       �");
             System.out.println("\t�              [1] Body Care                            �");
@@ -186,7 +186,7 @@ public class BrowseProduct {
         String choice;
 
         while (true) {
-            System.out.println("\t���������������������������������������������������������");
+            System.out.println("\n\n\t���������������������������������������������������������");
             System.out.println("\t�              Select kind of Detergents:               �");
             System.out.println("\t�                                                       �");
             System.out.println("\t�              [1] Powder Detergent                     �");
