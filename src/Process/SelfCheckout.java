@@ -4,7 +4,7 @@ import Shopper.Customer;
 import Shopper.UserCustomer;
 import Shopper.Product;
 
-import java.util.Scanner;
+import java.io.Console;
 import java.util.List;
 
 public class SelfCheckout {
@@ -64,7 +64,11 @@ public class SelfCheckout {
 
 
     private void process_e_wallet_payment (Customer customer) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         while (true) {
             double totalPrice = calculate_total_price();
@@ -75,20 +79,21 @@ public class SelfCheckout {
             System.out.println("\t[2] Apply Discount Coupon");
             System.out.println("\n\t[0] Cancel");
             System.out.print("\tEnter choice: ");
-            String choice = scanf.nextLine();
+            String choice = console.readLine();
 
             switch (choice) {
                 case "1":
                     processFinalPayment(customer, totalPrice);
                     break;
                 case "2":
-                    double discountedPrice = handleCouponApplication(totalPrice, scanf);
+                    double discountedPrice = handleCouponApplication(totalPrice, console);
 
                     // If coupon application is cancelled or fails
                     if (discountedPrice < 0) {
                         System.out.println("\tCoupon application cancelled or failed.");
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         continue; // Go back to main payment menu
                     }
                     // Proceed with discounted payment
@@ -101,18 +106,19 @@ public class SelfCheckout {
                 default:
                     System.out.println("\n\tInvalid choice. Please try again.");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
-    private double handleCouponApplication(double totalPrice, Scanner scanf) {
+    private double handleCouponApplication(double totalPrice, Console console) {
         CouponManager coupon_manager = new CouponManager();
 
         while (true) {
             System.out.print("\n\tEnter coupon code: ");
-            String couponCode = scanf.nextLine();
+            String couponCode = console.readLine();
 
             double discountedPrice = coupon_manager.apply_coupon(couponCode, totalPrice);
 
@@ -124,7 +130,7 @@ public class SelfCheckout {
                     System.out.println("\t[1] Yes");
                     System.out.println("\t[0] No, proceed without coupon");
                     System.out.print("\tEnter choice: ");
-                    String retryChoice = scanf.nextLine();
+                    String retryChoice = console.readLine();
 
                     if (retryChoice.equals("1")) {
                         break; // Try another coupon
@@ -144,12 +150,16 @@ public class SelfCheckout {
 
 
     private void processFinalPayment(Customer customer, double totalPrice) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         int maxAttempts = 3;
         for (int attempt = 0; attempt < maxAttempts; attempt++) {
             System.out.print("\n\tEnter PIN (or '///' to Cancel): ");
-            String enteredPin = scanf.nextLine().trim();
+            String enteredPin = console.readLine().trim();
 
             if (enteredPin.equals("///")) {
                 System.out.println("\tPayment cancelled.");
@@ -176,7 +186,12 @@ public class SelfCheckout {
     }
 
     private void updateCustomerDetails(Customer customer, double totalPrice) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         int point_reward = (int) ((totalPrice / 50) + customer.getRewardPoint());
         customer.setRewardPoint(point_reward);
 
@@ -191,7 +206,7 @@ public class SelfCheckout {
         print_receipt(customer, totalPrice);
 
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
 
         userCustomer.saveAllCustomersToCSV();
 
@@ -201,12 +216,14 @@ public class SelfCheckout {
         System.out.printf("\tTotal cashback reward point: %.0f\n", customer.getRewardPoint());
         System.out.printf("\tTotal spent: %.2f\n", customer.getTotal_spent()); */
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
 
         CouponManager couponManager = new CouponManager();
         couponManager.show_random_Coupon();
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
 
         userCustomer.registered_user_customer_item_category(customer.getUsername(), customer, OrderProcessor.cart);
     }
