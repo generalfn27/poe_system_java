@@ -185,6 +185,7 @@ public class SelfCheckout {
         System.out.println("\tToo many incorrect PIN attempts. Payment cancelled.");
     }
 
+
     private void updateCustomerDetails(Customer customer, double totalPrice) {
         Console console = System.console();
         if (console == null) {
@@ -206,7 +207,8 @@ public class SelfCheckout {
         print_receipt(customer, totalPrice);
 
         System.out.print("\t\tPress Enter key to continue.");
-        console.readLine();
+        console.readLine(); // Wait for the user to press Enter
+        console.flush();
 
         userCustomer.saveAllCustomersToCSV();
 
