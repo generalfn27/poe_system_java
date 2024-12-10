@@ -7,7 +7,6 @@ import Process.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class UserCustomer {
     private final List<Customer> customers = new ArrayList<>();
@@ -19,7 +18,11 @@ public class UserCustomer {
     }
 
     public void user_customer_menu() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         String choice;
 
         while (true) {
@@ -35,7 +38,7 @@ public class UserCustomer {
             System.out.println("\t--------------------------------------------------");
 
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine().trim();
 
             switch (choice) {
                 case "1":
@@ -53,14 +56,18 @@ public class UserCustomer {
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine(); //used for press any key to continue
             }
         }
     }
 
 
     public void guest_customer_item_category() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         String item_category;
 
         // Create an instance of OrderProcessor to handle the guest's order
@@ -88,7 +95,7 @@ public class UserCustomer {
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
             System.out.print("\t|        Enter here: ");
-            item_category = scanf.nextLine();
+            item_category = console.readLine().trim();
 
             // Variable to hold the products in the chosen category
             // parang shelf to
@@ -100,7 +107,7 @@ public class UserCustomer {
                         boolean cancel = true;
                         while (cancel) {
                             System.out.print("\n\tIf you go back, the cart will get empty. Do you still want to go back? (Y/N): ");
-                            String go_back = scanf.nextLine().trim().toUpperCase();
+                            String go_back = console.readLine().trim().toUpperCase();
 
                             if (go_back.equals("Y")) {
                                 OrderProcessor.cart.clear();
@@ -109,7 +116,7 @@ public class UserCustomer {
                             else if (go_back.equals("N")) { cancel = false; }
                         }
                     }
-                    if (OrderProcessor.cart.isEmpty()) { return; }
+                    if (OrderProcessor.cart.isEmpty()) { user_customer_menu(); return; }
                     break;
                 case "1":
                     selected_products = BrowseProduct.browse_beverages(); // Browse beverages
@@ -144,7 +151,8 @@ public class UserCustomer {
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\n\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
                     continue;
             }
 
@@ -162,11 +170,11 @@ public class UserCustomer {
     }
 
 
-    private static String get_valid_input(Scanner scanf, String prompt, String errorMsg, int minLength) {
+    private static String get_valid_input(Console console, String prompt, String errorMsg, int minLength) {
         String input;
         while (true) {
             System.out.print(prompt);
-            input = scanf.nextLine().trim();
+            input = console.readLine().trim();
             if (input.length() >= minLength) {
                 return input;
             }
@@ -175,27 +183,40 @@ public class UserCustomer {
     }
 
 
-    private static String get_valid_password(Scanner scanf) {
+    private static String get_valid_password(Console console) {
         String password, confirmPassword;
+
         while (true) {
-            password = get_valid_input(scanf, "\n\tEnter password (min 8 characters): ",
-                    "\tPassword must be at least 8 characters long.", 8);
+            // Prompt for password
+            System.out.println("\n\tEnter password (min 8 characters): ");
+            password = new String(console.readPassword()); // Using `readPassword` to mask input
 
-            System.out.print("\tConfirm password: ");
-            confirmPassword = scanf.nextLine().trim();
-
-            if (password.equals(confirmPassword)) {
-                return password;
+            // Check password length
+            if (password.length() < 8) {
+                System.out.println("\tPassword must be at least 8 characters long.");
+                continue;
             }
+
+            // Prompt for confirmation
+            System.out.print("\tConfirm password: ");
+            confirmPassword = new String(console.readPassword());
+
+            // Check if passwords match
+            if (password.equals(confirmPassword)) {
+                return password; // Password is valid
+            }
+
             System.out.println("\tPasswords do not match. Please try again.");
-            System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); // used for press any key to continue
         }
     }
 
 
     private void customer_register() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         final int MAX_CUSTOMERS = 100;
         if (customers.size() >= MAX_CUSTOMERS) {
             System.out.println("\n\tCustomer limit reached. Cannot register new customers.");
@@ -229,7 +250,7 @@ public class UserCustomer {
 
         while (!agreement_consent) {
             System.out.print("\n\tDo you agree to the terms? (y/n): ");
-            agreement = scanf.nextLine().trim().toLowerCase();
+            agreement = console.readLine().trim().toLowerCase();
 
             if (agreement.equals("y") || agreement.equals("n")) {
                 agreement_consent = true;
@@ -243,7 +264,7 @@ public class UserCustomer {
             return;
         }
 
-        String username = get_valid_input(scanf, "\n\tEnter Username (min 8 characters): ",
+        String username = get_valid_input(console, "\n\tEnter Username (min 8 characters): ",
                 "\tUsername must be at least 8 characters long.", 8);
 
         boolean not_exist = false;
@@ -252,7 +273,7 @@ public class UserCustomer {
             for (Customer customer : customers) {
                 if (customer.getUsername().equals(username)) {
                     System.out.println("\n\tUsername already exists. Please choose a different username.");
-                    username = get_valid_input(scanf, "\n\tEnter Username: ",
+                    username = get_valid_input(console, "\n\tEnter Username: ",
                             "\tUsername must be at least 8 characters long.", 8);
                     not_exist = false;
                     break;
@@ -261,20 +282,20 @@ public class UserCustomer {
         }
         newCustomer.setUsername(username);
 
-        String password = get_valid_password(scanf);
+        String password = get_valid_password(console);
         newCustomer.setPassword(password);
 
-        phoneNumber = get_valid_input(scanf, "\n\tEnter Phone Number (e.g. 09091234567): ",
+        phoneNumber = get_valid_input(console, "\n\tEnter Phone Number (e.g. 09091234567): ",
                 "\tInvalid phone number. Please enter an 11-digit number starting with '09'.", 11);
         while (!phoneNumber.matches("^09\\d{9}$")) {
-            phoneNumber = get_valid_input(scanf, "\tInvalid phone number. Try again: ",
+            phoneNumber = get_valid_input(console, "\tInvalid phone number. Try again: ",
                     "\tInvalid phone number. Please enter an 11-digit number starting with '09'.", 11);
         }
         newCustomer.setPhoneNumber(phoneNumber);
 
         do {
             System.out.print("\tIs the phone number #" + newCustomer.getPhoneNumber() + " for GCash (G) or PayMaya (P)? ");
-            String paymentChoice = scanf.nextLine().trim().toUpperCase();
+            String paymentChoice = console.readLine().trim().toUpperCase();
             if (paymentChoice.equals("G")) {
                 paymentMethod = "GCash";
                 break;
@@ -289,16 +310,16 @@ public class UserCustomer {
 
         System.out.println("\n\tThe payment method of user: " + newCustomer.getUsername() + " is using " + newCustomer.getPaymentMethod());
 
-        pinCode = get_valid_input(scanf, "\n\tEnter a 4-digit PIN code: ",
+        pinCode = get_valid_input(console, "\n\tEnter a 4-digit PIN code: ",
                 "\tInvalid PIN. Please enter a 4-digit number.", 4);
         while (!pinCode.matches("\\d{4}")) {
-            pinCode = get_valid_input(scanf, "\tInvalid PIN. Try again: ",
+            pinCode = get_valid_input(console, "\tInvalid PIN. Try again: ",
                     "\tInvalid PIN. Please enter a 4-digit number.", 4);
         }
         newCustomer.setPinCode(pinCode);
 
         while (!newCustomer.getPinCode().equals(confirmPin)) {
-            confirmPin = get_valid_input(scanf, "\tConfirm PIN: ",
+            confirmPin = get_valid_input(console, "\tConfirm PIN: ",
                     "\tPINs do not match. Please try again.", 4);
         }
 
@@ -306,7 +327,7 @@ public class UserCustomer {
         while (!validInput) {
             try {
                 System.out.print("\n\tEnter initial amount to add to your account: ");
-                initialFunds = Float.parseFloat(scanf.nextLine());
+                initialFunds = Float.parseFloat(console.readLine());
                 newCustomer.setBalance(initialFunds);
                 validInput = true;
             } catch (NumberFormatException e) {
@@ -323,21 +344,17 @@ public class UserCustomer {
 
         System.out.print("\n\tCongratulations! Your registration was successful. " + newCustomer.getUsername() +
                 ".\n\t\t\tPress Enter key to start exploring!\n");
-        scanf.nextLine();
+        console.readLine();
         registered_user_customer_item_category(newCustomer.getUsername(), newCustomer, OrderProcessor.cart);
     }
 
     // Helper method to input hidden password pero dapat magiging ****
     //shortcut sa pag fill ups thanks sa AI
-    private String input_password(Scanner scanner, String prompt) {
+    private String input_password(Console console, String prompt) {
         System.out.print(prompt);
-        return scanner.nextLine().trim();  // Simplified for Java, as hiding characters is more complex
+        char[] passwordChars = console.readPassword(); // Read password securely
+        return new String(passwordChars); // Convert char[] to String
     }
-
-    /*private String inputPin(Scanner scanner) {
-        System.out.print("\tConfirm Pin: ");
-        return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
-    }*/
 
 
     // eto sinisave naman lahat nito after every changes, rewriting data kumbaga
@@ -433,7 +450,11 @@ public class UserCustomer {
 
 
     private void customer_login() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         int attempt_count = 0;
         boolean login_successful = false;
         final int MAX_ATTEMPTS = 3;
@@ -444,7 +465,7 @@ public class UserCustomer {
             load_customers_from_CSV();
             System.out.println("\n\tNo registered customer so far. You are welcome to register, thank you...");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); //used for press any key to continue
+            console.readLine();
             return;
         }
 
@@ -457,10 +478,10 @@ public class UserCustomer {
             System.out.println("\t|                                 |");
             System.out.println("\t===================================\n");
             System.out.print("\tEnter Username: ");
-            String username = scanf.nextLine();
+            String username = console.readLine();
 
             // Get hidden password input
-            String password = input_password(scanf, "\tEnter Password: ");
+            String password = input_password(console, "\tEnter Password: ");
 
             // Check if the username and password match any customer record
             for (Customer customer : customers) {
@@ -482,13 +503,18 @@ public class UserCustomer {
             System.out.println("\n\tMaximum login attempts reached.");
             System.out.println("\t\tTo recover your account please contact the manager to reset password.");
             System.out.print("\t\t\tPress Enter key to continue...");
-            scanf.nextLine(); //used for press any key to continue
+            console.readLine();
+            console.flush();//used for press any key to continue
         }
     }
 
 
     public void registered_user_customer_item_category(String username, Customer customer, List<Product> existing_cart) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         String item_category;
 
         if (existing_cart == null) {
@@ -524,7 +550,7 @@ public class UserCustomer {
             System.out.println("\t|                                            |");
             System.out.println("\t----------------------------------------------");
             System.out.print("\t|        Enter here: ");
-            item_category = scanf.nextLine();
+            item_category = console.readLine();
 
             // Variable to hold the products in the chosen category
             //variable declaration lang to pero ang datatype nya ay array list
@@ -578,7 +604,7 @@ public class UserCustomer {
                     while (true) {
                         System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
                         System.out.print("\t[Y] for Yes  [N] for No: ");
-                        String exit_confirmation = scanf.nextLine().trim();
+                        String exit_confirmation = console.readLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
                             user_customer_menu();
@@ -589,14 +615,15 @@ public class UserCustomer {
                         } else {
                             System.out.println("\n\tAn error has occurred");
                             System.out.print("\t\tPress Enter key to continue.");
-                            scanf.nextLine(); //used for press any key to continue
+                            console.readLine(); //used for press any key to continue
                         }
                     }
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine(); //used for press any key to continue
+                    console.flush();
             }
 
             // After displaying products, process the order by asking for product code
@@ -610,11 +637,15 @@ public class UserCustomer {
 
 
     private void add_funds(Customer customer) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
             while (true) {
                 System.out.print("\n\tEnter your registered phone number (or type '0' to cancel): ");
-                String inputPhoneNumber = scanf.nextLine().trim();
+                String inputPhoneNumber = console.readLine().trim();
 
                 if (inputPhoneNumber.equalsIgnoreCase("0")) {
                     System.out.println("\tOperation canceled.");
@@ -628,7 +659,7 @@ public class UserCustomer {
 
                 while (true) {
                     System.out.print("\tEnter your PIN (or type '0' to cancel): ");
-                    String inputPin = scanf.nextLine().trim();
+                    String inputPin = console.readLine().trim();
 
                     if (inputPin.equalsIgnoreCase("0")) {
                         System.out.println("\tOperation canceled.");
@@ -646,7 +677,7 @@ public class UserCustomer {
                     while (!validInput) {
                         try {
                             System.out.print("\n\tEnter amount to add (or type '0' to cancel): ");
-                            String input = scanf.nextLine().trim();
+                            String input = console.readLine().trim();
 
                             if (input.equalsIgnoreCase("0")) {
                                 System.out.println("\tOperation canceled.");
@@ -671,7 +702,7 @@ public class UserCustomer {
 
                     System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
                     System.out.print("\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
                 }
             }
     }
@@ -679,7 +710,12 @@ public class UserCustomer {
 
 
     private void display_purchase_history_menu(Customer customer) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         File directory = new File("oopr-poe-data/receipts");
         FilenameFilter filter = (dir, name) -> name.startsWith("receipt_number_") && name.endsWith("Customer_" + customer.getUsername() + ".csv");
         File[] files = directory.listFiles(filter);
@@ -706,7 +742,7 @@ public class UserCustomer {
             while (true) {
                 System.out.print("\n\tEnter the number of the file to open: ");
                 try {
-                    String input = scanf.nextLine().trim();
+                    String input = console.readLine().trim();
                     int choice = Integer.parseInt(input);
 
                     if (choice >= 0 && choice <= csvFiles.size()) {
@@ -719,7 +755,7 @@ public class UserCustomer {
                         System.out.println("\tYou selected: " + selectedFile);
                         read_history_from_csv(selectedFile);
                         System.out.print("\tPress Enter key to continue.");
-                        scanf.nextLine();
+                        console.readLine();
                         display_purchase_history_menu(customer);
                         break;
                     } else {
@@ -731,9 +767,9 @@ public class UserCustomer {
             }
         } else {
             System.out.println("\tNo CSV files found.");
-            System.out.print("\tPress Enter key to continue.");
-            scanf.nextLine();
             System.out.println("\tReturning to previous menu.");
+            System.out.print("\t\tPress Enter key to continue.");
+            console.readLine();
         }
     }
 
@@ -781,66 +817,85 @@ public class UserCustomer {
 
 
     public void registered_customer_change_password(String username, Customer customer, List<Product> existing_cart) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String new_password;
-        String confirm_password = "";
+        String confirm_password;
         int attemptCount = 0;
         final int MAX_ATTEMPTS = 3;
 
         while (attemptCount < MAX_ATTEMPTS) {
-
-            System.out.print("\n\tAre you sure changing password (Y/N): ");
-            String change_password_confirmation = scanf.nextLine().trim();
+            System.out.print("\n\tAre you sure you want to change the password (Y/N): ");
+            String change_password_confirmation = console.readLine().trim();
 
             if (change_password_confirmation.equalsIgnoreCase("Y")) {
                 System.out.print("\tEnter your current password: ");
-                String current_password = scanf.nextLine().trim();
+                char[] current_password_chars = console.readPassword();
+                String current_password = new String(current_password_chars); // Convert to String
 
                 if (current_password.equals(customer.getPassword())) {
-                    System.out.print("\tSet your new password: ");
-                    new_password = scanf.nextLine().trim();
+                    System.out.println("\n\tPassword matched.");
+                    while (true) {
+                        System.out.print("\tSet your new password: ");
+                        char[] new_password_chars = console.readPassword();
+                        new_password = new String(new_password_chars); // Convert to String
 
-                    while (!new_password.equals(confirm_password)) {
                         System.out.print("\tConfirm the new password: ");
-                        confirm_password = scanf.nextLine().trim();
-                        if (!new_password.equals(confirm_password)) {
+                        char[] confirm_password_chars = console.readPassword();
+                        confirm_password = new String(confirm_password_chars); // Convert to String
+
+                        if (new_password.equals(confirm_password)) {
+                            customer.setPassword(new_password);
+                            saveAllCustomersToCSV();
+                            System.out.println("\n\tThe password has been successfully changed.");
+                            console.readLine(); // Wait for Enter key
+                            console.flush();
+                            registered_user_customer_item_category(username, customer, existing_cart);
+                            return;
+                        } else {
                             System.out.println("\n\tPasswords do not match. Please try again.");
                         }
                     }
-                    customer.setPassword(new_password);
-                    saveAllCustomersToCSV();
-                    System.out.print("\n\tThe password is successfully changed.\n");
-                    scanf.nextLine();
-                    registered_user_customer_item_category(username, customer, existing_cart);
-                    break;
                 } else {
                     attemptCount++;
                     System.out.println("\n\tIncorrect current password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                 }
-
             } else if (change_password_confirmation.equalsIgnoreCase("N")) {
                 registered_user_customer_item_category(username, customer, existing_cart);
                 return;
             } else {
+                System.out.println("\tInvalid input. Please enter 'Y' or 'N'.");
                 System.out.print("\t\tPress Enter key to continue.");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
-
         }
 
         // Handle case where attempts are exhausted
         if (attemptCount == MAX_ATTEMPTS) {
             System.out.println("\n\tMaximum attempts reached. Password change failed.\n");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
         }
     }
 
 
+
     public void redeem_reward_points(Customer customer, List<Product> existing_cart) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String promo_choice;
         double cashback;
         double reward_points;
@@ -848,7 +903,8 @@ public class UserCustomer {
         if (customer.getRewardPoint() <= 0) {
             System.out.println("\n\tYou do not have enough points to redeem rewards.");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -867,7 +923,7 @@ public class UserCustomer {
             System.out.println("\t|        [0] Go back                            |");
             System.out.println("\t-------------------------------------------------");
             System.out.print("\n\tEnter choice: ");
-            promo_choice = scanf.nextLine();
+            promo_choice = console.readLine();
 
             switch (promo_choice) {
                 case "0":
@@ -896,30 +952,34 @@ public class UserCustomer {
                 default:
                     System.out.println("\n\tWrong input");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     continue; // Restart the loop
             }
 
             while (true) {
                 System.out.print("\n\tAre you sure you want to proceed to redeem points? (Y/N): ");
-                String confirm_redeem = scanf.nextLine().trim().toUpperCase();
+                String confirm_redeem = console.readLine().trim().toUpperCase();
 
                 switch (confirm_redeem) {
                     case "Y":
                         redeem_point_reward_process(cashback, reward_points, customer);
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
+                        console.readLine(); //used for press any key to continue
+                        console.flush();
                         return;
                     case "N":
                         System.out.println("\n\tRedeem cancelled.");
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
+                        console.readLine(); //used for press any key to continue
+                        console.flush();
                         registered_user_customer_item_category(customer.getUsername(), customer, existing_cart);
                         return;
                     default:
                         System.out.println("\n\tWrong input");
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
+                        console.readLine(); //used for press any key to continue
+                        console.flush();
                 }
             }
         }
@@ -927,7 +987,12 @@ public class UserCustomer {
 
 
     public void redeem_point_reward_process(double cashBack, double rewardPoints, Customer customer) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         customer.setRewardPoint(customer.getRewardPoint() - rewardPoints);
         customer.setBalance(customer.getBalance() + cashBack);
 
@@ -936,18 +1001,24 @@ public class UserCustomer {
         System.out.println("\n\tRedemption successful! Cashback: " + cashBack + " pesos.");
         System.out.printf("\n\tAmount added successfully. New balance: %.2f\n", customer.getBalance());
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine(); //used for press any key to continue
+        console.flush();
     }
 
 
     public void view_customer_list() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         load_customers_from_CSV();
 
         if (customers.isEmpty()) {
             System.out.println("\n\tNo customer found in the system.");
             System.out.println("\n\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
             return;
         }
 
@@ -970,12 +1041,17 @@ public class UserCustomer {
         }
 
         System.out.print("\n\tPress Enter to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     public void delete_customer() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         if (customers.isEmpty()) {
             return;
@@ -985,12 +1061,12 @@ public class UserCustomer {
             view_customer_list();
             System.out.print("\n\tEnter Username to delete (0 to cancel): ");
             try {
-                String user_name = scanf.nextLine();
+                String user_name = console.readLine();
 
                 if (user_name.equalsIgnoreCase("0")) {
                     System.out.println("\n\tDeletion cancelled.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
                     return;
                 }
 
@@ -1005,7 +1081,7 @@ public class UserCustomer {
                 if (customer_to_delete == null) {
                     System.out.println("\n\tEmployee ID not found. Please try again.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
                     continue;
                 }
 
@@ -1020,38 +1096,47 @@ public class UserCustomer {
                     System.out.println("\tTotal Spent: " + customer_to_delete.getTotal_spent());
 
                     System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
-                    String confirmation = scanf.nextLine();
+                    String confirmation = console.readLine();
+                    console.flush();
 
                     if (confirmation.equalsIgnoreCase("Y")) {
                         customers.remove(customer_to_delete);
                         saveAllCustomersToCSV();
                         System.out.println("\n\tEmployee successfully deleted.");
                         System.out.print("\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         return;
                     } else if (confirmation.equalsIgnoreCase("N")) {
                         System.out.println("\n\tDeletion cancelled.");
                         System.out.print("\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         return;
                     } else {
                         System.out.println("\n\tInvalid Input");
                         System.out.print("\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                     }
                 }
 
             } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a valid customer Username.");
                 System.out.print("\t\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
         }
     }
 
 
     public void manager_reset_customer_password() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         if (customers.isEmpty()) {
             return;
@@ -1061,12 +1146,13 @@ public class UserCustomer {
             view_customer_list();
             System.out.print("\n\tEnter Username to delete (0 to cancel): ");
             try {
-                String user_name = scanf.nextLine();
+                String user_name = console.readLine();
 
                 if (user_name.equalsIgnoreCase("0")) {
                     System.out.println("\n\tPassword reset cancelled.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     return;
                 }
 
@@ -1081,7 +1167,8 @@ public class UserCustomer {
                 if (customer_to_reset == null) {
                     System.out.println("\n\tCustomer Username not found. Please try again.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     continue;
                 }
 
@@ -1098,14 +1185,15 @@ public class UserCustomer {
                 String confirmPassword;
                 do {
                     System.out.print("\n\tEnter (0 to cancel): ");
-                    newPassword = input_password(scanf, "\n\tEnter new password: ");
+                    newPassword = input_password(console, "\n\tEnter new password: ");
                     if (newPassword.equalsIgnoreCase("0")) {
                         System.out.println("\n\tPassword reset cancelled.");
                         System.out.print("\n\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         return;
                     }
-                    confirmPassword = input_password(scanf, "\tConfirm new password: ");
+                    confirmPassword = input_password(console, "\tConfirm new password: ");
 
                     if (!newPassword.equals(confirmPassword)) {
                         System.out.println("\n\tPasswords do not match. Please try again.");
@@ -1117,13 +1205,15 @@ public class UserCustomer {
 
                 System.out.println("\n\tPassword successfully reset.");
                 System.out.print("\n\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
                 return;
 
             } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a valid customer Username.");
                 System.out.print("\t\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
         }
     }
