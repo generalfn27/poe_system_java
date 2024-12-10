@@ -33,8 +33,9 @@ public class ManagerCredentials {
         System.out.println("\t|                                     |");
         System.out.println("\t=======================================\n");
 
+        System.out.println("\tCreate manager account for ");
 
-        String username = get_valid_input(console, "\tEnter manager username: ",
+        String username = get_valid_input(console, "\tEnter your desire manager username: ",
                 "\tManager username must be at least 8 characters long.", 8);
 
         String password = get_valid_password(console);
@@ -66,11 +67,13 @@ public class ManagerCredentials {
                     save_credentials(username, password, phoneNumber, birthplace, motherMaidenName);
                     System.out.print("\t\tPress Enter key to continue.");
                     console.readLine(); // Wait for the user to press Enter
+                    console.flush();
                     break;
                 case "2":
                     System.out.println("\n\tRestarting initial setup...");
                     System.out.print("\t\tPress Enter key to continue.");
                     console.readLine(); // Wait for the user to press Enter
+                    console.flush();
                     initialSetup();
                     break;
                 case "3":
@@ -249,14 +252,14 @@ public class ManagerCredentials {
                 if (credentials.length >= 5) {
                     System.out.println("\n\tPassword Recovery");
 
-                    String inputPhone = console.readLine("\tEnter registered phone number: ").replaceAll("[^0-9]", "");
+                    String inputPhone = console.readLine("\n\tEnter registered phone number: ").replaceAll("[^0-9]", "");
                     if (!inputPhone.equals(credentials[2])) {
                         System.out.println("\tVerification failed.");
                         return;
                     }
 
-                    String inputBirthplace = console.readLine("\tEnter your birthplace: ").trim();
-                    String inputMotherMaidenName = console.readLine("\tEnter your mother's maiden name: ").trim();
+                    String inputBirthplace = console.readLine("\n\tEnter your birthplace: ").trim();
+                    String inputMotherMaidenName = console.readLine("\n\tEnter your mother's maiden name: ").trim();
 
                     if (!inputBirthplace.equals(credentials[3]) || !inputMotherMaidenName.equals(credentials[4])) {
                         System.out.println("\tVerification failed.");
@@ -269,8 +272,8 @@ public class ManagerCredentials {
                     String newPassword;
                     String confirmPassword;
                     do {
-                        newPassword = console.readLine("\tEnter new password: ");
-                        confirmPassword = console.readLine("\tConfirm new password: ");
+                        newPassword = console.readLine("\n\tEnter new password: ");
+                        confirmPassword = console.readLine("\n\tConfirm new password: ");
 
                         if (!newPassword.equals(confirmPassword)) {
                             System.out.println("\tError: Passwords do not match. Please try again.");
