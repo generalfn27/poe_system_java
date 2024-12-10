@@ -583,7 +583,7 @@ public class UserCustomer {
                     break;
                 case "9":
                     add_funds(customer);
-                    //registered_user_customer_item_category(username, customer, existing_cart);
+                    registered_user_customer_item_category(username, customer, existing_cart);
                     break;
                 case "10":
                     display_purchase_history_menu(customer);
@@ -852,6 +852,7 @@ public class UserCustomer {
                             customer.setPassword(new_password);
                             saveAllCustomersToCSV();
                             System.out.println("\n\tThe password has been successfully changed.");
+                            System.out.print("\t\tPress Enter key to continue.");
                             console.readLine(); // Wait for Enter key
                             console.flush();
                             registered_user_customer_item_category(username, customer, existing_cart);
