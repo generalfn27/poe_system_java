@@ -57,7 +57,11 @@ public class CashierProcess extends OrderProcessor {
 
 
     public boolean process_payment(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return false;
+        }
         String retryChoice;
 
         while (true) {
@@ -69,7 +73,8 @@ public class CashierProcess extends OrderProcessor {
             System.out.println("\t[2] Yes & apply a discount coupon");
             System.out.println("\n\t[0] Cancel");
             System.out.print("\tEnter choice: ");
-            String choice = scanf.nextLine();
+            String choice = console.readLine();
+
 
             switch (choice) {
                 case "1":
@@ -80,7 +85,7 @@ public class CashierProcess extends OrderProcessor {
                 case "2":
                     while (true) {
                         System.out.print("\n\tEnter coupon code: ");
-                        String couponCode = scanf.nextLine();
+                        String couponCode = console.readLine();
                         CouponManager coupon_manager = new CouponManager();
                         double discountedPrice = coupon_manager.apply_coupon(couponCode, totalPrice);
 
@@ -90,7 +95,7 @@ public class CashierProcess extends OrderProcessor {
                                 System.out.println("\t[1] Yes");
                                 System.out.println("\t[0] No, proceed without coupon");
                                 System.out.print("\tEnter choice: ");
-                                retryChoice = scanf.nextLine();
+                                retryChoice = console.readLine();
 
                                 if (retryChoice.equals("1")) {
                                     break; // Break out of the retry choice loop to allow another coupon input
@@ -99,7 +104,8 @@ public class CashierProcess extends OrderProcessor {
                                 } else {
                                     System.out.println("\tInvalid choice. Please enter [1] or [0].");
                                     System.out.print("\t\tPress Enter key to continue.");
-                                    scanf.nextLine();
+                                    console.readLine();
+                                    console.flush();
                                 }
                             }
 
@@ -122,14 +128,20 @@ public class CashierProcess extends OrderProcessor {
                 default:
                     System.out.println("\tInvalid choice. Please try again.");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
     public boolean proceed_to_payment (double totalPrice, Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return false;
+        }
+
         double payment = 0;
         boolean validInput = false;
 
@@ -137,7 +149,7 @@ public class CashierProcess extends OrderProcessor {
         while (!validInput) {
             try {
                 System.out.print("\n\tEnter rendered amount: ");
-                payment = Float.parseFloat(scanf.nextLine());
+                payment = Float.parseFloat(console.readLine());
                 validInput = true; // Input is valid, exit the loop
             } catch (NumberFormatException e) {
                 System.out.println("\tInvalid input. Please enter a valid number.");
@@ -158,14 +170,16 @@ public class CashierProcess extends OrderProcessor {
             CouponManager couponManager = new CouponManager();
             couponManager.show_random_Coupon();
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
 
             counter.clear();
             return true; // Return true to indicate successful payment para balik dashboard
         } else {
             System.out.println("\tInsufficient payment. Try again.");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); //used for press any key to continue
+            console.readLine();
+            console.flush();
         }
         return false;
     }
@@ -201,7 +215,12 @@ public class CashierProcess extends OrderProcessor {
 
     // Method to print the receipt
     private void print_receipt(List<Product> counter, double payment, Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         System.out.println("\n\n\t----- RECEIPT -----");
         System.out.println("\tCashier Name," + cashier.getEmployee_full_name());
         System.out.println("\tDate," + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
@@ -222,11 +241,13 @@ public class CashierProcess extends OrderProcessor {
         }
         System.out.println("\t------------------------------------------");
         System.out.print("\tPress Enter key to Save & Exit: ");
-        scanf.nextLine(); //used for press any key to continue
+        console.readLine();
+        console.flush();
 
         cashier_save_receipt_to_csv(counter, calculate_total_price(), payment, cashier);
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine(); //used for press any key to continue
+        console.readLine();
+        console.flush();
         counter.clear();
     }
 
