@@ -8,8 +8,8 @@ import Process.CouponManager;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Manager {
     private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
@@ -23,7 +23,11 @@ public class Manager {
 
 
     private void manager_login() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         int attempt_count = 0;
         boolean valid = false;
 
@@ -36,14 +40,15 @@ public class Manager {
             System.out.println("\n\t[0] Exit");
             System.out.print("\n\tEnter choice: ");
 
-            String choice = scanf.nextLine();
+            String choice = console.readLine();
 
             switch (choice) {
                 case "1":
                     System.out.print("\n\tEnter username: ");
-                    String inputUsername = scanf.nextLine();
+                    String inputUsername = console.readLine();
                     System.out.print("\tEnter password: ");
-                    String inputPassword = scanf.nextLine();
+                    char[] passwordArray = console.readPassword();
+                    String inputPassword = new String(passwordArray);
 
                     if (validate_manager_login(inputUsername, inputPassword)) {
                         valid = true;
@@ -60,14 +65,15 @@ public class Manager {
                     }
                     break;
                 case "2":
-                    ManagerCredentials.recover_manager_credentials(scanf);
+                    ManagerCredentials.recover_manager_credentials();
                     break;
                 case "0":
                     return;
                 default:
                     System.out.println("\tInvalid choice!");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
@@ -78,13 +84,14 @@ public class Manager {
     }
 
 
-    private boolean handle_logout(Scanner scanf) {
+    private boolean handle_logout(Console console) {
         while (true) {
             System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
             System.out.print("\t[Y] for Yes  [N] for No: ");
 
-            String exit_confirmation = scanf.next().trim();
-            scanf.nextLine();
+            String exit_confirmation = console.readLine().trim();
+            console.readLine();
+            console.flush();
 
             if (exit_confirmation.equalsIgnoreCase("Y")) {
                 UserType.user_type_menu();
@@ -97,7 +104,12 @@ public class Manager {
 
 
     private void manager_dashboard() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         while (true) {
@@ -117,7 +129,7 @@ public class Manager {
             System.out.println("\t[0] Exit");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine().trim();
 
             switch (choice) {
                 case "1":
@@ -126,7 +138,8 @@ public class Manager {
                 case "2":
                     display_sales_report();
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
                     break;
                 case "3":
                     display_purchase_history_menu();
@@ -141,10 +154,10 @@ public class Manager {
                     customer_account_management();
                     break;
                 case "7":
-                    manager_account_management(scanf);
+                    manager_account_management(console);
                     break;
                 case "0":
-                    boolean logout_confirmed = handle_logout(scanf);
+                    boolean logout_confirmed = handle_logout(console);
                     if (logout_confirmed) {
                         UserType.user_type_menu();
                         return;
@@ -153,14 +166,20 @@ public class Manager {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
     private void display_purchase_history_menu() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         File directory = new File("oopr-poe-data/receipts/");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("receipt_number"));
         List<String> csvFiles = new ArrayList<>();
@@ -185,7 +204,7 @@ public class Manager {
             while (true) {
                 System.out.print("\n\tEnter the number of the file to open: ");
                 try {
-                    String input = scanf.nextLine().trim();
+                    String input = console.readLine().trim();
                     int choice = Integer.parseInt(input);
 
                     if (choice >= 0 && choice <= csvFiles.size()) {
@@ -198,25 +217,29 @@ public class Manager {
                         System.out.println("\n\n\tYou selected: " + selectedFile);
                         read_transaction_history_from_csv(selectedFile);
                         System.out.print("\tPress Enter key to continue.");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         break;
                     } else {
                         System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
+                        console.readLine();
+                        console.flush();
                     }
                     display_purchase_history_menu();
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input! Please enter a valid number.");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
                 }
             }
         } else {
             System.out.println("\tNo CSV files found.");
             System.out.println("\tReturning to previous menu...");
             System.out.print("\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
         }
     }
 
@@ -264,7 +287,12 @@ public class Manager {
 
 
     public void inventory_management() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String item_category;
 
         while (true) {
@@ -285,7 +313,7 @@ public class Manager {
             System.out.println("\t----------------------------------------------");
             System.out.print  ("\t|        Enter here: ");
 
-            item_category = scanf.nextLine();
+            item_category = console.readLine().trim();
 
             // Variable to hold the products in the chosen category
             List<Product> selected_products = null;
@@ -329,15 +357,21 @@ public class Manager {
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
 
             if (selected_products != null && !selected_products.isEmpty()) {
                 System.out.print("\n\t\tPress Enter key to continue.");
-                scanf.nextLine(); //used for press any key to continue
+                console.readLine();
+                console.flush();
                 inventory_item_options(selected_products);
 
-            } else { System.out.println("\n\tNo products available in this category.");  }
+            } else {
+                System.out.println("\n\tNo products available in this category.");
+                console.readLine();
+                console.flush();
+            }
 
         }
 
@@ -345,7 +379,12 @@ public class Manager {
 
 
     public void inventory_item_options(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String inventory_option_choice;
 
         while (true) {
@@ -364,7 +403,7 @@ public class Manager {
             System.out.println("\t|        [0] Go Back                         |");
             System.out.println("\t----------------------------------------------");
             System.out.print  ("\t|        Enter here: ");
-            inventory_option_choice = scanf.nextLine();
+            inventory_option_choice = console.readLine();
 
             switch (inventory_option_choice) {
                 case "0":
@@ -388,39 +427,46 @@ public class Manager {
                 case "6":
                     BrowseProduct.display_products(products);
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
     private void add_new_item(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         System.out.println("\n\t=== Add New Item ===");
         BrowseProduct.display_products(products);
 
-        String code = get_valid_input(scanf);
+        String code = get_valid_input(console);
 
         // Check if product code already exists
         if (products.stream().anyMatch(p -> p.getCode().equals(code))) {
             System.out.println("\n\tProduct code already exists!");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
         System.out.print("\tEnter product name: ");
-        String name = scanf.nextLine();
+        String name = console.readLine();
 
         double price;
         while (true) {
             try {
                 System.out.print("\tEnter product price: ");
-                price = Double.parseDouble(scanf.nextLine());
+                price = Double.parseDouble(console.readLine());
                 if (price <= 0) {
                     System.out.println("\tPrice must be greater than 0!");
                     continue;
@@ -435,7 +481,7 @@ public class Manager {
         while (true) {
             try {
                 System.out.print("\tEnter initial stock: ");
-                stock = Integer.parseInt(scanf.nextLine());
+                stock = Integer.parseInt(console.readLine());
                 if (stock < 0) {
                     System.out.println("\tStock cannot be negative!");
                     continue;
@@ -452,17 +498,22 @@ public class Manager {
 
         System.out.println("\tProduct added successfully!");
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     private void remove_product(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         System.out.println("\n\t=== Remove Product ===");
 
         BrowseProduct.display_products(products);
         System.out.print("\n\tEnter product code to remove: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Product productToRemove = null;
         for (Product product : products) {
@@ -478,7 +529,7 @@ public class Manager {
             String confirm;
             while (true) {
                 System.out.print("\tAre you sure you want to remove this product? (Y/N): ");
-                confirm = scanf.nextLine();
+                confirm = console.readLine();
                 if (confirm.equalsIgnoreCase("Y") || confirm.equalsIgnoreCase("N")) {
                     break;
                 } else {
@@ -498,17 +549,23 @@ public class Manager {
         }
 
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     private void restock_product(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         System.out.println("\n\t=== Restock Product ===");
 
         BrowseProduct.display_products(products);
         System.out.print("\n\tEnter product code to restock: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Product productToRestock = null;
         for (Product product : products) {
@@ -525,7 +582,7 @@ public class Manager {
             while (true) {
                 try {
                     System.out.print("\tEnter additional stock quantity: ");
-                    additionalStock = Integer.parseInt(scanf.nextLine());
+                    additionalStock = Integer.parseInt(console.readLine());
                     if (additionalStock <= 0) {
                         System.out.println("\tPlease enter a positive number!");
                         continue;
@@ -544,17 +601,22 @@ public class Manager {
         }
 
         System.out.print("\t\tPress Enter key to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     private void decrease_stock_product(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         System.out.println("\n\t=== Decrease Product ===");
 
         BrowseProduct.display_products(products);
         System.out.print("\n\tEnter product code to decrease: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Product productToRestock = null;
         for (Product product : products) {
@@ -571,7 +633,7 @@ public class Manager {
             while (true) {
                 try {
                     System.out.print("\tEnter reduction stock quantity: ");
-                    additionalStock = Integer.parseInt(scanf.nextLine());
+                    additionalStock = Integer.parseInt(console.readLine());
                     if (additionalStock <= 0) {
                         System.out.println("\tPlease enter a positive number!");
                         continue;
@@ -590,17 +652,23 @@ public class Manager {
         }
 
         System.out.print("\t\tPress Enter key to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     private void update_product_price(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         System.out.println("\n\t=== Update Product Price ===");
 
         BrowseProduct.display_products(products);
         System.out.print("\n\tEnter product code to update: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Product productToUpdate = null;
         for (Product product : products) {
@@ -617,7 +685,7 @@ public class Manager {
             while (true) {
                 try {
                     System.out.print("\tEnter new price: ");
-                    newPrice = Double.parseDouble(scanf.nextLine());
+                    newPrice = Double.parseDouble(console.readLine());
                     if (newPrice <= 0) {
                         System.out.println("\tPrice must be greater than 0!");
                         continue;
@@ -636,7 +704,8 @@ public class Manager {
         }
 
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
@@ -669,7 +738,12 @@ public class Manager {
 
 
     public void hr_management_menu() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
         Cashier cashier = new Cashier();
 
@@ -686,7 +760,7 @@ public class Manager {
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "0":
@@ -707,14 +781,20 @@ public class Manager {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
     public void voucher_management_dashboard() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         while (true) {
@@ -731,7 +811,7 @@ public class Manager {
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "0":
@@ -755,7 +835,8 @@ public class Manager {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
 
         }
@@ -764,7 +845,12 @@ public class Manager {
 
 
     public void customer_account_management() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
         UserCustomer userCustomer = new UserCustomer();
 
@@ -780,7 +866,7 @@ public class Manager {
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "0":
@@ -798,7 +884,8 @@ public class Manager {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
@@ -837,11 +924,11 @@ public class Manager {
     }
 
 
-    private String get_valid_input(Scanner scanf) {
+    private String get_valid_input(Console console) {
         String input;
         while (true) {
             System.out.print("\n\tEnter new product code for new item: ");
-            input = scanf.nextLine().trim();
+            input = console.readLine().trim();
             if (input.length() >= 6) {
                 return input;
             }
@@ -850,7 +937,7 @@ public class Manager {
     }
 
 
-    private void manager_account_management(Scanner scanf) {
+    private void manager_account_management(Console console) {
         while (true) {
             System.out.println("\n\t=======================================");
             System.out.println("\t|    Manager Account Management      |");
@@ -860,14 +947,14 @@ public class Manager {
             System.out.println("\t[0] Return to Main Menu");
 
             System.out.print("\n\n\tEnter Here: ");
-            String choice = scanf.nextLine();
+            String choice = console.readLine();
 
             switch (choice) {
                 case "1":
-                    ManagerCredentials.recover_manager_credentials(scanf);
+                    ManagerCredentials.recover_manager_credentials();
                     break;
                 case "2":
-                    ManagerCredentials.change_store_name(scanf);
+                    ManagerCredentials.change_store_name();
                     break;
                 case "0":
                     manager_dashboard();
@@ -875,7 +962,8 @@ public class Manager {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
             }
         }
     }
