@@ -33,7 +33,7 @@ public class CouponManager {
 
         boolean coupon_exist = true;
         while (coupon_exist) {
-            System.out.print("\n\tEnter 'exit' to Cancel");
+            System.out.println("\n\tType & Enter 'exit' to Cancel");
             System.out.print("\tEnter New Discount Code (4 letters followed by 4 digits): ");
             discountCode = console.readLine();
 
