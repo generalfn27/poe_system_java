@@ -15,7 +15,7 @@ public class UserType {
 
         while (true) {
             String storeName = ManagerCredentials.getStoreName();
-            System.out.println("\n\t=======================================");
+            System.out.println("\n\n\n\n\t=======================================");
             System.out.println("\t|                                     |");
             System.out.printf ("\t|       Welcome to %-15s    |\n", storeName + " Store");
             System.out.println("\t|                                     |");
@@ -55,7 +55,7 @@ public class UserType {
                         String exit_confirmation = console.readLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
-                            System.out.println("\t============================================\n");
+                            System.out.println("\n\n\n\t============================================\n");
                             System.out.println("\t|                                          |\n");
                             System.out.println("\t|     Thank You for Using our Program!     |\n");
                             System.out.println("\t|                                          |\n");
