@@ -222,7 +222,7 @@ public class Manager {
 
 
     public static void read_transaction_history_from_csv(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("oopr-poe-data/" + filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("oopr-poe-data/receipts/" + filename))) {
             String line;
 
             System.out.println("\n\t=== Purchase History ===\n");
