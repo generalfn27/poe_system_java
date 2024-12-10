@@ -3,11 +3,11 @@ package Process;
 import Shopper.*;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class BrowseProduct {
     // Method to read products from the CSV file
@@ -60,7 +60,12 @@ public class BrowseProduct {
     }
 
     public static List<Product> browse_canned_goods() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return null;
+        }
+
         String choice;
 
         while (true) {
@@ -74,11 +79,11 @@ public class BrowseProduct {
             System.out.println("\t----------------------------------------------");
 
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine().trim(); // Use console.readLine() for input
 
             switch (choice) {
                 case "0":
-                    return null;  // Return to the previous menu dahil wala syang binalik
+                    return null;  // Return null if user chooses to go back
                 case "1":
                     BrowseProduct browse_canned_fish = new BrowseProduct();
                     List<Product> canned_fish = browse_canned_fish.load_products_from_CSV("canned_fish.csv");
@@ -86,17 +91,18 @@ public class BrowseProduct {
                     return canned_fish;
                 case "2":
                     BrowseProduct browse_canned_meat = new BrowseProduct();
-                    List<Product> canned_meat = browse_canned_meat.load_products_from_CSV("canned_meat.csv"); // Correct CSV file
+                    List<Product> canned_meat = browse_canned_meat.load_products_from_CSV("canned_meat.csv");
                     display_products(canned_meat);
                     return canned_meat;
                 default:
                     System.out.println("\nInvalid input. Try again...\n");
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine(); // Use console.readLine() to pause before continuing
             }
         }
     }
+
 
 
     public static List<Product> browse_condiments() {
@@ -124,7 +130,12 @@ public class BrowseProduct {
 
 
     public static List<Product> browse_self_care_items() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return null;
+        }
+
         String choice;
 
         while (true) {
@@ -140,7 +151,7 @@ public class BrowseProduct {
             System.out.println("\t���������������������������������������������������������");
 
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "0":
@@ -159,14 +170,19 @@ public class BrowseProduct {
                     System.out.println("\nInvalid input. Try again...\n");
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
             }
         }
     }
 
 
     public static List<Product> browse_detergents() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return null;
+        }
+
         String choice;
 
         while (true) {
@@ -183,7 +199,7 @@ public class BrowseProduct {
             System.out.println("\t���������������������������������������������������������");
 
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "0":
@@ -207,7 +223,7 @@ public class BrowseProduct {
                     System.out.println("\nInvalid input. Try again...\n");
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
             }
         }
     }

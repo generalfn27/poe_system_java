@@ -6,7 +6,6 @@ import Shopper.UserCustomer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,15 +33,21 @@ public class OrderProcessor {
     }
 
     public boolean process_customer_order(List<Product> products) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return false;
+        }
+
         String product_code;
         Product selected_product;
 
         while (true) {
             System.out.println("\n\tEnter /// to Cancel product selection.");
-            product_code = get_valid_input(scanf, "\tEnter product code: ", "\tInvalid input. Please try again.", 3).toUpperCase();
+            product_code = get_valid_input(console, "\tEnter product code: ", "\tInvalid input. Please try again.", 3).toUpperCase();
 
             if (product_code.equals("///")) {
+                System.out.println("\n\tProduct selection cancelled.");
                 return false;
             }
 
@@ -55,7 +60,7 @@ public class OrderProcessor {
 
             System.out.println("\tInvalid product code. Try again.");
             System.out.print("\tPress Enter to continue...");
-            scanf.nextLine(); // Wait for user input before retrying
+            console.readLine();
         }
 
         int quantity = 0;
@@ -64,10 +69,10 @@ public class OrderProcessor {
         do {
             display_product_details(selected_product);
             System.out.print("\tEnter quantity: ");
+            String quantityInput = console.readLine().trim();
 
-            if (scanf.hasNextInt()) {
-                quantity = scanf.nextInt();
-                scanf.nextLine(); // Consume the newline character
+            try {
+                quantity = Integer.parseInt(quantityInput);
 
                 // Validate quantity range (1 to stock)
                 if (quantity > 0 && quantity <= selected_product.getStock()) {
@@ -75,21 +80,20 @@ public class OrderProcessor {
                 } else {
                     System.out.println("\n\tInvalid quantity. Please enter a value between 1 and " + selected_product.getStock() + ".");
                     System.out.print("\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
                 }
-            } else {
-                scanf.nextLine();
+            } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a number.");
                 System.out.print("\tPress Enter to continue...");
-                scanf.nextLine(); // Consume invalid input and retry
+                console.readLine();
             }
         } while (!valid_input);
 
         while (true) {
             display_product_details(selected_product);
-            System.out.printf("\n\tPrice: %.2f\tQuantity: %2d\n", selected_product.getPrice() * quantity, quantity);
+            System.out.printf("\n\tPrice: %.2f\tQuantity: %d\n", selected_product.getPrice() * quantity, quantity);
 
-            String add_item_confirmation = get_valid_input(scanf, "\tAdd to cart (A) or cancel (C)? ", "\tInvalid input. Please enter A or C only.", 1).toUpperCase();
+            String add_item_confirmation = get_valid_input(console, "\tAdd to cart (A) or cancel (C)? ", "\tInvalid input. Please enter A or C only.", 1).toUpperCase();
 
             switch (add_item_confirmation) {
                 case "A":
@@ -99,22 +103,24 @@ public class OrderProcessor {
                 case "C":
                     System.out.println("\tItem not added to cart.");
                     System.out.print("\tPress Enter to continue...");
-                    scanf.nextLine(); // Wait for user input
+                    console.readLine();
                     return false;
                 default:
                     System.out.println("\tInvalid input. Please enter A or C only.");
                     System.out.print("\tPress Enter to continue...");
-                    scanf.nextLine(); // Wait for retry
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
-    private static String get_valid_input(Scanner scanf, String prompt, String errorMsg, int minLength) {
+
+    private static String get_valid_input(Console console, String prompt, String errorMsg, int minLength) {
         String input;
         while (true) {
             System.out.print(prompt);
-            input = scanf.nextLine().trim();
+            input = console.readLine().trim();
             if (input.length() >= minLength) {
                 return input;
             }
@@ -190,7 +196,12 @@ public class OrderProcessor {
     // both modify process menu ay pwede pang gawing method para mas malinis tignan
     // for now ganito muna dahil di pa naman sure kung need sobrang neat & clean code
     public void modify_menu_process() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         while (true) {
@@ -203,140 +214,138 @@ public class OrderProcessor {
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
-            choice = scanf.nextLine();
+            choice = console.readLine().trim().toUpperCase();
 
-            //pwedeng isang case lang and ang nasa scanf ay naka toupper, kung alin efficient
             switch (choice) {
                 case "I":
-                case "i":
-                    int quantityToIncrease;
-                    boolean quantity_increase_valid_input = false;
-
-                    System.out.println("\n\tEnter 0 to Cancel item increase");
-                    System.out.print("\tEnter the product code to increase: ");
-                    String codeToIncrease = scanf.nextLine();
-
-                    if (codeToIncrease.equals("0")) { break; }
-
-                    while (!quantity_increase_valid_input) {
-                        try {
-                            System.out.print("\tEnter quantity to increase: ");
-                            quantityToIncrease = Integer.parseInt(scanf.nextLine());
-                            increase_item_quantity(codeToIncrease, quantityToIncrease);
-                            quantity_increase_valid_input = true; // Input is valid, exit the loop
-                        } catch (NumberFormatException e) {
-                            System.out.println("\tInvalid input. Please enter a valid number.");
-                        }
-                    }
+                    handle_quantity_change(console, "increase");
                     break;
                 case "D":
-                case "d":
-                    int quantityToDeduct;
-                    boolean deduction_valid_input = false;
-
-                    System.out.println("\tEnter 0 to Cancel item deduction");
-                    System.out.print("\tEnter product code to deduct: ");
-                    String codeToDeduct = scanf.nextLine();
-
-                    if (codeToDeduct.equals("0")) { break; }
-
-                    while (!deduction_valid_input) {
-                        try {
-                            System.out.print("\tEnter quantity to deduct: ");
-                            quantityToDeduct = Integer.parseInt(scanf.nextLine());
-                            deduct_item_quantity(codeToDeduct, quantityToDeduct);
-                            deduction_valid_input = true; // Input is valid, exit the loop
-                        } catch (NumberFormatException e) {
-                            System.out.println("\tInvalid input. Please enter a valid number.");
-                        }
-                    }
+                    handle_quantity_change(console, "deduct");
                     break;
                 case "R":
-                case "r":
                     System.out.println("\tEnter 0 to Cancel item removal");
                     System.out.print("\tEnter product code to remove: ");
-                    String codeToRemove = scanf.nextLine();
-                    if (codeToRemove.equals("0")) { break; }
-                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                    String codeToRemove = console.readLine();
+                    if (codeToRemove.equals("0")) {
+                        break;
+                    }
+                    remove_item(codeToRemove); // Remove the item from the cart
                     break;
                 case "C":
-                case "c":
-                    boolean valid_to_clear = false;
-
-                    while (!valid_to_clear){
-                        System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
-                        String confirm_clear = scanf.nextLine().trim();
-
-                        switch (confirm_clear) {
-                            case "y":
-                            case "Y":
-                                reset_cart();  // Reset the cart
-                                valid_to_clear = true;
-                                break;
-                            case "n":
-                            case "N":
-                                valid_to_clear = true;
-                                break;
-                            default:
-                                System.out.println("\n\tWrong input");
-                                System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
-                        }
-                    }
+                    handle_cart_clear(console);
                     break;
                 case "B":
-                case "b":
-                    return; //as far as i know kaya nagana ung return kasi return sa menu agad dahil dun sya last na callout
+                    return; // Go back to the previous menu
                 case "P":
-                case "p":
-                    // Confirmation before checkout
-                    String confirm_process_queue;
-                    boolean valid = false;
-
-                    while (!valid) {
-                        System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                        confirm_process_queue = scanf.nextLine().trim();
-
-                        switch (confirm_process_queue) {
-                            case "y":
-                            case "Y":
-                                System.out.println("\n\tProcessing checkout...");
-                                System.out.print("\n\tPress and enter [E] to confirm checkout or [Any other key] to cancel: ");
-                                String exit_choice = scanf.nextLine().trim().toUpperCase();
-
-                                if (exit_choice.equals("E")) {
-                                    save_cart_to_queue_csv();
-                                    reset_cart();
-                                    UserCustomer user_customer = new UserCustomer();
-                                    user_customer.guest_customer_item_category();
-                                    return;
-                                } else {
-                                    valid = true;
-                                }
-                                break;
-                            case "n":
-                            case "N":
-                                System.out.println("\n\tCheckout cancelled.");
-                                valid = true;
-                                break;
-                            default:
-                                System.out.println("\n\tWrong input");
-                                System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
-                        }
-                    }
+                    handle_checkout(console);
                     break;
                 default:
                     System.out.println("\tInvalid choice.");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+            }
+        }
+    }
+
+    private void handle_quantity_change(Console console, String action) {
+        int quantity = 0;
+        boolean validInput = false;
+
+        System.out.println("\n\tEnter 0 to Cancel item " + action);
+        System.out.print("\tEnter the product code to " + action + ": ");
+        String productCode = console.readLine();
+        if (productCode.equals("0")) {
+            return;
+        }
+
+        while (!validInput) {
+            try {
+                System.out.print("\tEnter quantity to " + action + ": ");
+                quantity = Integer.parseInt(console.readLine());
+                if (action.equals("increase")) {
+                    increase_item_quantity(productCode, quantity);
+                } else if (action.equals("deduct")) {
+                    deduct_item_quantity(productCode, quantity);
+                }
+                validInput = true;
+            } catch (NumberFormatException e) {
+                System.out.println("\tInvalid input. Please enter a valid number.");
+            }
+        }
+    }
+
+    private void handle_cart_clear(Console console) {
+        boolean valid = false;
+
+        while (!valid) {
+            System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
+            String confirmClear = console.readLine().trim().toUpperCase();
+
+            switch (confirmClear) {
+                case "Y":
+                    reset_cart();
+                    System.out.println("\n\tCart cleared.");
+                    valid = true;
+                    break;
+                case "N":
+                    System.out.println("\n\tCart clearing cancelled.");
+                    valid = true;
+                    break;
+                default:
+                    System.out.println("\n\tInvalid input. Please enter Y or N.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    console.readLine();
             }
         }
     }
 
 
+    private void handle_checkout(Console console) {
+        boolean valid = false;
+
+        while (!valid) {
+            System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
+            String confirmCheckout = console.readLine().trim().toUpperCase();
+
+            switch (confirmCheckout) {
+                case "Y":
+                    System.out.print("\n\tPress [E] to confirm checkout or [Any other key] to cancel: ");
+                    String exitChoice = console.readLine().trim().toUpperCase();
+
+                    if (exitChoice.equals("E")) {
+                        System.out.println("\n\tProcessing checkout...");
+                        save_cart_to_queue_csv();
+                        reset_cart();
+                        UserCustomer userCustomer = new UserCustomer();
+                        userCustomer.guest_customer_item_category();
+                        return;
+                    } else {
+                        System.out.println("\n\tCheckout cancelled.");
+                        valid = true;
+                    }
+                    break;
+                case "N":
+                    System.out.println("\n\tCheckout cancelled.");
+                    valid = true;
+                    break;
+                default:
+                    System.out.println("\n\tInvalid input. Please enter Y or N.");
+                    System.out.print("\t\tPress Enter key to continue.");
+                    console.readLine();
+            }
+        }
+    }
+
+
+
     public void registered_user_modify_menu_process(Customer customer, List<Product> cart) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         if (cart == null) {
@@ -353,7 +362,7 @@ public class OrderProcessor {
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             //pwedeng isang case lang and ang nasa scanf ay naka toupper, kung alin efficient
             switch (choice) {
@@ -364,14 +373,14 @@ public class OrderProcessor {
 
                     System.out.println("\tEnter 0 to Cancel item increase");
                     System.out.print("\tEnter the product code to increase: ");
-                    String codeToIncrease = scanf.nextLine();
+                    String codeToIncrease = console.readLine();
 
                     if (codeToIncrease.equals("0")) { break; }
 
                     while (!quantity_increase_valid_input) {
                         try {
                             System.out.print("\tEnter quantity to increase: ");
-                            quantityToIncrease = Integer.parseInt(scanf.nextLine());
+                            quantityToIncrease = Integer.parseInt(console.readLine());
                             increase_item_quantity(codeToIncrease, quantityToIncrease);
                             quantity_increase_valid_input = true; // Input is valid, exit the loop
                         } catch (NumberFormatException e) {
@@ -386,14 +395,14 @@ public class OrderProcessor {
 
                     System.out.println("\tEnter 0 to Cancel item deduction");
                     System.out.print("\tEnter product code to deduct: ");
-                    String codeToDeduct = scanf.nextLine();
+                    String codeToDeduct = console.readLine();
 
                     if (codeToDeduct.equals("0")) { break; }
 
                     while (!deduction_valid_input) {
                         try {
                             System.out.print("\tEnter quantity to deduct: ");
-                            quantityToDeduct = Integer.parseInt(scanf.nextLine());
+                            quantityToDeduct = Integer.parseInt(console.readLine());
                             deduct_item_quantity(codeToDeduct, quantityToDeduct);
                             deduction_valid_input = true; // Input is valid, exit the loop
                         } catch (NumberFormatException e) {
@@ -405,7 +414,7 @@ public class OrderProcessor {
                 case "r":
                     System.out.println("\tEnter 0 to Cancel item removal");
                     System.out.print("\tEnter product code to remove: ");
-                    String codeToRemove = scanf.nextLine();
+                    String codeToRemove = console.readLine();
                     if (codeToRemove.equals("0")) { break; }
                     remove_item(codeToRemove);  // Remove the item sa cart all quantity
                     break;
@@ -414,7 +423,7 @@ public class OrderProcessor {
                     boolean valid_to_clear = false;
                     while (!valid_to_clear){
                         System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
-                        String confirm_clear = scanf.nextLine().trim();
+                        String confirm_clear = console.readLine().trim();
 
                         switch (confirm_clear) {
                             case "y":
@@ -429,7 +438,8 @@ public class OrderProcessor {
                             default:
                                 System.out.println("\n\tWrong input");
                                 System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
+                                console.readLine();
+                                console.flush();
                         }
                     }
                     break;
@@ -443,7 +453,7 @@ public class OrderProcessor {
                 case "p":
                     while (true) {
                         System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
-                        String confirmInput = scanf.nextLine();
+                        String confirmInput = console.readLine();
 
                         if (confirmInput.equalsIgnoreCase("y")) {
                             self_checkout_or_queue_process(customer, cart);
@@ -453,21 +463,28 @@ public class OrderProcessor {
                         } else {
                             System.out.println("\n\tAn error has occurred.");
                             System.out.print("\t\tPress Enter key to continue.");
-                            scanf.nextLine(); //used for press any key to continue
+                            console.readLine();
+                            console.flush();
                         }
                     }
                     break;
                 default:
                     System.out.println("\n\tAn error has occurred.");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
     public void self_checkout_or_queue_process(Customer customer, List<Product> cart) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         while (true) {
                 OrderProcessor.cart = cart;
                 System.out.println("\t===========================================");
@@ -481,18 +498,19 @@ public class OrderProcessor {
                 System.out.println("\t|                                         |");
                 System.out.println("\t===========================================");
                 System.out.print  ("\tEnter choice: ");
-                String payment_choice = scanf.nextLine().trim();
+                String payment_choice = console.readLine().trim();
 
                 switch (payment_choice) {
                     case "0":
                         while (true) {
                             System.out.print("\n\tAre you sure you want to cancel checkout? (Y/N): ");
-                            String cancellation_confirmation = scanf.nextLine();
+                            String cancellation_confirmation = console.readLine();
 
                             if (cancellation_confirmation.equalsIgnoreCase("Y")) {
                                 System.out.println("\n\tCheckout cancelled.");
                                 System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
+                                console.readLine();
+                                console.flush();
                                 registered_user_modify_menu_process(customer, cart);
                                 return;
                             } else if (cancellation_confirmation.equalsIgnoreCase("N")) {
@@ -500,14 +518,15 @@ public class OrderProcessor {
                             } else {
                                 System.out.println("\n\tAn error has occurred.");
                                 System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
+                                console.readLine();
+                                console.flush();
                             }
                         }
                         break;
                     case "1":
                         while (true) {
                             System.out.print("\n\n\tAre you sure you want to queue? (Y/N): ");
-                            String queue_confirmation = scanf.nextLine();
+                            String queue_confirmation = console.readLine();
 
                             if (queue_confirmation.equalsIgnoreCase("Y")) {
                                 save_cart_to_queue_csv();
@@ -519,14 +538,15 @@ public class OrderProcessor {
                             } else {
                                 System.out.println("\n\tAn error has occurred.");
                                 System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
+                                console.readLine();
+                                console.flush();
                             }
                         }
                         break;
                     case "2":
                         while (true) {
                             System.out.print("\n\n\tAre you sure you want to self checkout? (Y/N): ");
-                            String self_checkout_confirmation = scanf.nextLine();
+                            String self_checkout_confirmation = console.readLine();
 
                             if (self_checkout_confirmation.equalsIgnoreCase("Y")) {
                                 SelfCheckout selfCheckout = new SelfCheckout(cart);
@@ -536,14 +556,16 @@ public class OrderProcessor {
                             } else {
                                 System.out.println("\n\tAn error has occurred.");
                                 System.out.print("\t\tPress Enter key to continue.");
-                                scanf.nextLine(); //used for press any key to continue
+                                console.readLine();
+                                console.flush();
                             }
                         }
                         break;
                     default:
                         System.out.println("\n\tAn error has occurred.");
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
+                        console.readLine();
+                        console.flush();
                 }
 
         }
@@ -551,7 +573,12 @@ public class OrderProcessor {
 
 
     public void increase_item_quantity(String product_code, int quantity) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() + quantity;
@@ -568,11 +595,17 @@ public class OrderProcessor {
         }
         System.out.println("\n\tProduct not found in the cart. Please add the item first.");
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
     public void deduct_item_quantity(String product_code, int quantity) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
                 int new_quantity = product.getStock() - quantity;
@@ -590,12 +623,18 @@ public class OrderProcessor {
         }
         System.out.println("\n\tProduct not found in the cart. Please add the item first.");
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     public void remove_item(String product_code) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         Product to_remove = null;
         for (Product product : cart) {
             if (product.getCode().equals(product_code.toUpperCase())) {
@@ -612,7 +651,8 @@ public class OrderProcessor {
         } else {
             System.out.println("\n\tProduct not found in the cart. Please add the item first.");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
         }
     }
 
@@ -631,7 +671,12 @@ public class OrderProcessor {
 
 
     public void save_cart_to_queue_csv() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         if (cart.isEmpty()) {
             System.out.println("\tCart is empty. Nothing to save.");
             return;
@@ -667,7 +712,8 @@ public class OrderProcessor {
             System.out.println("\t����������������������������������������������������������������������������������������\n\n");
 
             System.out.print("\n\tPress Enter key to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
 
             save_queue_number();
 

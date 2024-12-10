@@ -3,13 +3,6 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\accounts\customers.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\bar_soap.csv">
           <value>
             <Attribute>
@@ -80,7 +73,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\oopr-poe-data\accounts\customers.csv">
+        <entry key="\oopr-poe-data\products\coupons.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -94,7 +87,14 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\oopr-poe-data\queues\queue_number_01_09_12_2024.csv">
+        <entry key="\oopr-poe-data\queues\queue_number_02_10_12_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\oopr-poe-data\receipts\receipt_number_1_10_12_2024_Cashier_felix123.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -109,13 +109,6 @@
           </value>
         </entry>
         <entry key="\powder_detergents.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\products\coupons.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

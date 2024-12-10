@@ -8,11 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class Cashier {
-    private static final int MAX_ATTEMPTS = 3; // Maximum login attempts
     private final CashierProcess cashier_process; // Class-level instance variable for CashierProcess
     public final List<Cashier> cashiers = new ArrayList<>();
     private static int currentIDNumber;
@@ -123,65 +121,82 @@ public class Cashier {
 
 
     private void cashier_login() {
-        Scanner scanf = new Scanner(System.in);
-        int attempt_count = 0;
-        boolean login_successful = false;
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
+        final int MAX_ATTEMPTS = 3;
+        int attemptCount = 0;
+        boolean loginSuccessful = false;
 
         // Load cashiers from the CSV if not already loaded
         if (cashiers.isEmpty()) {
             load_cashiers_from_CSV();
 
-            //kung empty uli after file reading edi mag return sya sa menu
+            // If still empty after loading, exit to user type menu
             if (cashiers.isEmpty()) {
-                System.out.println("\tNo cashier loaded. Please apply to manager.");
+                System.out.println("\n\tNo cashier accounts found. Please contact the manager.");
                 System.out.print("\t\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
                 UserType.user_type_menu();
+                return;
             }
         }
 
-        while (attempt_count <= MAX_ATTEMPTS) {
+        while (attemptCount < MAX_ATTEMPTS) {
             System.out.println("\n\t===================================");
             System.out.println("\t|                                 |");
             System.out.println("\t|          Cashier Login          |");
             System.out.println("\t|                                 |");
             System.out.println("\t===================================");
             System.out.print("\n\tEnter Username: ");
-            String username = scanf.nextLine();
+            String username = console.readLine().trim();
 
             System.out.print("\tEnter Password: ");
-            String password = scanf.nextLine();
+            char[] passwordChars = console.readPassword();
+            String password = new String(passwordChars);
 
+            // Check if username and password match any cashier
             for (Cashier cashier : cashiers) {
                 if (cashier.getEmployee_username().equals(username) && cashier.getPassword().equals(password)) {
-                    System.out.println("\n\tLogin successful.");
-                    login_successful = true;
+                    System.out.println("\n\tLogin successful. Welcome, " + username + "!");
+                    loginSuccessful = true;
                     cashier_dashboard(cashier);
+                    return; // Exit after successful login
                 }
             }
 
-            if (login_successful) { break; }
-            else {
-                attempt_count++;
-                System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
+            // If no match found, increment attempts and provide feedback
+            attemptCount++;
+            System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
+
+            if (attemptCount < MAX_ATTEMPTS) {
+                System.out.print("\t\tPress Enter to try again...");
+                console.readLine();
+                console.flush();
             }
         }
 
-        if (!login_successful) {
+        // If maximum attempts are reached, show message and return to the main menu
+        if (!loginSuccessful) {
             System.out.println("\n\tMaximum login attempts reached. Please try again later.");
+            System.out.print("\t\tPress Enter to return to the main menu...");
+            console.readLine();
+            console.flush();
             UserType.user_type_menu();
         }
-
     }
 
 
-    private boolean handle_logout(Scanner scanf) {
+
+    private boolean handle_logout(Console console) {
         while (true) {
             System.out.println("\n\n\tAre you sure you want to Logout and go back to menu?\n");
             System.out.print("\t[Y] for Yes  [N] for No: ");
 
-            String exit_confirmation = scanf.next().trim();
-            scanf.nextLine();
+            String exit_confirmation = console.readLine().trim();
 
             if (exit_confirmation.equalsIgnoreCase("Y")) {
                 UserType.user_type_menu();
@@ -194,13 +209,19 @@ public class Cashier {
 
 
     public void create_new_cashier_employee() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         final int MAX_EMPLOYEES = 10;
 
         if (cashiers.size() >= MAX_EMPLOYEES) {
             System.out.println("\n\tCashier employees limit reached. Cannot register and hire new cashier.");
             System.out.print("\t\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -208,12 +229,13 @@ public class Cashier {
 
         Cashier new_cashier = new Cashier();
 
-        String cashier_username = get_valid_input(scanf, "\n\tEnter cashier user name ('exit' to cancel): ",
+        String cashier_username = get_valid_input(console, "\n\tEnter cashier user name ('exit' to cancel): ",
                 "\tUsername cannot be empty.", 4);
         if (cashier_username.equals("exit")) {
             System.out.println("\n\tRegistration Canceled.");
             System.out.print("\n\t\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -224,12 +246,13 @@ public class Cashier {
             for (Cashier cashier : cashiers) {
                 if (cashier.getEmployee_username().equals(cashier_username)) {
                     System.out.println("\n\tCashier already exists. Please choose a different username.");
-                    cashier_username = get_valid_input(scanf, "\n\tEnter cashier user name ('exit' to cancel): ",
+                    cashier_username = get_valid_input(console, "\n\tEnter cashier user name ('exit' to cancel): ",
                             "\tUsername cannot be empty.", 4);
                     if (cashier_username.equals("exit")) {
                         System.out.println("\n\tRegistration Canceled.");
                         System.out.print("\n\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         return;
                     }
                     cashier_username_not_exist = false;
@@ -239,24 +262,24 @@ public class Cashier {
         }
         new_cashier.setEmployee_username(cashier_username);
 
-        String cashier_first_name = get_valid_input(scanf, "\n\tEnter cashier first name: ",
+        String cashier_first_name = get_valid_input(console, "\n\tEnter cashier first name: ",
                 "\tFirst name must only contain letters.", 3);
         new_cashier.setEmployee_first_name(cashier_first_name);
 
-        String cashier_surname = get_valid_input(scanf, "\n\tEnter cashier surname: ",
+        String cashier_surname = get_valid_input(console, "\n\tEnter cashier surname: ",
                 "\tSurname must only contain letters.", 3);
         new_cashier.setEmployee_surname(cashier_surname);
 
         System.out.println("\n\tWelcome " + new_cashier.getEmployee_first_name() + " "
                 + new_cashier.getEmployee_surname());
 
-        String password = get_valid_password(scanf);
+        String password = get_valid_password(console);
         new_cashier.setPassword(password);
 
         String phoneNumber;
         while (true) {
             System.out.print("\n\tEnter Phone Number: ");
-            phoneNumber = scanf.nextLine();
+            phoneNumber = console.readLine();
             if (phoneNumber.matches("^09\\d{9}$")) {
                 break;
             } else {
@@ -284,7 +307,7 @@ public class Cashier {
             System.out.println("\tEnter (Y) if you are sure.");
             System.out.println("\tEnter (N) if you are not sure and return to HR Manager Dashboard.");
             System.out.print("\tEnter choice: ");
-            detail_confirmation = scanf.nextLine();
+            detail_confirmation = console.readLine();
 
             if (detail_confirmation.equalsIgnoreCase("y")) {
                 save_new_cashier_employee_to_csv(new_cashier);
@@ -294,57 +317,54 @@ public class Cashier {
             } else if (detail_confirmation.equalsIgnoreCase("n")) {
                 System.out.println("\n\tReturning to HR Management Menu");
                 System.out.println("\n\t\tPress enter to Continue");
-                scanf.nextLine();
+                console.readLine();
                 return;
             } else {
                 System.out.println("\n\tInvalid Input");
                 System.out.println("\n\t\tPress enter to Continue");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
         }
 
         System.out.print("\n\tCongratulations! Your registration was successful.  " + new_cashier.getEmployee_username() + ".\n\t\t\tPress Enter key to start exploring!\n");
-        scanf.nextLine(); // used for press any key to continue
+        console.readLine();
+        console.flush();
     }
 
 
-    private static String get_valid_input(Scanner scanf, String prompt, String errorMsg, int minLength) {
+    private static String get_valid_input(Console console, String prompt, String errorMsg, int minLength) {
         String input;
         while (true) {
-            System.out.print(prompt);
-            input = scanf.nextLine().trim();
+            input = console.readLine(prompt).trim();
             if (input.length() >= minLength) {
                 return input;
             }
-            System.out.println("\t" + errorMsg);
+            console.printf("\t%s%n", errorMsg);
         }
     }
 
 
-    private static String get_valid_password(Scanner scanf) {
+    private static String get_valid_password(Console console) {
         String password, confirmPassword;
         while (true) {
-            password = get_valid_input(scanf, "\n\tEnter password (min 8 characters): ",
+            password = get_valid_input(console, "\n\tEnter password (min 8 characters): ",
                     "\tPassword must be at least 8 characters long.", 8);
-
-            System.out.print("\tConfirm password: ");
-            confirmPassword = scanf.nextLine().trim();
-
+            confirmPassword = console.readLine("\tConfirm password: ").trim();
             if (password.equals(confirmPassword)) {
                 return password;
             }
-            System.out.println("\tPasswords do not match. Please try again.");
-            System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); // used for press any key to continue
+            console.printf("\tPasswords do not match. Please try again.%n");
         }
     }
 
 
     // Helper method to input hidden password pero dapat magiging ****
     //shortcut sa pag fill ups thanks sa AI
-    private String input_password(Scanner scanner, String prompt) {
+    private String input_password(Console console, String prompt) {
         System.out.print(prompt);
-        return scanner.nextLine();  // Simplified for Java, as hiding characters is more complex
+        char[] passwordChars = console.readPassword(); // Read password securely
+        return new String(passwordChars); // Convert char[] to String
     }
 
 
@@ -435,7 +455,12 @@ public class Cashier {
 
     //next development dapat pinapasa na username sa parameter as welcome sa employee
     private void cashier_dashboard(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         while (true) {
@@ -450,7 +475,7 @@ public class Cashier {
             System.out.println("\t|                                               |");
             System.out.println("\t================================================\n");
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "1":
@@ -460,7 +485,7 @@ public class Cashier {
                     cashier_account_menu_profile(cashier);
                     break;
                 case "0":
-                    boolean logout_confirmed = handle_logout(scanf);
+                    boolean logout_confirmed = handle_logout(console);
                     if (logout_confirmed) {
                         UserType.user_type_menu();
                         return;
@@ -469,7 +494,8 @@ public class Cashier {
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
                     break;
             }
         }
@@ -477,8 +503,12 @@ public class Cashier {
 
 
     public void selecting_queue_list_to_process(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
-        File directory = new File("oopr-poe-data/queues");
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+        File directory = new File("oopr-poe-data/queues/");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
         List<String> csvFiles = new ArrayList<>();
 
@@ -502,7 +532,7 @@ public class Cashier {
             while (true) {
                 System.out.print("\tEnter the number of the file to open: ");
                 try {
-                    String input = scanf.nextLine().trim();
+                    String input = console.readLine().trim();
                     int choice = Integer.parseInt(input);
 
                     if (choice >= 0 && choice <= csvFiles.size()) {
@@ -527,10 +557,11 @@ public class Cashier {
         } else {
             System.out.println("\tNo CSV files found.");
             System.out.println("\tNo Queue Order to process.");
+            System.out.println("\tReturning to Cashier Dashboard...");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine(); //used for press any key to continue
+            console.readLine();
+            console.flush();
 
-            System.out.println("\tReturning to Cashier Dashboard.");
             cashier_dashboard(cashier);
         }
     }
@@ -538,7 +569,11 @@ public class Cashier {
 
     public void cashier_process_choice(Cashier cashier) {
         System.out.flush();
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         String choice;
 
         while (true) {
@@ -554,7 +589,7 @@ public class Cashier {
             System.out.println("\t[0] Go back");
 
             System.out.print("\n\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "1":
@@ -568,7 +603,8 @@ public class Cashier {
                 case "3":
                     cashier_process.display_counter();
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
                     break;
                 case "0":
                     selecting_queue_list_to_process(cashier);
@@ -576,14 +612,20 @@ public class Cashier {
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
     // ung mga changes here hanggang sa arraylist lang so pag nag back ka hindi mag reflect un sa csv
     public void modify_counter_process(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         while (true) {
@@ -595,7 +637,7 @@ public class Cashier {
             System.out.println("\tProceed to Pay (P)");
             System.out.println("\tGo Back to Dashboard (B)");
             System.out.print("\n\tEnter choice: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "I":
@@ -605,14 +647,14 @@ public class Cashier {
 
                     System.out.println("\n\tEnter 0 to Cancel item increase");
                     System.out.print("\tEnter the product code to increase: ");
-                    String codeToIncrease = scanf.nextLine();
+                    String codeToIncrease = console.readLine();
 
                     if (codeToIncrease.equals("0")) { break; }
 
                     while (!quantity_increase_valid_input) {
                         try {
                             System.out.print("\tEnter quantity to increase: ");
-                            quantityToIncrease = Integer.parseInt(scanf.nextLine());
+                            quantityToIncrease = Integer.parseInt(console.readLine());
                             cashier_process.increase_item_quantity_counter(codeToIncrease, quantityToIncrease);
                             quantity_increase_valid_input = true; // Input is valid, exit the loop
                         } catch (NumberFormatException e) {
@@ -627,14 +669,14 @@ public class Cashier {
 
                     System.out.println("\tEnter 0 to Cancel item deduction");
                     System.out.print("\tEnter product code to deduct: ");
-                    String codeToDeduct = scanf.nextLine();
+                    String codeToDeduct = console.readLine();
 
                     if (codeToDeduct.equals("0")) { break; }
 
                     while (!deduction_valid_input) {
                         try {
                             System.out.print("\tEnter quantity to deduct: ");
-                            quantityToDeduct = Integer.parseInt(scanf.nextLine());
+                            quantityToDeduct = Integer.parseInt(console.readLine());
                             cashier_process.deduct_item_quantity_counter(codeToDeduct, quantityToDeduct);
                             deduction_valid_input = true; // Input is valid, exit the loop
                         } catch (NumberFormatException e) {
@@ -646,7 +688,7 @@ public class Cashier {
                 case "r":
                     System.out.println("\tEnter 0 to Cancel item removal");
                     System.out.print("\tEnter product code to remove: ");
-                    String codeToRemove = scanf.nextLine();
+                    String codeToRemove = console.readLine();
                     if (codeToRemove.equals("0")) { break; }
                     cashier_process.remove_item_counter(codeToRemove);  // Remove the item sa cart all quantity
                     break;
@@ -663,14 +705,20 @@ public class Cashier {
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
     public void cashier_account_menu_profile(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String choice;
 
         while (true) {
@@ -687,7 +735,7 @@ public class Cashier {
             System.out.println("\t|                                               |");
             System.out.println("\t=================================================\n");
             System.out.print("\n\tEnter Here: ");
-            choice = scanf.nextLine();
+            choice = console.readLine();
 
             switch (choice) {
                 case "0":
@@ -705,14 +753,20 @@ public class Cashier {
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
         }
     }
 
 
     public void view_cashier_receipts(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         File receiptDirectory = new File("oopr-poe-data/receipts");
         FilenameFilter filter = (dir, name) -> name.startsWith("receipt_number_") && name.endsWith("Cashier_" + cashier.getEmployee_username() + ".csv");
         File[] files = receiptDirectory.listFiles(filter);
@@ -738,7 +792,7 @@ public class Cashier {
             while (true) {
                 System.out.print("\n\tEnter the number of the file to open: ");
                 try {
-                    String input = scanf.nextLine().trim();
+                    String input = console.readLine().trim();
                     int choice = Integer.parseInt(input);
 
                     if (choice >= 0 && choice <= csvFiles.size()) {
@@ -751,12 +805,14 @@ public class Cashier {
                         System.out.println("\n\n\tYou selected: " + selectedFile);
                         Manager.read_transaction_history_from_csv(selectedFile);
                         System.out.print("\tPress Enter key to continue.");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         break;
                     } else {
                         System.out.println("\tInvalid choice! Please enter a number between 0 and " + csvFiles.size());
                         System.out.print("\t\tPress Enter key to continue.");
-                        scanf.nextLine(); //used for press any key to continue
+                        console.readLine();
+                        console.flush();
                     }
                     view_cashier_receipts(cashier);
                 } catch (NumberFormatException e) {
@@ -766,12 +822,18 @@ public class Cashier {
         } else {
             System.out.println("\tNo CSV files found.");
             System.out.print("\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
         }
     }
 
+
     public void display_cashier_account_details(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         load_cashiers_from_CSV();
 
@@ -791,19 +853,24 @@ public class Cashier {
                     cashier.getTotal_transaction_processed());
 
         System.out.print("\n\tPress Enter to continue...");
-        scanf.nextLine();
-
+        console.readLine();
+        console.flush();
     }
 
 
     public void view_employee_list() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
         load_cashiers_from_CSV();
 
         if (cashiers.isEmpty()) {
             System.out.println("\n\tNo employees found in the system.");
             System.out.print("\t\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -825,16 +892,23 @@ public class Cashier {
         }
 
         System.out.print("\n\tPress Enter to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
+
     public void delete_employee() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         if (cashiers.isEmpty()) {
             System.out.println("\n\tNo employees found in the system.");
             System.out.print("\t\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -842,12 +916,13 @@ public class Cashier {
             view_employee_list();
             System.out.print("\n\tEnter employee ID to delete (0 to cancel): ");
             try {
-                int employeeId = Integer.parseInt(scanf.nextLine());
+                int employeeId = Integer.parseInt(console.readLine());
 
                 if (employeeId == 0) {
                     System.out.println("\n\tDeletion cancelled.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     return;
                 }
 
@@ -862,7 +937,8 @@ public class Cashier {
                 if (employeeToDelete == null) {
                     System.out.println("\n\tEmployee ID not found. Please try again.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     continue;
                 }
 
@@ -875,30 +951,34 @@ public class Cashier {
                     System.out.println("\tTotal Transaction Processed: " + employeeToDelete.getTotal_transaction_processed());
                     System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
 
-                    String confirmation = scanf.nextLine();
+                    String confirmation = console.readLine();
                     if (confirmation.equalsIgnoreCase("Y")) {
                         cashiers.remove(employeeToDelete);
                         save_all_cashiers_to_csv(); // Save updated list to CSV
                         System.out.println("\n\tEmployee successfully deleted.");
                         System.out.print("\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         return;
                     } else if (confirmation.equalsIgnoreCase("N")) {
                         System.out.println("\n\tDeletion cancelled.");
                         System.out.print("\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                         return;
                     } else {
                         System.out.println("\n\tInvalid Input");
                         System.out.print("\t\tPress Enter to continue...");
-                        scanf.nextLine();
+                        console.readLine();
+                        console.flush();
                     }
                 }
 
             } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
                 System.out.print("\t\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
         }
     }
@@ -906,12 +986,17 @@ public class Cashier {
 
     // dito ay id lang need ng manager para palitan password mo
     public void manager_reset_employee_password() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         if (cashiers.isEmpty()) {
             System.out.println("\n\tNo employees found in the system.");
             System.out.print("\t\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -919,12 +1004,13 @@ public class Cashier {
             view_employee_list();
             System.out.print("\n\tEnter employee ID to reset password (0 to cancel): ");
             try {
-                int employeeId = Integer.parseInt(scanf.nextLine());
+                int employeeId = Integer.parseInt(console.readLine());
 
                 if (employeeId == 0) {
                     System.out.println("\n\tPassword reset cancelled.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     return;
                 }
 
@@ -940,7 +1026,8 @@ public class Cashier {
                 if (employeeToReset == null) {
                     System.out.println("\n\tEmployee ID not found. Please try again.");
                     System.out.print("\n\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     continue;
                 }
 
@@ -951,8 +1038,8 @@ public class Cashier {
                 String newPassword;
                 String confirmPassword;
                 do {
-                    newPassword = input_password(scanf, "\n\tEnter new password: ");
-                    confirmPassword = input_password(scanf, "\tConfirm new password: ");
+                    newPassword = input_password(console, "\n\tEnter new password: ");
+                    confirmPassword = input_password(console, "\tConfirm new password: ");
 
                     if (!newPassword.equals(confirmPassword)) {
                         System.out.println("\n\tPasswords do not match. Please try again.");
@@ -964,13 +1051,15 @@ public class Cashier {
 
                 System.out.println("\n\tPassword successfully reset.");
                 System.out.print("\n\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
                 return;
 
             } catch (NumberFormatException e) {
                 System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
                 System.out.print("\t\tPress Enter to continue...");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
         }
     }
@@ -1001,63 +1090,71 @@ public class Cashier {
 
     // pag personal mismo na cashier ung magpapalit ng password
     private void cashier_employee_change_password(Cashier cashier) {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         String new_password;
         String confirm_password = "";
         int attemptCount = 0;
         final int MAX_ATTEMPTS = 3;
 
         while (attemptCount < MAX_ATTEMPTS) {
-
             System.out.print("\n\tAre you sure changing password (Y/N): ");
-            String change_password_confirmation = scanf.nextLine().trim();
+            String change_password_confirmation = console.readLine().trim();
 
             if (change_password_confirmation.equalsIgnoreCase("Y")) {
                 System.out.print("\tEnter your current password: ");
-                String current_password = scanf.nextLine();
+                String current_password = new String(console.readPassword());
 
                 if (current_password.equals(cashier.getPassword())) {
                     System.out.print("\tSet your new password: ");
-                    new_password = scanf.nextLine();
+                    new_password = new String(console.readPassword());
 
                     while (!new_password.equals(confirm_password)) {
                         System.out.print("\tConfirm the new password: ");
-                        confirm_password = scanf.nextLine();
+                        confirm_password = new String(console.readPassword());
                         if (!new_password.equals(confirm_password)) {
                             System.out.println("\n\tPasswords do not match. Please try again.");
                         }
                     }
+
                     cashier.setPassword(new_password);
                     save_all_cashiers_to_csv();
                     System.out.println("\n\tThe password is successfully changed.");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                     cashier_account_menu_profile(cashier);
                     break;
                 } else {
                     attemptCount++;
                     System.out.println("\n\tIncorrect current password. Attempts left: " + (MAX_ATTEMPTS - attemptCount));
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                 }
-
             } else if (change_password_confirmation.equalsIgnoreCase("N")) {
                 cashier_account_menu_profile(cashier);
                 return;
             } else {
+                System.out.println("\tInvalid input. Please enter Y or N.");
                 System.out.print("\t\tPress Enter key to continue.");
-                scanf.nextLine();
+                console.readLine();
+                console.flush();
             }
-
         }
 
-        // kapag sumosobra kana tigil ka na
         if (attemptCount == MAX_ATTEMPTS) {
             System.out.println("\n\tMaximum attempts reached. Password change failed.\n");
             System.out.print("\t\tPress Enter key to continue.");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
         }
     }
+
 
 
 }

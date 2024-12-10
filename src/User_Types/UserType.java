@@ -3,11 +3,15 @@ package User_Types;
 import Shopper.*;
 import Employee.*;
 
-import java.util.Scanner;
+import java.io.Console;
 
 public class UserType {
     public static void user_type_menu() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         while (true) {
             String storeName = ManagerCredentials.getStoreName();
@@ -24,8 +28,7 @@ public class UserType {
             System.out.println("\n\t[0] Exit\n");
             System.out.print("\tType here: ");
 
-            String user_type_choice = scanf.next();
-            scanf.nextLine();
+            String user_type_choice = console.readLine().trim();
 
             switch (user_type_choice) {
                 case "1":
@@ -49,7 +52,7 @@ public class UserType {
                         System.out.println("\n\n\tAre you sure you want to close the program?\n");
                         System.out.print("\t[Y] for Yes  [N] for No: ");
 
-                        String exit_confirmation = scanf.nextLine().trim();
+                        String exit_confirmation = console.readLine().trim();
 
                         if (exit_confirmation.equalsIgnoreCase("Y")) {
                             System.out.println("\t============================================\n");
@@ -57,21 +60,19 @@ public class UserType {
                             System.out.println("\t|     Thank You for Using our Program!     |\n");
                             System.out.println("\t|                                          |\n");
                             System.out.println("\t============================================\n");
-                            scanf.close();
                             System.exit(0);
                         } else if (exit_confirmation.equalsIgnoreCase("N")) {
                             user_type_menu();
                             break;
                         } else {
                             System.out.println("\n\tAn error has occurred");
-                            System.out.print("\t\tPress Enter key to continue.");
-                            scanf.nextLine(); //used for press any key to continue
                         }
                     }
                 default:
                     System.out.println("\n\tAn error has occurred");
                     System.out.print("\t\tPress Enter key to continue.");
-                    scanf.nextLine(); //used for press any key to continue
+                    console.readLine();
+                    console.flush();
             }
             System.out.println();
         }

@@ -16,7 +16,11 @@ public class CouponManager {
 
 
     public void register_coupon() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
 
         Coupon newCoupon = new Coupon();
         String discountCode = "";
@@ -31,7 +35,7 @@ public class CouponManager {
         while (coupon_exist) {
             System.out.print("\n\tEnter 'exit' to Cancel");
             System.out.print("\tEnter New Discount Code (4 letters followed by 4 digits): ");
-            discountCode = scanf.nextLine();
+            discountCode = console.readLine();
 
             if (discountCode.equals("exit")){ return; }
 
@@ -56,7 +60,7 @@ public class CouponManager {
 
         do {
             System.out.print("\tEnter Discount Type (percentage/off): ");
-            discountType = scanf.nextLine().trim().toLowerCase();
+            discountType = console.readLine().trim().toLowerCase();
             if (!discountType.equals("percentage") && !discountType.equals("off")) {
                 System.out.println("\tInvalid discount type. Must be 'percentage' or 'off'.");
             }
@@ -67,7 +71,7 @@ public class CouponManager {
         do {
             System.out.print("\tEnter Discount Value: ");
             try {
-                discountValue = Double.parseDouble(scanf.nextLine());
+                discountValue = Double.parseDouble(console.readLine());
                 if (discountValue <= 0) {
                     System.out.println("\tDiscount value must be positive.");
                 }
@@ -85,7 +89,8 @@ public class CouponManager {
 
         System.out.println("\tCoupon " + discountCode + " registered successfully.");
         System.out.print("\t\tPress Enter key to continue.");
-        scanf.nextLine(); //used for press any key to continue
+        console.readLine();
+        console.flush();
     }
 
 
@@ -188,13 +193,19 @@ public class CouponManager {
 
 
     public void view_employee_list() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         loadCouponsFromFile();
 
         if (availableCoupons.isEmpty()) {
             System.out.println("\n\tNo Coupons found in the system.");
             System.out.print("\n\tPress Enter to continue...");
-            scanf.nextLine();
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -214,16 +225,22 @@ public class CouponManager {
         }
 
         System.out.print("\n\tPress Enter to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     public void delete_coupon() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         view_employee_list();
         System.out.println("\n\t=== Remove Coupon Code ===");
         System.out.print("\n\tEnter coupon code to remove: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Coupon couponToRemove = null;
         for (Coupon coupon : availableCoupons) {
@@ -239,7 +256,7 @@ public class CouponManager {
             String confirm;
             while (true) {
                 System.out.print("\tAre you sure you want to remove this product? (Y/N): ");
-                confirm = scanf.nextLine();
+                confirm = console.readLine();
                 if (confirm.equalsIgnoreCase("Y") || confirm.equalsIgnoreCase("N")) {
                     break;
                 } else {
@@ -257,16 +274,22 @@ public class CouponManager {
         }
 
         System.out.print("\n\tPress Enter to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     public void restock_coupon_quantity() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         view_employee_list();
         System.out.println("\n\t=== Restock Coupon Code ===");
         System.out.print("\n\tEnter coupon code to restock: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Coupon couponToRestock = null;
         for (Coupon coupon : availableCoupons) {
@@ -283,7 +306,7 @@ public class CouponManager {
             while (true) {
                 try {
                     System.out.print("\tEnter additional stock quantity: ");
-                    additionalStock = Integer.parseInt(scanf.nextLine());
+                    additionalStock = Integer.parseInt(console.readLine());
                     if (additionalStock <= 0) {
                         System.out.println("\tPlease enter a positive number!");
                         continue;
@@ -292,7 +315,8 @@ public class CouponManager {
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input. Please enter a valid number.");
                     System.out.print("\t\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                 }
             }
 
@@ -304,16 +328,22 @@ public class CouponManager {
         }
 
         System.out.print("\t\tPress Enter key to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     public void decrease_coupon_quantity() {
-        Scanner scanf = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
         view_employee_list();
         System.out.println("\n\t=== Decrease Coupon Code ===");
         System.out.print("\n\tEnter coupon code to decrease: ");
-        String code = scanf.nextLine().toUpperCase();
+        String code = console.readLine().toUpperCase();
 
         Coupon couponToRestock = null;
         for (Coupon coupon : availableCoupons) {
@@ -330,7 +360,7 @@ public class CouponManager {
             while (true) {
                 try {
                     System.out.print("\tEnter reduction stock quantity: ");
-                    additionalStock = Integer.parseInt(scanf.nextLine());
+                    additionalStock = Integer.parseInt(console.readLine());
                     if (additionalStock <= 0) {
                         System.out.println("\tPlease enter a positive number!");
                         continue;
@@ -339,7 +369,8 @@ public class CouponManager {
                 } catch (NumberFormatException e) {
                     System.out.println("\tInvalid input. Please enter a valid number.");
                     System.out.print("\t\tPress Enter to continue...");
-                    scanf.nextLine();
+                    console.readLine();
+                    console.flush();
                 }
             }
             couponToRestock.update_quantity(-additionalStock);
@@ -349,34 +380,31 @@ public class CouponManager {
         } else { System.out.println("\n\tProduct not found!"); }
 
         System.out.print("\t\tPress Enter key to continue...");
-        scanf.nextLine();
+        console.readLine();
+        console.flush();
     }
 
 
     public void show_random_Coupon() {
-        // Create a list to hold valid coupons (those with quantity > 0)
         List<Coupon> validCoupons = new ArrayList<>();
 
-        // Add only coupons with quantity > 0 to validCoupons list
+        // Add only coupons if available not 0
         for (Coupon coupon : availableCoupons) {
             if (coupon.getCouponQuantity() > 0) {
                 validCoupons.add(coupon);
             }
         }
 
-        // If there are no valid coupons, return
         if (validCoupons.isEmpty()) {
             System.out.println("\n\tNo valid coupons available to display.");
             return;
         }
 
-        // Select a random coupon from the valid coupons
         Random random = new Random();
         int randomIndex = random.nextInt(validCoupons.size());
 
         Coupon randomCoupon = validCoupons.get(randomIndex);
 
-        // Display the coupon details
         System.out.println("\n\t=== Special Coupon Advertisement ===");
         System.out.printf("\tDiscount Code: %s%n", randomCoupon.getDiscountCode());
         System.out.printf("\tDiscount Value: %.2f%n", randomCoupon.getDiscountValue());
