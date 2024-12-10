@@ -80,6 +80,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\oopr-poe-data\products\sales_report.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\oopr-poe-data\queues\queue_number_02_10_12_2024.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\oopr-poe-data\receipts\receipt_number_1_10_12_2024_Cashier_felix123.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\powder_detergents.csv">
           <value>
             <Attribute>
