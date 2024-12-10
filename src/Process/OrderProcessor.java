@@ -154,7 +154,7 @@ public class OrderProcessor {
 
 
     public static void display_cart() {
-        System.out.println("\n\tYour Cart:");
+        System.out.println("\n\n\n\tYour Cart:");
         if (cart.isEmpty()) {
             System.out.println("\tYour cart is empty.");
         } else {
