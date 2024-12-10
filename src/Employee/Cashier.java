@@ -478,7 +478,7 @@ public class Cashier {
 
     public void selecting_queue_list_to_process(Cashier cashier) {
         Scanner scanf = new Scanner(System.in);
-        File directory = new File("queues");
+        File directory = new File("oopr-poe-data/queues");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().startsWith("queue_number_"));
         List<String> csvFiles = new ArrayList<>();
 
