@@ -584,7 +584,7 @@ public class Cashier {
             System.out.println("\t=======================================\n");
 
             System.out.println("\n\t[1] Proceed to pay");
-            System.out.println("\t[2] Modify Counter Items (under development)");
+            System.out.println("\t[2] Modify Counter Items");
             System.out.println("\t[3] Preview items");
             System.out.println("\t[0] Go back");
 
