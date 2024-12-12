@@ -47,7 +47,7 @@ public class SelfCheckout {
 
     int calculate_total_items() {
         int total = 0;
-        for (Product product : cart) {
+        for (Product product : this.cart) {
             total += product.getStock();
         }
         return total;
@@ -56,7 +56,7 @@ public class SelfCheckout {
 
     private double calculate_total_price() {
         double total = 0;
-        for (Product product : cart) {
+        for (Product product : this.cart) {
             total += product.getPrice() * product.getStock();
         }
         return total;
@@ -174,6 +174,7 @@ public class SelfCheckout {
                 }
 
                 customer.setBalance(customer.getBalance() - totalPrice);
+                userCustomer.saveAllCustomersToCSV();
                 updateCustomerDetails(customer, totalPrice);
                 return;
             } else {
@@ -200,6 +201,8 @@ public class SelfCheckout {
         customer.setTotal_spent(total_spent);
 
         customer.setTransaction(customer.getTransaction() + 1);
+
+
 
         cashierProcess.update_sales_report(cart);
         cashierProcess.update_all_stocks(cart);
@@ -244,13 +247,14 @@ public class SelfCheckout {
 
         System.out.println("\n\t-----------------------------");
         System.out.printf("\tTotal Items: %d\n", calculate_total_items());
+        System.out.printf("\tVAT: %.2f\n", calculate_total_price() * 0.12);
         System.out.printf("\tTotal Amount: %.2f\n", totalPrice);
         System.out.printf("\tNew Balance: %.2f\n", customer.getBalance());
         System.out.printf("\tCurrent Reward Points: %.0f\n", customer.getRewardPoint());
         System.out.println("\t-----------------------------");
         System.out.println("\tThank you for your purchase!");
 
-        cashierProcess.self_checkout_save_receipt_to_csv(this.cart, totalPrice, totalPrice, customer);
+        cashierProcess.self_checkout_save_receipt_to_csv(this.cart, calculate_total_items(), calculate_total_price(), totalPrice, customer);
     }
 
 }
