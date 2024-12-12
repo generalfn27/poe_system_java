@@ -1055,6 +1055,10 @@ public class UserCustomer {
         }
 
         if (customers.isEmpty()) {
+            System.out.println("\n\tNo Customer found in the system.");
+            System.out.print("\t\tPress Enter to continue...");
+            console.readLine();
+            console.flush();
             return;
         }
 
@@ -1140,6 +1144,10 @@ public class UserCustomer {
         }
 
         if (customers.isEmpty()) {
+            System.out.println("\n\tNo Customer found in the system.");
+            System.out.print("\t\tPress Enter to continue...");
+            console.readLine();
+            console.flush();
             return;
         }
 
