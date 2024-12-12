@@ -233,6 +233,7 @@ public class CashierProcess extends OrderProcessor {
 
         System.out.println("\t----------------------------------------");
         System.out.printf("\n\tTotal Items: %d\n", calculate_total_items());
+        System.out.printf("\tVAT: %.2f\n", calculate_total_price() * 0.12);
         System.out.printf("\tTotal Price: %.2f\n", calculate_total_price());
         //gawan to ng tax vat 12% need lng ng isang method para taga display
 
@@ -288,7 +289,7 @@ public class CashierProcess extends OrderProcessor {
     }
 
 
-    public void self_checkout_save_receipt_to_csv(List<Product> counter, double totalPrice, double payment, Customer customer) {
+    public void self_checkout_save_receipt_to_csv(List<Product> counter, int totalItems, double totalPrice, double payment, Customer customer) {
         if (counter.isEmpty()) {
             System.out.println("No items in the counter. Nothing to save.");
             return;
@@ -310,8 +311,8 @@ public class CashierProcess extends OrderProcessor {
                         product.getPrice());
             }
 
-            writer.printf("%nTotal Items: ,%d%n", calculate_total_items());
-            writer.printf("Total Price: ,%.2f%n", calculate_total_price());
+            writer.printf("%nTotal Items: ,%d%n", totalItems);
+            writer.printf("Total Price: ,%.2f%n", totalPrice);
             writer.printf("Payment: ,%.2f%n", payment);
 
             if (payment > totalPrice) {
