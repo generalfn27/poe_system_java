@@ -202,7 +202,7 @@ public class SelfCheckout {
 
         customer.setTransaction(customer.getTransaction() + 1);
 
-
+        userCustomer.saveAllCustomersToCSV();
 
         cashierProcess.update_sales_report(cart);
         cashierProcess.update_all_stocks(cart);
@@ -213,7 +213,6 @@ public class SelfCheckout {
         console.readLine(); // Wait for the user to press Enter
         console.flush();
 
-        userCustomer.saveAllCustomersToCSV();
 
         cart.clear();
 
