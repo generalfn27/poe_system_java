@@ -359,26 +359,25 @@ public class UserCustomer {
 
     // eto sinisave naman lahat nito after every changes, rewriting data kumbaga
     public void saveAllCustomersToCSV() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("oopr-poe-data/accounts/customers.csv"))) {
+        File file = new File("oopr-poe-data/accounts/customers.csv"); // Simple file in project root
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent\n");
             for (Customer customer : customers) {
-                // Debug: Print customer information that will be saved
-                //System.out.println("\tSaving customer: " + customer.getUsername() + " with balance: " + customer.getBalance());
-
                 writer.write(customer.getUsername() + "," +
-                                customer.getPassword() + "," +
-                                customer.getPhoneNumber() + "," +
-                                customer.getPaymentMethod() + "," +
-                                customer.getBalance() + "," +
-                                customer.getPinCode() + "," +
-                                customer.getTransaction() + "," +
-                                customer.getRewardPoint() + "," +
-                                customer.getTotal_spent());
-                                writer.newLine();
+                        customer.getPassword() + "," +
+                        customer.getPhoneNumber() + "," +
+                        customer.getPaymentMethod() + "," +
+                        customer.getBalance() + "," +
+                        customer.getPinCode() + "," +
+                        customer.getTransaction() + "," +
+                        customer.getRewardPoint() + "," +
+                        customer.getTotal_spent());
+                writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
         } catch (IOException e) {
             System.out.println("\tError saving customer data: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -582,8 +581,7 @@ public class UserCustomer {
                     selected_products = BrowseProduct.browse_detergents(); // Browse detergents
                     break;
                 case "9":
-                    add_funds(customer);
-                    registered_user_customer_item_category(username, customer, existing_cart);
+                    add_funds(customer, existing_cart);
                     break;
                 case "10":
                     display_purchase_history_menu(customer);
@@ -636,7 +634,7 @@ public class UserCustomer {
     }
 
 
-    private void add_funds(Customer customer) {
+    private void add_funds(Customer customer, List<Product> existing_cart) {
         Console console = System.console();
         if (console == null) {
             System.err.println("No console available. Run this program in a terminal.");
@@ -703,6 +701,8 @@ public class UserCustomer {
                     System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
                     System.out.print("\tPress Enter key to continue.");
                     console.readLine();
+                    console.flush();
+                    registered_user_customer_item_category(customer.getUsername(), customer, existing_cart);
                 }
             }
     }
