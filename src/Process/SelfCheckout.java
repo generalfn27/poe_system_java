@@ -192,26 +192,18 @@ public class SelfCheckout {
             return;
         }
 
-        System.out.println("DEBUG: Before update");
-        System.out.println("Current Balance: " + customer.getBalance());
-        System.out.println("Current Reward Points: " + customer.getRewardPoint());
-        System.out.println("Current Total Spent: " + customer.getTotal_spent());
-        System.out.println("Current Transactions: " + customer.getTransaction());
-
-        customer.setBalance(customer.getBalance() - totalPrice);
-        int point_reward = (int) ((totalPrice / 50) + customer.getRewardPoint());
-        customer.setRewardPoint(point_reward);
-        double total_spent = customer.getTotal_spent() + totalPrice;
-        customer.setTotal_spent(total_spent);
-        customer.setTransaction(customer.getTransaction() + 1);
-
+        for (Customer existingCustomer : userCustomer.customers) {
+            if (existingCustomer.getUsername().equals(customer.getUsername())) {
+                existingCustomer.setBalance(customer.getBalance() - totalPrice);
+                int point_reward = (int) ((totalPrice / 50) + customer.getRewardPoint());
+                existingCustomer.setRewardPoint(point_reward);
+                double total_spent = customer.getTotal_spent() + totalPrice;
+                existingCustomer.setTotal_spent(total_spent);
+                existingCustomer.setTransaction(customer.getTransaction() + 1);
+                break;
+            }
+        }
         userCustomer.saveAllCustomersToCSV();
-
-        System.out.println("\nDEBUG: After update");
-        System.out.println("New Balance: " + customer.getBalance());
-        System.out.println("New Reward Points: " + customer.getRewardPoint());
-        System.out.println("New Total Spent: " + customer.getTotal_spent());
-        System.out.println("New Transactions: " + customer.getTransaction());
 
         cashierProcess.update_sales_report(cart);
         cashierProcess.update_all_stocks(cart);
@@ -222,15 +214,7 @@ public class SelfCheckout {
         console.readLine(); // Wait for the user to press Enter
         console.flush();
 
-
         cart.clear();
-
-        /* System.out.printf("\tFunds deducted successfully. New balance: %.2f\n", customer.getBalance());
-        System.out.printf("\tTotal cashback reward point: %.0f\n", customer.getRewardPoint());
-        System.out.printf("\tTotal spent: %.2f\n", customer.getTotal_spent());
-        System.out.print("\t\tPress Enter key to continue.");
-        console.readLine();
-        console.flush();*/
 
         CouponManager couponManager = new CouponManager();
         couponManager.show_random_Coupon();

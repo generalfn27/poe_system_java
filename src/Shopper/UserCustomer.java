@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserCustomer {
-    private final List<Customer> customers = new ArrayList<>();
+    public final List<Customer> customers = new ArrayList<>();
     public CouponManager couponManager;
 
     public UserCustomer() {
