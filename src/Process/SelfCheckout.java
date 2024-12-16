@@ -122,8 +122,8 @@ public class SelfCheckout {
 
             double discountedPrice = coupon_manager.apply_coupon(couponCode, totalPrice);
 
-            if (discountedPrice == -1) { // Invalid code or coupon exhausted
-                System.out.println("\n\tInvalid coupon or coupon has been exhausted.");
+            if (discountedPrice == -1) { // Invalid code or no remaining use
+                System.out.println("\n\tInvalid coupon or Coupon has no remaining uses.");
 
                 while (true) {
                     System.out.println("\tWould you like to try another coupon?");
