@@ -23,6 +23,7 @@ public class Cashier {
     private String phone_number;
     private String hired_date;
     private int total_transaction_processed;
+    private String account_status;
 
     public int getEmployee_id() {
         return employee_id;
@@ -76,7 +77,6 @@ public class Cashier {
         this.phone_number = phone_number;
     }
 
-
     public String getHired_date(){
         return hired_date;
     }
@@ -93,10 +93,18 @@ public class Cashier {
         this.total_transaction_processed = total_transaction_processed;
     }
 
+    public String getAccount_status() {
+        return account_status;
+    }
+
+    public void setAccount_status(String account_status) {
+        this.account_status = account_status;
+    }
+
 
     // Add a private constructor for creating Cashier objects from CSV
     private Cashier(int id, String username, String firstName, String surname,
-                    String password, String phone, String hireDate, int transactions) {
+                    String password, String phone, String hireDate, int transactions, String account_status) {
         this.employee_id = id;
         this.employee_username = username;
         this.employee_first_name = firstName;
@@ -105,6 +113,7 @@ public class Cashier {
         this.phone_number = phone;
         this.hired_date = hireDate;
         this.total_transaction_processed = transactions;
+        this.account_status = account_status;
         this.cashier_process = null; // Not needed for data objects
     }
 
@@ -292,6 +301,7 @@ public class Cashier {
         String formattedDate = dateFormat.format(new Date());
         new_cashier.setHired_date(formattedDate);
         new_cashier.setTotal_transaction_processed(0);
+        new_cashier.setAccount_status("active");
 
         currentIDNumber++;
         new_cashier.setEmployee_id(currentIDNumber);
@@ -400,7 +410,7 @@ public class Cashier {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
                 writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname," +
-                        "password,phone_number,hired_date,total_transaction_processed\n");
+                        "password,phone_number,hired_date,total_transaction_processed,status\n");
             }
             //Write cashier employee data
             writer.append(String.valueOf(cashier.getEmployee_id())).append(",");
@@ -410,7 +420,8 @@ public class Cashier {
             writer.append(cashier.getPassword()).append(",");
             writer.append(cashier.getPhone_number()).append(",");
             writer.append(cashier.getHired_date()).append(",");
-            writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append("\n");
+            writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append(",");
+            writer.append(cashier.getAccount_status()).append("\n");
 
         } catch (IOException e) {
             System.err.println("Error writing new cashier employee data to file: " + e.getMessage());
@@ -429,7 +440,7 @@ public class Cashier {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 8) {
+                if (data.length == 9) {
                     // Use the private constructor to create Cashier objects
                     Cashier cashier = new Cashier(
                             Integer.parseInt(data[0]),  // id
@@ -439,7 +450,8 @@ public class Cashier {
                             data[4],                    // password
                             data[5],                    // phone
                             data[6],                    // hireDate
-                            Integer.parseInt(data[7])   // transactions
+                            Integer.parseInt(data[7]),  // transactions
+                            data[8]                     //account status
                     );
                     cashiers.add(cashier);
                 }
@@ -451,6 +463,29 @@ public class Cashier {
         }
     }
 
+
+    // Helper method to save all cashiers to CSV after modifications
+    private void save_all_cashiers_to_csv() {
+        try (FileWriter writer = new FileWriter("oopr-poe-data/accounts/cashier_employees.csv")) {
+
+            writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname," +
+                    "password,phone_number,hired_date,total_transaction_processed,status\n");
+
+            for (Cashier cashier : cashiers) {
+                writer.append(String.valueOf(cashier.getEmployee_id())).append(",");
+                writer.append(cashier.getEmployee_username()).append(",");
+                writer.append(cashier.getEmployee_first_name()).append(",");
+                writer.append(cashier.getEmployee_surname()).append(",");
+                writer.append(cashier.getPassword()).append(",");
+                writer.append(cashier.getPhone_number()).append(",");
+                writer.append(cashier.getHired_date()).append(",");
+                writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append(",");
+                writer.append(cashier.getAccount_status()).append("\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving cashier employees data to file: " + e.getMessage());
+        }
+    }
 
 
     //next development dapat pinapasa na username sa parameter as welcome sa employee
@@ -897,7 +932,7 @@ public class Cashier {
     }
 
 
-    public void delete_employee() {
+    public void deactivate_employee() {
         Console console = System.console();
         if (console == null) {
             System.err.println("No console available. Run this program in a terminal.");
@@ -914,27 +949,27 @@ public class Cashier {
 
         while (true) {
             view_employee_list();
-            System.out.print("\n\tEnter employee ID to delete (0 to cancel): ");
+            System.out.print("\n\tEnter employee ID to deactivate (0 to cancel): ");
             try {
                 int employeeId = Integer.parseInt(console.readLine());
 
                 if (employeeId == 0) {
-                    System.out.println("\n\tDeletion cancelled.");
+                    System.out.println("\n\tDeactivation cancelled.");
                     System.out.print("\n\tPress Enter to continue...");
                     console.readLine();
                     console.flush();
                     return;
                 }
 
-                Cashier employeeToDelete = null;
+                Cashier employeeToDeactivate = null;
                 for (Cashier cashier : cashiers) {
                     if (cashier.getEmployee_id() == employeeId) {
-                        employeeToDelete = cashier;
+                        employeeToDeactivate = cashier;
                         break;
                     }
                 }
 
-                if (employeeToDelete == null) {
+                if (employeeToDeactivate == null) {
                     System.out.println("\n\tEmployee ID not found. Please try again.");
                     System.out.print("\n\tPress Enter to continue...");
                     console.readLine();
@@ -943,25 +978,112 @@ public class Cashier {
                 }
 
                 while (true) {
-                    System.out.println("\n\tAre you sure you want to delete employee:");
-                    System.out.println("\tID: " + employeeToDelete.getEmployee_id());
-                    System.out.println("\tName: " + employeeToDelete.getEmployee_full_name());
-                    System.out.println("\tPhone Number: " + employeeToDelete.getPhone_number());
-                    System.out.println("\tHired Date: " + employeeToDelete.getHired_date());
-                    System.out.println("\tTotal Transaction Processed: " + employeeToDelete.getTotal_transaction_processed());
+                    System.out.println("\n\tAre you sure you want to deactivate employee:");
+                    System.out.println("\tID: " + employeeToDeactivate.getEmployee_id());
+                    System.out.println("\tName: " + employeeToDeactivate.getEmployee_full_name());
+                    System.out.println("\tPhone Number: " + employeeToDeactivate.getPhone_number());
+                    System.out.println("\tHired Date: " + employeeToDeactivate.getHired_date());
+                    System.out.println("\tTotal Transaction Processed: " + employeeToDeactivate.getTotal_transaction_processed());
                     System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
 
                     String confirmation = console.readLine();
                     if (confirmation.equalsIgnoreCase("Y")) {
-                        cashiers.remove(employeeToDelete);
+                        employeeToDeactivate.setAccount_status("inactive");
                         save_all_cashiers_to_csv(); // Save updated list to CSV
-                        System.out.println("\n\tEmployee successfully deleted.");
+                        System.out.println("\n\tEmployee successfully deactivate.");
                         System.out.print("\t\tPress Enter to continue...");
                         console.readLine();
                         console.flush();
                         return;
                     } else if (confirmation.equalsIgnoreCase("N")) {
-                        System.out.println("\n\tDeletion cancelled.");
+                        System.out.println("\n\tDeactivation cancelled.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        console.readLine();
+                        console.flush();
+                        return;
+                    } else {
+                        System.out.println("\n\tInvalid Input");
+                        System.out.print("\t\tPress Enter to continue...");
+                        console.readLine();
+                        console.flush();
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tInvalid input. Please enter a valid employee ID.");
+                System.out.print("\t\tPress Enter to continue...");
+                console.readLine();
+                console.flush();
+            }
+        }
+    }
+
+
+    public void reactivate_employee() {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
+        if (cashiers.isEmpty()) {
+            System.out.println("\n\tNo employees found in the system.");
+            System.out.print("\t\tPress Enter to continue...");
+            console.readLine();
+            console.flush();
+            return;
+        }
+
+        while (true) {
+            view_employee_list();
+            System.out.print("\n\tEnter employee ID to reactivate (0 to cancel): ");
+            try {
+                int employeeId = Integer.parseInt(console.readLine());
+
+                if (employeeId == 0) {
+                    System.out.println("\n\tReactivation cancelled.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    console.readLine();
+                    console.flush();
+                    return;
+                }
+
+                Cashier employeeToDeactivate = null;
+                for (Cashier cashier : cashiers) {
+                    if (cashier.getEmployee_id() == employeeId) {
+                        employeeToDeactivate = cashier;
+                        break;
+                    }
+                }
+
+                if (employeeToDeactivate == null) {
+                    System.out.println("\n\tEmployee ID not found. Please try again.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    console.readLine();
+                    console.flush();
+                    continue;
+                }
+
+                while (true) {
+                    System.out.println("\n\tAre you sure you want to reactivate employee:");
+                    System.out.println("\tID: " + employeeToDeactivate.getEmployee_id());
+                    System.out.println("\tName: " + employeeToDeactivate.getEmployee_full_name());
+                    System.out.println("\tPhone Number: " + employeeToDeactivate.getPhone_number());
+                    System.out.println("\tHired Date: " + employeeToDeactivate.getHired_date());
+                    System.out.println("\tTotal Transaction Processed: " + employeeToDeactivate.getTotal_transaction_processed());
+                    System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
+
+                    String confirmation = console.readLine();
+                    if (confirmation.equalsIgnoreCase("Y")) {
+                        employeeToDeactivate.setAccount_status("active");
+                        save_all_cashiers_to_csv(); // Save updated list to CSV
+                        System.out.println("\n\tEmployee successfully reactivate.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        console.readLine();
+                        console.flush();
+                        return;
+                    } else if (confirmation.equalsIgnoreCase("N")) {
+                        System.out.println("\n\tReactivation cancelled.");
                         System.out.print("\t\tPress Enter to continue...");
                         console.readLine();
                         console.flush();
@@ -1047,7 +1169,7 @@ public class Cashier {
                 } while (!newPassword.equals(confirmPassword));
 
                 employeeToReset.setPassword(newPassword);
-                save_all_cashiers_to_csv(); // Save updated list to CSV
+                save_all_cashiers_to_csv();
 
                 System.out.println("\n\tPassword successfully reset.");
                 System.out.print("\n\tPress Enter to continue...");
@@ -1061,29 +1183,6 @@ public class Cashier {
                 console.readLine();
                 console.flush();
             }
-        }
-    }
-
-
-    // Helper method to save all cashiers to CSV after modifications
-    private void save_all_cashiers_to_csv() {
-        try (FileWriter writer = new FileWriter("oopr-poe-data/accounts/cashier_employees.csv")) {
-
-            writer.write("Employee_id,Employee_username,Employee_first_name,Employee_surname," +
-                    "password,phone_number,hired_date,total_transaction_processed\n");
-
-            for (Cashier cashier : cashiers) {
-                writer.append(String.valueOf(cashier.getEmployee_id())).append(",");
-                writer.append(cashier.getEmployee_username()).append(",");
-                writer.append(cashier.getEmployee_first_name()).append(",");
-                writer.append(cashier.getEmployee_surname()).append(",");
-                writer.append(cashier.getPassword()).append(",");
-                writer.append(cashier.getPhone_number()).append(",");
-                writer.append(cashier.getHired_date()).append(",");
-                writer.append(String.valueOf(cashier.getTotal_transaction_processed())).append("\n");
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving cashier employees data to file: " + e.getMessage());
         }
     }
 
