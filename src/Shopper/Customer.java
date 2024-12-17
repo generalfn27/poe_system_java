@@ -10,6 +10,7 @@ public class Customer {
     private double transaction;
     private double reward_point;
     private double total_spent;
+    private String account_status;
 
     public Customer() {
         // Default constructor, you can initialize default values if needed
@@ -87,5 +88,13 @@ public class Customer {
 
     public void setTotal_spent(double total_spent) {
         this.total_spent = total_spent;
+    }
+
+    public String getAccount_status() {
+        return account_status;
+    }
+
+    public void setAccount_status(String account_status) {
+        this.account_status = account_status;
     }
 }
