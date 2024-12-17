@@ -188,7 +188,7 @@ public class UserCustomer {
 
         while (true) {
             // Prompt for password
-            System.out.println("\n\tEnter password (min 8 characters): ");
+            System.out.print("\n\tEnter password (min 8 characters): ");
             password = new String(console.readPassword()); // Using `readPassword` to mask input
 
             // Check password length
@@ -338,6 +338,7 @@ public class UserCustomer {
         newCustomer.setTransaction(0);
         newCustomer.setRewardPoint(0);
         newCustomer.setTotal_spent(0);
+        newCustomer.setAccount_status("active");
 
         save_customer_to_file(newCustomer);
         customers.add(newCustomer);
@@ -358,10 +359,10 @@ public class UserCustomer {
 
 
     // eto sinisave naman lahat nito after every changes, rewriting data kumbaga
-    public void saveAllCustomersToCSV() {
+    public void save_all_customers_to_CSV() {
         File file = new File("oopr-poe-data/accounts/customers.csv"); // Simple file in project root
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent\n");
+            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent,Status\n");
             for (Customer customer : customers) {
                 writer.write(customer.getUsername() + "," +
                         customer.getPassword() + "," +
@@ -371,7 +372,8 @@ public class UserCustomer {
                         customer.getPinCode() + "," +
                         customer.getTransaction() + "," +
                         customer.getRewardPoint() + "," +
-                        customer.getTotal_spent());
+                        customer.getTotal_spent() + "," +
+                        customer.getAccount_status());
                 writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
@@ -392,7 +394,7 @@ public class UserCustomer {
         try (FileWriter writer = new FileWriter(file, true)) {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
-                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint\n");
+                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent,Status\n");
             }
             // Write customer data
             writer.append(customer.getUsername()).append(",");
@@ -403,7 +405,8 @@ public class UserCustomer {
             writer.append(customer.getPinCode()).append(",");
             writer.append(String.valueOf(customer.getTransaction())).append(",");
             writer.append(String.valueOf(customer.getRewardPoint())).append(",");
-            writer.append(String.valueOf(customer.getTotal_spent())).append("\n");
+            writer.append(String.valueOf(customer.getTotal_spent())).append(",");
+            writer.append(customer.getAccount_status()).append("\n");
 
         } catch (IOException e) {
             // Handle exceptions gracefully
@@ -424,8 +427,8 @@ public class UserCustomer {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction, reward points, total_spent
-                if (data.length == 9) {
+                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction, reward points, total_spent, account_status
+                if (data.length == 10) {
                     Customer customer = new Customer();
                     customer.setUsername(data[0]);
                     customer.setPassword(data[1]);
@@ -436,6 +439,7 @@ public class UserCustomer {
                     customer.setTransaction(Float.parseFloat(data[6]));
                     customer.setRewardPoint(Double.parseDouble(data[7]));
                     customer.setTotal_spent(Double.parseDouble(data[8]));
+                    customer.setAccount_status(data[9]);
                     customers.add(customer);
                 }
             }
@@ -469,7 +473,6 @@ public class UserCustomer {
         }
 
         // Loop until login is successful or maximum attempts reached
-        // Maximum number of login attempts
         while (attempt_count < MAX_ATTEMPTS) {
             System.out.println("\n\t===================================");
             System.out.println("\t|                                 |");
@@ -478,32 +481,63 @@ public class UserCustomer {
             System.out.println("\t===================================\n");
             System.out.print("\tEnter Username: ");
             String username = console.readLine();
-
-            // Get hidden password input
             String password = input_password(console, "\tEnter Password: ");
 
-            // Check if the username and password match any customer record
+            boolean username_exists = false;
+
             for (Customer customer : customers) {
-                if (customer.getUsername().equalsIgnoreCase(username) && customer.getPassword().equals(password)) {
-                    System.out.println("\n\tLogin successful.\n");
-                    login_successful = true;
-                    registered_user_customer_item_category(customer.getUsername(), customer, null);
-                    break;
+                if (customer.getUsername().equalsIgnoreCase(username)) {
+                    username_exists = true;
+
+                    if (customer.getPassword().equals(password)) {
+                        if (customer.getAccount_status().equalsIgnoreCase("inactive")) {
+                            System.out.println("\tYour account is deactivated. Please reactivate your account.");
+                            System.out.print("\t\t\tPress Enter key to continue...");
+                            console.readLine();
+                            console.flush();
+                            return;
+                        }
+                        System.out.println("\n\tLogin successful.\n");
+                        login_successful = true;
+                        registered_user_customer_item_category(customer.getUsername(), customer, null);
+                        break;
+                    }
                 }
             }
 
-            if (login_successful) { break; }
-            else {
+            if (login_successful) {
+                break;
+            } else {
                 attempt_count++;
-                System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
+
+                if (username_exists) {
+                    System.out.println("\n\tInvalid password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
+
+                    if (attempt_count >= MAX_ATTEMPTS) {
+                        for (Customer customer : customers) {
+                            if (customer.getUsername().equalsIgnoreCase(username)) {
+                                customer.setAccount_status("inactive");
+                                save_all_customers_to_CSV();
+                                System.out.println("\n\tMaximum login attempts reached.");
+                                System.out.println("\t\tYour account has been deactivated. Please contact the manager to reset password.");
+                                System.out.print("\t\t\tPress Enter key to continue...");
+                                console.readLine();
+                                console.flush();
+                                return;
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("\n\tInvalid username or password. Attempts left: " + (MAX_ATTEMPTS - attempt_count));
+                }
             }
         }
+
         if (!login_successful) {
             System.out.println("\n\tMaximum login attempts reached.");
-            System.out.println("\t\tTo recover your account please contact the manager to reset password.");
             System.out.print("\t\t\tPress Enter key to continue...");
             console.readLine();
-            console.flush();//used for press any key to continue
+            console.flush();
         }
     }
 
@@ -696,7 +730,7 @@ public class UserCustomer {
                     }
 
                     customer.setBalance(customer.getBalance() + amount);
-                    saveAllCustomersToCSV();
+                    save_all_customers_to_CSV();
 
                     System.out.printf("\n\tFunds added successfully. New balance: %.2f\n", customer.getBalance());
                     System.out.print("\tPress Enter key to continue.");
@@ -850,7 +884,7 @@ public class UserCustomer {
 
                         if (new_password.equals(confirm_password)) {
                             customer.setPassword(new_password);
-                            saveAllCustomersToCSV();
+                            save_all_customers_to_CSV();
                             System.out.println("\n\tThe password has been successfully changed.");
                             System.out.print("\t\tPress Enter key to continue.");
                             console.readLine(); // Wait for Enter key
@@ -997,7 +1031,7 @@ public class UserCustomer {
         customer.setRewardPoint(customer.getRewardPoint() - rewardPoints);
         customer.setBalance(customer.getBalance() + cashBack);
 
-        saveAllCustomersToCSV();
+        save_all_customers_to_CSV();
 
         System.out.println("\n\tRedemption successful! Cashback: " + cashBack + " pesos.");
         System.out.printf("\n\tAmount added successfully. New balance: %.2f\n", customer.getBalance());
@@ -1026,19 +1060,20 @@ public class UserCustomer {
         System.out.println("\n\t=========================================================");
         System.out.println("\t|                    Customer List                      |");
         System.out.println("\t=========================================================");
-        System.out.printf("\t%-10s %-13s %-16s %-9s %-12s %-14s %-12s%n",
-                "Username", "Phone", "Payment Method", "Balance", "Transactions", "Reward Points", "Total Spent");
+        System.out.printf("\t%-10s %-13s %-16s %-9s %-12s %-14s %-12s %-8s%n",
+                "Username", "Phone", "Payment Method", "Balance", "Transactions", "Reward Points", "Total Spent", "Status");
         System.out.println("\t-------------------------------------------------");
 
         for (Customer customer : customers) {
-            System.out.printf("\t%-10s %-13s %-16s %-12s %-12s %-14s %-12s%n",
+            System.out.printf("\t%-10s %-13s %-16s %-12s %-12s %-14s %-12s %-9s%n",
                     customer.getUsername(),
                     customer.getPhoneNumber(),
                     customer.getPaymentMethod(),
                     customer.getBalance(),
                     customer.getTransaction(),
                     customer.getRewardPoint(),
-                    customer.getTotal_spent());
+                    customer.getTotal_spent(),
+                    customer.getAccount_status());
         }
 
         System.out.print("\n\tPress Enter to continue...");
@@ -1047,7 +1082,7 @@ public class UserCustomer {
     }
 
 
-    public void delete_customer() {
+    public void deactivate_customer() {
         Console console = System.console();
         if (console == null) {
             System.err.println("No console available. Run this program in a terminal.");
@@ -1064,27 +1099,27 @@ public class UserCustomer {
 
         while (true) {
             view_customer_list();
-            System.out.print("\n\tEnter Username to delete (0 to cancel): ");
+            System.out.print("\n\tEnter Username to deactivate (0 to cancel): ");
             try {
                 String user_name = console.readLine();
 
                 if (user_name.equalsIgnoreCase("0")) {
-                    System.out.println("\n\tDeletion cancelled.");
+                    System.out.println("\n\tDeactivation cancelled.");
                     System.out.print("\n\tPress Enter to continue...");
                     console.readLine();
                     return;
                 }
 
-                Customer customer_to_delete = null;
+                Customer customer_to_deactivate = null;
                 for (Customer customer : customers) {
                     if (customer.getUsername().equals(user_name)) {
-                        customer_to_delete = customer;
+                        customer_to_deactivate = customer;
                         break;
                     }
                 }
 
-                if (customer_to_delete == null) {
-                    System.out.println("\n\tEmployee ID not found. Please try again.");
+                if (customer_to_deactivate == null) {
+                    System.out.println("\n\tUsername not found. Please try again.");
                     System.out.print("\n\tPress Enter to continue...");
                     console.readLine();
                     continue;
@@ -1092,28 +1127,117 @@ public class UserCustomer {
 
                 while (true) {
                     System.out.println("\n\tAre you sure you want to delete employee:");
-                    System.out.println("\tUser Name: " + customer_to_delete.getUsername());
-                    System.out.println("\tPhone Number: " + customer_to_delete.getPhoneNumber());
-                    System.out.println("\tPayment Method: " + customer_to_delete.getPaymentMethod());
-                    System.out.println("\tBalance: " + customer_to_delete.getBalance());
-                    System.out.println("\tTotal Transaction: " + customer_to_delete.getTransaction());
-                    System.out.println("\tReward Points: " + customer_to_delete.getTransaction());
-                    System.out.println("\tTotal Spent: " + customer_to_delete.getTotal_spent());
+                    System.out.println("\tUser Name: " + customer_to_deactivate.getUsername());
+                    System.out.println("\tPhone Number: " + customer_to_deactivate.getPhoneNumber());
+                    System.out.println("\tPayment Method: " + customer_to_deactivate.getPaymentMethod());
+                    System.out.println("\tBalance: " + customer_to_deactivate.getBalance());
+                    System.out.println("\tTotal Transaction: " + customer_to_deactivate.getTransaction());
+                    System.out.println("\tReward Points: " + customer_to_deactivate.getTransaction());
+                    System.out.println("\tTotal Spent: " + customer_to_deactivate.getTotal_spent());
 
                     System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
                     String confirmation = console.readLine();
                     console.flush();
 
                     if (confirmation.equalsIgnoreCase("Y")) {
-                        customers.remove(customer_to_delete);
-                        saveAllCustomersToCSV();
-                        System.out.println("\n\tEmployee successfully deleted.");
+                        customer_to_deactivate.setAccount_status("inactive");
+                        save_all_customers_to_CSV();
+                        System.out.println("\n\tCustomer successfully deactivated.");
                         System.out.print("\t\tPress Enter to continue...");
                         console.readLine();
                         console.flush();
                         return;
                     } else if (confirmation.equalsIgnoreCase("N")) {
-                        System.out.println("\n\tDeletion cancelled.");
+                        System.out.println("\n\tDeactivation cancelled.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        console.readLine();
+                        console.flush();
+                        return;
+                    } else {
+                        System.out.println("\n\tInvalid Input");
+                        System.out.print("\t\tPress Enter to continue...");
+                        console.readLine();
+                        console.flush();
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tInvalid input. Please enter a valid customer Username.");
+                System.out.print("\t\tPress Enter to continue...");
+                console.readLine();
+                console.flush();
+            }
+        }
+    }
+
+
+    public void reactivate_customer() {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("No console available. Run this program in a terminal.");
+            return;
+        }
+
+        if (customers.isEmpty()) {
+            System.out.println("\n\tNo Customer found in the system.");
+            System.out.print("\t\tPress Enter to continue...");
+            console.readLine();
+            console.flush();
+            return;
+        }
+
+        while (true) {
+            view_customer_list();
+            System.out.print("\n\tEnter Username to reactivate (0 to cancel): ");
+            try {
+                String user_name = console.readLine();
+
+                if (user_name.equalsIgnoreCase("0")) {
+                    System.out.println("\n\tAccount reactivation cancelled.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    console.readLine();
+                    return;
+                }
+
+                Customer customer_to_reactivate = null;
+                for (Customer customer : customers) {
+                    if (customer.getUsername().equals(user_name)) {
+                        customer_to_reactivate = customer;
+                        break;
+                    }
+                }
+
+                if (customer_to_reactivate == null) {
+                    System.out.println("\n\tUsername not found. Please try again.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    console.readLine();
+                    continue;
+                }
+
+                while (true) {
+                    System.out.println("\n\tAre you sure you want to reactivate:");
+                    System.out.println("\tUser Name: " + customer_to_reactivate.getUsername());
+                    System.out.println("\tPhone Number: " + customer_to_reactivate.getPhoneNumber());
+                    System.out.println("\tPayment Method: " + customer_to_reactivate.getPaymentMethod());
+                    System.out.println("\tBalance: " + customer_to_reactivate.getBalance());
+                    System.out.println("\tTotal Transaction: " + customer_to_reactivate.getTransaction());
+                    System.out.println("\tReward Points: " + customer_to_reactivate.getTransaction());
+                    System.out.println("\tTotal Spent: " + customer_to_reactivate.getTotal_spent());
+
+                    System.out.print("\n\t[Y] to confirm, [N] to cancel: ");
+                    String confirmation = console.readLine();
+                    console.flush();
+
+                    if (confirmation.equalsIgnoreCase("Y")) {
+                        customer_to_reactivate.setAccount_status("active");
+                        save_all_customers_to_CSV();
+                        System.out.println("\n\tEmployee successfully activated.");
+                        System.out.print("\t\tPress Enter to continue...");
+                        console.readLine();
+                        console.flush();
+                        return;
+                    } else if (confirmation.equalsIgnoreCase("N")) {
+                        System.out.println("\n\tReactivation cancelled.");
                         System.out.print("\t\tPress Enter to continue...");
                         console.readLine();
                         console.flush();
@@ -1210,7 +1334,7 @@ public class UserCustomer {
                 } while (!newPassword.equals(confirmPassword));
 
                 customer_to_reset.setPassword(newPassword);
-                saveAllCustomersToCSV();
+                save_all_customers_to_CSV();
 
                 System.out.println("\n\tPassword successfully reset.");
                 System.out.print("\n\tPress Enter to continue...");
