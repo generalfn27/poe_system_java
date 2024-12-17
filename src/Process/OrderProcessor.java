@@ -224,13 +224,32 @@ public class OrderProcessor {
                     handle_quantity_change(console, "deduct");
                     break;
                 case "R":
-                    System.out.println("\tEnter 0 to Cancel item removal");
-                    System.out.print("\tEnter product code to remove: ");
-                    String codeToRemove = console.readLine();
-                    if (codeToRemove.equals("0")) {
-                        break;
+                    boolean valid_to_remove = false;
+                    while (!valid_to_remove){
+                        System.out.print("\tAre you sure you want to remove an item? (Y/N): ");
+                        String confirm_clear = console.readLine().trim();
+
+                        switch (confirm_clear) {
+                            case "y":
+                            case "Y":
+                                System.out.println("\tEnter 0 to Cancel item removal");
+                                System.out.print("\tEnter product code to remove: ");
+                                String codeToRemove = console.readLine();
+                                if (codeToRemove.equals("0")) { break; }
+                                remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                                valid_to_remove = true;
+                                break;
+                            case "n":
+                            case "N":
+                                valid_to_remove = true;
+                                break;
+                            default:
+                                System.out.println("\n\tWrong input");
+                                System.out.print("\t\tPress Enter key to continue.");
+                                console.readLine();
+                                console.flush();
+                        }
                     }
-                    remove_item(codeToRemove); // Remove the item from the cart
                     break;
                 case "C":
                     handle_cart_clear(console);
@@ -362,12 +381,11 @@ public class OrderProcessor {
             System.out.println("\tProceed to checkout (P)");
             System.out.println("\tGo Back to Categories (B)");
             System.out.print("\n\tEnter choice: ");
-            choice = console.readLine();
+            choice = console.readLine().trim().toUpperCase();
 
             //pwedeng isang case lang and ang nasa scanf ay naka toupper, kung alin efficient
             switch (choice) {
                 case "I":
-                case "i":
                     int quantityToIncrease;
                     boolean quantity_increase_valid_input = false;
 
@@ -389,7 +407,6 @@ public class OrderProcessor {
                     }
                     break;
                 case "D":
-                case "d":
                     int quantityToDeduct;
                     boolean deduction_valid_input = false;
 
@@ -411,27 +428,42 @@ public class OrderProcessor {
                     }
                     break;
                 case "R":
-                case "r":
-                    System.out.println("\tEnter 0 to Cancel item removal");
-                    System.out.print("\tEnter product code to remove: ");
-                    String codeToRemove = console.readLine();
-                    if (codeToRemove.equals("0")) { break; }
-                    remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                    boolean valid_to_remove = false;
+                    while (!valid_to_remove){
+                        System.out.print("\tAre you sure you want to remove an item? (Y/N): ");
+                        String confirm_clear = console.readLine().trim().toUpperCase();
+
+                        switch (confirm_clear) {
+                            case "Y":
+                                System.out.println("\tEnter 0 to Cancel item removal");
+                                System.out.print("\tEnter product code to remove: ");
+                                String codeToRemove = console.readLine();
+                                if (codeToRemove.equals("0")) { break; }
+                                remove_item(codeToRemove);  // Remove the item sa cart all quantity
+                                valid_to_remove = true;
+                                break;
+                            case "N":
+                                valid_to_remove = true;
+                                break;
+                            default:
+                                System.out.println("\n\tWrong input");
+                                System.out.print("\t\tPress Enter key to continue.");
+                                console.readLine();
+                                console.flush();
+                        }
+                    }
                     break;
                 case "C":
-                case "c":
                     boolean valid_to_clear = false;
                     while (!valid_to_clear){
                         System.out.print("\tAre you sure you want to clear your cart? (Y/N): ");
-                        String confirm_clear = console.readLine().trim();
+                        String confirm_clear = console.readLine().trim().toUpperCase();
 
                         switch (confirm_clear) {
-                            case "y":
                             case "Y":
                                 reset_cart();  // Reset the cart
                                 valid_to_clear = true;
                                 break;
-                            case "n":
                             case "N":
                                 valid_to_clear = true;
                                 break;
@@ -444,13 +476,11 @@ public class OrderProcessor {
                     }
                     break;
                 case "B":
-                case "b":
                     //hindi maipasa ung cart dahil pag return lng ginamit ay balik balik lng sa methods
                     UserCustomer user_customer = new UserCustomer();
                     user_customer.registered_user_customer_item_category(customer.getUsername(), customer, cart);
                     return;
                 case "P":
-                case "p":
                     while (true) {
                         System.out.print("\n\tAre you sure you want to proceed to checkout? (Y/N): ");
                         String confirmInput = console.readLine();
