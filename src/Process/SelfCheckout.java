@@ -203,7 +203,7 @@ public class SelfCheckout {
                 break;
             }
         }
-        userCustomer.saveAllCustomersToCSV();
+        userCustomer.save_all_customers_to_CSV();
 
         cashierProcess.update_sales_report(cart);
         cashierProcess.update_all_stocks(cart);
