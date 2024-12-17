@@ -430,7 +430,7 @@ public class Cashier {
     }
 
     public void load_cashiers_from_CSV() {
-        // Clear existing list before loading
+        // Clear existing list before loading para di mag doble doble
         cashiers.clear();
 
         String CASHIER_CSV_FILE = "oopr-poe-data/accounts/cashier_employees.csv";
@@ -451,7 +451,7 @@ public class Cashier {
                             data[5],                    // phone
                             data[6],                    // hireDate
                             Integer.parseInt(data[7]),  // transactions
-                            data[8]                     //account status
+                            data[8]                     // account status
                     );
                     cashiers.add(cashier);
                 }
@@ -721,11 +721,30 @@ public class Cashier {
                     break;
                 case "R":
                 case "r":
-                    System.out.println("\tEnter 0 to Cancel item removal");
-                    System.out.print("\tEnter product code to remove: ");
-                    String codeToRemove = console.readLine();
-                    if (codeToRemove.equals("0")) { break; }
-                    cashier_process.remove_item_counter(codeToRemove);  // Remove the item sa cart all quantity
+                    boolean valid_to_remove = false;
+                    while (!valid_to_remove){
+                        System.out.print("\tAre you sure you want to remove an item? (Y/N): ");
+                        String confirm_clear = console.readLine().trim().toLowerCase();
+
+                        switch (confirm_clear) {
+                            case "y":
+                                System.out.println("\tEnter 0 to Cancel item removal");
+                                System.out.print("\tEnter product code to remove: ");
+                                String codeToRemove = console.readLine();
+                                if (codeToRemove.equals("0")) { break; }
+                                cashier_process.remove_item_counter(codeToRemove);  // Remove the item sa cart all quantity
+                                valid_to_remove = true;
+                                break;
+                            case "n":
+                                valid_to_remove = true;
+                                break;
+                            default:
+                                System.out.println("\n\tWrong input");
+                                System.out.print("\t\tPress Enter key to continue.");
+                                console.readLine();
+                                console.flush();
+                        }
+                    }
                     break;
                 case "P":
                 case "p":
