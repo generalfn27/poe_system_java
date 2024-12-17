@@ -8,7 +8,6 @@ import Process.CouponManager;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Manager {
@@ -755,8 +754,9 @@ public class Manager {
             System.out.println("\t=======================================\n");
             System.out.println("\t[1] Register New Employee");
             System.out.println("\t[2] View Employee List");
-            System.out.println("\t[3] Delete Employee");
-            System.out.println("\t[4] Reset Employee Password");
+            System.out.println("\t[3] Deactivate Employee");
+            System.out.println("\t[4] Reactivate Employee");
+            System.out.println("\t[5] Reset Employee Password");
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -773,9 +773,12 @@ public class Manager {
                     cashier.view_employee_list();
                     break;
                 case "3":
-                    cashier.delete_employee();
+                    cashier.deactivate_employee();
                     break;
                 case "4":
+                    cashier.reactivate_employee();
+                    break;
+                case "5":
                     cashier.manager_reset_employee_password();
                     break;
                 default:
@@ -861,8 +864,9 @@ public class Manager {
             System.out.println("\t|                                     |");
             System.out.println("\t=======================================\n");
             System.out.println("\t[1] View Customer List");
-            System.out.println("\t[2] Delete Customer Account");
-            System.out.println("\t[3] Reset Customer Password");
+            System.out.println("\t[2] Deactivate Customer Account");
+            System.out.println("\t[3] Reactivate Customer Account");
+            System.out.println("\t[4] Reset Customer Password");
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -876,9 +880,12 @@ public class Manager {
                     userCustomer.view_customer_list();
                     break;
                 case "2":
-                    userCustomer.delete_customer();
+                    userCustomer.deactivate_customer();
                     break;
                 case "3":
+                    userCustomer.reactivate_customer();
+                    break;
+                case "4":
                     userCustomer.manager_reset_customer_password();
                     break;
                 default:
