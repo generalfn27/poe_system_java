@@ -323,6 +323,8 @@ public class UserCustomer {
                     "\tPINs do not match. Please try again.", 4);
         }
 
+        //dito din dapat may security question save dito 1 and 2 tapos all set na
+
         boolean validInput = false;
         while (!validInput) {
             try {
@@ -407,6 +409,8 @@ public class UserCustomer {
             writer.append(String.valueOf(customer.getRewardPoint())).append(",");
             writer.append(String.valueOf(customer.getTotal_spent())).append(",");
             writer.append(customer.getAccount_status()).append("\n");
+
+            //dito dagdag ng security question 1 and 2 same sa mga file saving
 
         } catch (IOException e) {
             // Handle exceptions gracefully
