@@ -11,6 +11,8 @@ public class Customer {
     private double reward_point;
     private double total_spent;
     private String account_status;
+    private String first_security_question;
+    private String second_security_question;
 
     public Customer() {
         // Default constructor, you can initialize default values if needed
@@ -96,5 +98,21 @@ public class Customer {
 
     public void setAccount_status(String account_status) {
         this.account_status = account_status;
+    }
+
+    public String getFirst_security_question() {
+        return first_security_question;
+    }
+
+    public void setFirst_security_question(String first_security_question) {
+        this.first_security_question = first_security_question;
+    }
+
+    public String getSecond_security_question() {
+        return second_security_question;
+    }
+
+    public void setSecond_security_question(String second_security_question) {
+        this.second_security_question = second_security_question;
     }
 }
