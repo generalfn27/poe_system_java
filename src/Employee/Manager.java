@@ -866,7 +866,7 @@ public class Manager {
             System.out.println("\t[1] View Customer List");
             System.out.println("\t[2] Deactivate Customer Account");
             System.out.println("\t[3] Reactivate Customer Account");
-            System.out.println("\t[4] Reset Customer Password");
+            System.out.println("\t[4] Customer Password Recovery");
             System.out.println("\n\t[0] Go back to Dashboard");
 
             System.out.print("\n\n\tEnter Here: ");
@@ -886,7 +886,7 @@ public class Manager {
                     userCustomer.reactivate_customer();
                     break;
                 case "4":
-                    userCustomer.manager_reset_customer_password();
+                    userCustomer.customer_password_recovery();
                     break;
                 default:
                     System.out.println("\n\tInvalid input. Try again...");
