@@ -323,7 +323,15 @@ public class UserCustomer {
                     "\tPINs do not match. Please try again.", 4);
         }
 
-        //dito din dapat may security question save dito 1 and 2 tapos all set na
+        String first_security_question = get_valid_input(console, "\tEnter your birthplace: ",
+                "\tBirthplace must be at least 3 characters long.", 3);
+
+        newCustomer.setFirst_security_question(first_security_question);
+
+        String second_security_question = get_valid_input(console, "\tEnter your mother's maiden name: ",
+                "\tMother's maiden name must be at least 3 characters long.", 3);
+
+        newCustomer.setSecond_security_question(second_security_question);
 
         boolean validInput = false;
         while (!validInput) {
@@ -364,7 +372,7 @@ public class UserCustomer {
     public void save_all_customers_to_CSV() {
         File file = new File("oopr-poe-data/accounts/customers.csv"); // Simple file in project root
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent,Status\n");
+            writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent,Status,SecurityQuestion1,SecurityQuestion2\n");
             for (Customer customer : customers) {
                 writer.write(customer.getUsername() + "," +
                         customer.getPassword() + "," +
@@ -375,7 +383,9 @@ public class UserCustomer {
                         customer.getTransaction() + "," +
                         customer.getRewardPoint() + "," +
                         customer.getTotal_spent() + "," +
-                        customer.getAccount_status());
+                        customer.getAccount_status() + "," +
+                        customer.getFirst_security_question() + "," +
+                        customer.getSecond_security_question());
                 writer.newLine();
             }
             System.out.println("\n\tCustomer data saved to CSV.");
@@ -396,7 +406,7 @@ public class UserCustomer {
         try (FileWriter writer = new FileWriter(file, true)) {
             // Write header only if the file doesn't exist (i.e., it's a new file)
             if (!fileExists) {
-                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent,Status\n");
+                writer.write("Username,Password,PhoneNumber,PaymentMethod,Balance,PIN,Transaction,RewardPoint,TotalSpent,Status,SecurityQuestion1,SecurityQuestion2\n");
             }
             // Write customer data
             writer.append(customer.getUsername()).append(",");
@@ -408,9 +418,9 @@ public class UserCustomer {
             writer.append(String.valueOf(customer.getTransaction())).append(",");
             writer.append(String.valueOf(customer.getRewardPoint())).append(",");
             writer.append(String.valueOf(customer.getTotal_spent())).append(",");
-            writer.append(customer.getAccount_status()).append("\n");
-
-            //dito dagdag ng security question 1 and 2 same sa mga file saving
+            writer.append(customer.getAccount_status()).append(",");
+            writer.append(customer.getFirst_security_question()).append(",");
+            writer.append(customer.getSecond_security_question()).append("\n");
 
         } catch (IOException e) {
             // Handle exceptions gracefully
@@ -431,8 +441,9 @@ public class UserCustomer {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(",");
-                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction, reward points, total_spent, account_status
-                if (data.length == 10) {
+                // Expect 8 fields: username, password, phone number, payment method, balance, PIN, transaction,
+                // reward points, total_spent, account_status, first security question and second
+                if (data.length == 12) {
                     Customer customer = new Customer();
                     customer.setUsername(data[0]);
                     customer.setPassword(data[1]);
@@ -444,6 +455,8 @@ public class UserCustomer {
                     customer.setRewardPoint(Double.parseDouble(data[7]));
                     customer.setTotal_spent(Double.parseDouble(data[8]));
                     customer.setAccount_status(data[9]);
+                    customer.setFirst_security_question(data[10]);
+                    customer.setSecond_security_question(data[11]);
                     customers.add(customer);
                 }
             }
@@ -1264,7 +1277,7 @@ public class UserCustomer {
     }
 
 
-    public void manager_reset_customer_password() {
+    public void customer_password_recovery() {
         Console console = System.console();
         if (console == null) {
             System.err.println("No console available. Run this program in a terminal.");
@@ -1281,7 +1294,7 @@ public class UserCustomer {
 
         while (true) {
             view_customer_list();
-            System.out.print("\n\tEnter Username to delete (0 to cancel): ");
+            System.out.print("\n\tEnter Username to reset password (0 to cancel): ");
             try {
                 String user_name = console.readLine();
 
@@ -1317,6 +1330,33 @@ public class UserCustomer {
                 System.out.println("\tTotal Transaction: " + customer_to_reset.getTransaction());
                 System.out.println("\tReward Points: " + customer_to_reset.getTransaction());
                 System.out.println("\tTotal Spent: " + customer_to_reset.getTotal_spent());
+
+                // Security Question Verification
+                System.out.println("\n\tPlease verify your identity with security questions:");
+
+                // First Security Question
+                System.out.print("\tWhat is your birthplace?: ");
+                String answer1 = console.readLine().trim();
+                if (!answer1.equals(customer_to_reset.getFirst_security_question())) {
+                    System.out.println("\n\tIncorrect answer to security question 1.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    console.readLine();
+                    console.flush();
+                    return;
+                }
+
+                // Second Security Question
+                System.out.print("\tWhat is your mother's maiden name?: ");
+                String answer2 = console.readLine().trim();
+                if (!answer2.equals(customer_to_reset.getSecond_security_question())) {
+                    System.out.println("\n\tIncorrect answer to security question 2.");
+                    System.out.print("\n\tPress Enter to continue...");
+                    console.readLine();
+                    console.flush();
+                    return;
+                }
+
+                System.out.println("\n\tSecurity questions verified successfully!");
 
                 String newPassword;
                 String confirmPassword;
