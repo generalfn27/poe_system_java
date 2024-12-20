@@ -73,6 +73,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\oopr-poe-data\accounts\customers.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\oopr-poe-data\products\coupons.csv">
           <value>
             <Attribute>
