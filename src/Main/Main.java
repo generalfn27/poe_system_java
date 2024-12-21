@@ -10,6 +10,7 @@ public class Main {
             ManagerCredentials.initialSetup();
         }
         UserType.user_type_menu();
-        //isama flowchart na bago sa files tapos mag start na sa weekend ng may gui
+        //isama flowchart na bago sa files tapos mag
+        // start na sa weekend ng may gui
     }
 }
